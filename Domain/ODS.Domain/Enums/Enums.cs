@@ -7,4 +7,11 @@
         AirtelMoney,
         ZamtelKwacha
     }
+    public enum AuditType
+    {
+        None,
+        Create,
+        Update,
+        Delete
+    }
 }
