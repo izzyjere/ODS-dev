@@ -1,30 +1,61 @@
-﻿namespace ODS.Core.Repositories
+﻿using System.Reflection;
+
+namespace ODS.Core.Repositories
 {
     public class Repository<T, TKey> : IRepository<T, TKey> where T : class, IEntity<TKey>
     {
-        public Task Add(T entity)
+        readonly SystemDbContext context;
+        public Repository(SystemDbContext _context)
         {
-            throw new NotImplementedException();
+            context = _context;
+        }
+        public async Task Add(T entity)
+        {
+            await context.Set<T>().AddAsync(entity);
         }
 
         public Task Delete(T entity)
         {
-            throw new NotImplementedException();
+            context.Set<T>().Remove(entity);
+            return Task.CompletedTask;
         }
 
-        public Task<T> Get(TKey id)
+        public IQueryable<T> Entities(bool eager = true)
         {
-            throw new NotImplementedException();
+            var query = context.Set<T>().AsQueryable();
+            var navigationProperties = new List<PropertyInfo>();
+            if (eager)
+            {
+                context.Model.GetEntityTypes().Select(entity => entity.GetNavigations()).ToList().ForEach(navigations =>
+                {
+                    navigations.ToList().ForEach(navigationProperty =>
+                    {
+                        navigationProperties.AddRange(typeof(T).GetProperties().Where(x => x.PropertyType == navigationProperty.PropertyInfo.PropertyType).ToList());
+                    });
+                });
+                foreach (var navigationProperty in navigationProperties)
+                {
+                    query = query.Include(navigationProperty.Name);
+                }
+            }
+
+            return query;
         }
 
-        public Task<List<T>> GetAll()
+        public async Task<T> Get(TKey id)
         {
-            throw new NotImplementedException();
+            return await context.Set<T>().FindAsync(id);
+        }
+
+        public async Task<List<T>> GetAll()
+        {
+            return await context.Set<T>().ToListAsync();
         }
 
         public Task Update(T entity)
         {
-            throw new NotImplementedException();
+            context.Set<T>().Update(entity);
+            return Task.CompletedTask;
         }
     }
 }

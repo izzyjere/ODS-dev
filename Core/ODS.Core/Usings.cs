@@ -5,6 +5,7 @@ global using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 global using Newtonsoft.Json;
 
+global using ODS.Core.Contexts;
 global using ODS.Core.Models;
 global using ODS.Domain.Contracts;
 global using ODS.Domain.Enums;
