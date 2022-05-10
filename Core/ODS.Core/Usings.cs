@@ -12,5 +12,8 @@ global using ODS.Domain.Enums;
 global using ODS.Domain.Interfaces;
 global using ODS.Domain.Models;
 
+global using System.Collections;
 global using System.ComponentModel.DataAnnotations.Schema;
 global using System.Data;
+
+global using static System.Console;
