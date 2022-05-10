@@ -1,17 +1,19 @@
-﻿namespace ODS.Domain.Interfaces
+﻿using ODS.Domain.Wrapper;
+
+namespace ODS.Domain.Interfaces
 {
     public interface IService
     {
     }
     public interface IService<T, TKey> : IService where T : class, IEntity<TKey>
     {
-        Task<T> GetById(TKey id);
-        Task<List<T>> GetAll();
+        Task<IResult<T>> GetById(TKey id);
+        Task<IResult<List<T>>> GetAll();
 
-        Task<bool> Create(T entity);
+        Task<IResult> Create(T entity);
 
-        Task<bool> Update(T entity);
+        Task<IResult> Update(T entity);
 
-        Task<bool> Delete(T entity);
+        Task<IResult> Delete(T entity);
     }
 }
