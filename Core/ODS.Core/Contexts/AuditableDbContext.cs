@@ -1,6 +1,6 @@
 ﻿namespace ODS.Core.Contexts
 {
-    public abstract class AuditableDbContext : IdentityDbContext<User, Role, int, IdentityUserClaim<int>, IdentityUserRole<int>, IdentityUserLogin<int>, IdentityRoleClaim<int>, IdentityUserToken<int>>
+    public abstract class AuditableDbContext : IdentityDbContext<User, Role, int, IdentityUserClaim<int>, UserRole, IdentityUserLogin<int>, IdentityRoleClaim<int>, IdentityUserToken<int>>
     {
         protected AuditableDbContext(DbContextOptions options) : base(options)
         {

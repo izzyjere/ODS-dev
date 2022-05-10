@@ -8,6 +8,8 @@ global using Newtonsoft.Json;
 global using ODS.Core.Models;
 global using ODS.Domain.Contracts;
 global using ODS.Domain.Enums;
+global using ODS.Domain.Interfaces;
+global using ODS.Domain.Models;
 
 global using System.ComponentModel.DataAnnotations.Schema;
 global using System.Data;
