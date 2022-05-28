@@ -7,6 +7,12 @@
         AirtelMoney,
         ZamtelKwacha
     }
+    public enum DonationType
+    {
+        None,
+        Money,
+        Item
+    }
     public enum AuditType
     {
         None,
