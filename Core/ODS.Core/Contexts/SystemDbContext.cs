@@ -101,6 +101,12 @@
             modelBuilder.Entity<Orphanage>(e =>
             {
                 e.ToTable("Orphanages", "Domain");
+                e.OwnsMany(o => o.Files, f =>
+                {
+                    f.ToTable("FileUploads");
+                    f.Property(f => f.OrphanageId);
+                    f.WithOwner(f => f.Orphanage);
+                });
             });
             #endregion
         }
