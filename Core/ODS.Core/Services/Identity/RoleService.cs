@@ -1,5 +1,4 @@
-﻿global using KPMS.Domain.Constants;
-global using KPMS.Core.Extensions;
+﻿global using AutoMapper;
 
 namespace ODS.Core.Services.Identity;
 

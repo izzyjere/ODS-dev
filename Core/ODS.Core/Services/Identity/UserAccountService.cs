@@ -1,15 +1,11 @@
-﻿using KPMS.Core.Middleware;
-using KPMS.Domain.Configurations;
-
+﻿global using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-
 using System.IdentityModel.Tokens.Jwt;
-
+using System.Security.Claims;
 using System.Security.Cryptography;
-
 using System.Text;
 
-using IResult = KPMS.Domain.Wrapper.IResult;
+using IResult = ODS.Domain.Wrapper.IResult;
 
 namespace ODS.Core.Services.Identity
 {
@@ -18,8 +14,7 @@ namespace ODS.Core.Services.Identity
         readonly UserManager<User> userManager;
         readonly SignInManager<User> signInManager;
         readonly ILogger<UserAccountService> logger;
-        private readonly RoleManager<Role> roleManager;
-        private readonly AppConfiguration appConfig;
+        private readonly RoleManager<Role> roleManager;     
         private readonly ICurrentUserService currentUserService;
         readonly IMapper mapper;
 
@@ -28,15 +23,13 @@ namespace ODS.Core.Services.Identity
                                   SignInManager<User> _signInManager,
                                   ILogger<UserAccountService> _logger,
                                   RoleManager<Role> _roleManager,
-                                  ICurrentUserService currentUserService,
-         AppConfiguration appConfigurationOptions)
+                                  ICurrentUserService currentUserService)
         {
             signInManager = _signInManager;
             userManager = _userManager;
             roleManager = _roleManager;
             logger = _logger;
-            this.currentUserService = currentUserService;
-            appConfig = appConfigurationOptions;
+            this.currentUserService = currentUserService;           
             mapper = _mapper;
 
         }
@@ -156,7 +149,7 @@ namespace ODS.Core.Services.Identity
 
         private SigningCredentials GetSigningCredentials()
         {
-            var secret = Encoding.UTF8.GetBytes(appConfig.Secret);
+            var secret = Encoding.UTF8.GetBytes("JU5T50MERAND0M3SECRET");
             return new SigningCredentials(new SymmetricSecurityKey(secret), SecurityAlgorithms.HmacSha256);
         }
         private string GenerateEncryptedToken(SigningCredentials signingCredentials, IEnumerable<Claim> claims)
@@ -174,7 +167,7 @@ namespace ODS.Core.Services.Identity
             var tokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(appConfig.Secret)),
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("JU5T50MERAND0M3SECRET")),
                 ValidateIssuer = false,
                 ValidateAudience = false,
                 RoleClaimType = ClaimTypes.Role,
@@ -227,9 +220,7 @@ namespace ODS.Core.Services.Identity
                 }
                 user.FirstName = request.FirstName;
                 user.LastName = request.LastName;
-                user.PhoneNumber = request.PhoneNumber;
-                user.LastModifiedBy = await currentUserService.GetUserName();
-                user.LastModifiedOn = DateTime.Now;
+                user.PhoneNumber = request.PhoneNumber;                 
                 var phoneNumber = await userManager.GetPhoneNumberAsync(user);
                 if (request.PhoneNumber != phoneNumber)
                 {
@@ -264,9 +255,7 @@ namespace ODS.Core.Services.Identity
                 Email = request.Email,
                 UserName = request.UserName,
                 IsActive = true,
-                EmailConfirmed = true,
-                CreatedBy = await currentUserService.GetUserName(),
-                CreatedOn = DateTime.Now,
+                EmailConfirmed = request.AutoConfirmEmail,               
             };
             var result = await userManager.CreateAsync(user, "kmc1234");
             if (result.Succeeded)
@@ -276,18 +265,12 @@ namespace ODS.Core.Services.Identity
                 if (request.PhoneNumber != phoneNumber)
                 {
                     await userManager.SetPhoneNumberAsync(user, request.PhoneNumber);
-                }
-                var role = await roleManager.FindByNameAsync(request.Role.ToString());
-                if (role is null)
-                {
-                    role = new Role(request.Role.ToString(), request.Role.ToDescriptionString());
-                    await roleManager.CreateAsync(role);
-                }
+                }               
                 else { }
-                await userManager.AddToRoleAsync(user, request.Role.ToString());
+                await userManager.AddToRoleAsync(user, "BasicUser");
                 return Result.Success("user created successifully.");
             }
-            else
+            else                           
             {
                 return Result.Success(result.Errors.First().Description.ToString());
             }
@@ -307,7 +290,6 @@ namespace ODS.Core.Services.Identity
                     FirstName = user.FirstName,
                     LastName = user.LastName,
                     Email = user.Email,
-                    Role = (RoleEnum)user.Roles.First().RoleId,
                     PhoneNumber = user.PhoneNumber,
                     AutoConfirmEmail = user.EmailConfirmed,
                     UserName = user.UserName,
