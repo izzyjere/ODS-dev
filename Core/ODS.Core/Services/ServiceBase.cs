@@ -1,4 +1,4 @@
-﻿using ODS.Domain.Wrapper;
+﻿using IResult= ODS.Domain.Wrapper.IResult;
 
 namespace ODS.Core.Services
 {

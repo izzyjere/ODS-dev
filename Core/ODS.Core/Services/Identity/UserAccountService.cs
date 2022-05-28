@@ -1,10 +1,10 @@
 ﻿global using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using ODS.Core.Middleware;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-
 using IResult = ODS.Domain.Wrapper.IResult;
 
 namespace ODS.Core.Services.Identity
@@ -14,22 +14,22 @@ namespace ODS.Core.Services.Identity
         readonly UserManager<User> userManager;
         readonly SignInManager<User> signInManager;
         readonly ILogger<UserAccountService> logger;
-        private readonly RoleManager<Role> roleManager;     
-        private readonly ICurrentUserService currentUserService;
+        private readonly RoleManager<Role> roleManager; 
+      
         readonly IMapper mapper;
 
         public UserAccountService(UserManager<User> _userManager,
                                   IMapper _mapper,
                                   SignInManager<User> _signInManager,
                                   ILogger<UserAccountService> _logger,
-                                  RoleManager<Role> _roleManager,
-                                  ICurrentUserService currentUserService)
+                                  RoleManager<Role> _roleManager)
+                                 
         {
             signInManager = _signInManager;
             userManager = _userManager;
             roleManager = _roleManager;
             logger = _logger;
-            this.currentUserService = currentUserService;           
+                      
             mapper = _mapper;
 
         }

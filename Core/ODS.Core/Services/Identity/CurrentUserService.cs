@@ -1,4 +1,6 @@
-﻿namespace ODS.Core.Services.Identity
+﻿global using ODS.Core.Extensions;
+
+namespace ODS.Core.Services.Identity
 {
     public class CurrentUserService : ICurrentUserService
     {

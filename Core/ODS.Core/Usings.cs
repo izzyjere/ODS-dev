@@ -17,3 +17,8 @@ global using System.ComponentModel.DataAnnotations.Schema;
 global using System.Data;
 
 global using static System.Console;
+global using Microsoft.Extensions.DependencyInjection;
+global using ODS.Core.Mappings.Application;
+global using ODS.Core.Mappings.Identity;
+global using ODS.Core.Repositories;
+global using ODS.Core.Services.Identity;
