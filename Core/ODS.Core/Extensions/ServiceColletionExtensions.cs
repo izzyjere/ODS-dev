@@ -1,7 +1,16 @@
-﻿namespace ODS.Core.Extensions
+﻿using ODS.Core.Services.Domain;
+
+namespace ODS.Core.Extensions
 {
     public static class ServiceColletionExtensions
     {
+        public static IServiceCollection AddDomainServices(this IServiceCollection services)
+        {
+            services.AddTransient<DonationService>()
+                    .AddTransient<OrphanageService>()
+                    .AddTransient<DonorService>();
+            return services;
+        }
         public static IServiceCollection RegisterAutoMapper(this IServiceCollection services)
         {
             var config = new MapperConfiguration(c =>
