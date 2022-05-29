@@ -24,8 +24,8 @@ namespace ODS.Extensions
                     configuration.SnackbarConfiguration.MaximumOpacity = 100;
                     configuration.SnackbarConfiguration.ShowCloseIcon = true;
                 })
-            .AddDomainServices()
-            .AddScoped<StateManager>();
+            .AddDomainServices();
+           
             return services;
         }
         public static IServiceCollection AddIdentity(this IServiceCollection services)
