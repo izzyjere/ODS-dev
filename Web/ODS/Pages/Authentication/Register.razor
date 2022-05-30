@@ -13,35 +13,35 @@
         <MudItem xs="12" sm="6">
             <div class="form-outline">
                 <input @bind-value="@Model.FirstName" type="text" id="form2Example17" class="form-control form-control-lg" />
-                <ValidationMessage For="()=>Model.FirstName" />
+                <MudText Typo="Typo.caption"><ValidationMessage For="()=>Model.FirstName" /></MudText>
                 <label class="form-label" for="form2Example17">First Name</label>
             </div>
         </MudItem>
         <MudItem xs="12" sm="6">
              <div class="form-outline">
                 <input @bind-value="@Model.LastName" type="text" id="form2Example18" class="form-control form-control-lg" />
-                <ValidationMessage For="()=>Model.LastName" />
+                <MudText Typo="Typo.caption"><ValidationMessage For="()=>Model.LastName" /></MudText>
                 <label class="form-label" for="form2Example18">Last Name</label>
             </div>
         </MudItem>
         <MudItem xs="12" sm="6">
             <div class="form-outline">
                 <input @bind-value="@Model.Email" type="email" id="form2Example19" class="form-control form-control-lg" />
-                <ValidationMessage For="()=>Model.Email" />
+                <MudText Typo="Typo.caption"><ValidationMessage For="()=>Model.Email" /></MudText>
                 <label class="form-label" for="form2Example19">Email</label>
             </div>
         </MudItem>
         <MudItem xs="12" sm="6">
             <div class="form-outline">
-                <input @bind-value="@Model.PhoneNumber" type="text" id="form2Example20" class="form-control form-control-lg" />
-                <ValidationMessage For="()=>Model.PhoneNumber" />
+                <input @bind-value="@Model.PhoneNumber" type="tel" id="form2Example20" class="form-control form-control-lg" />
+                <MudText Typo="Typo.caption"><ValidationMessage For="()=>Model.PhoneNumber" /></MudText>
                 <label class="form-label" for="form2Example17">Phone Number</label>
             </div>
         </MudItem>
         <MudItem xs="12" sm="6">
             <div class="form-outline">
                 <input @bind-value="@Model.Password" type="password" id="form2Example21" class="form-control form-control-lg" />
-                <ValidationMessage For="()=>Model.Password" />
+               <MudText Typo="Typo.caption"><ValidationMessage For="()=>Model.Password" /></MudText>
                 <label class="form-label" for="form2Example17">Password</label>
             </div>
         </MudItem>
@@ -49,7 +49,7 @@
         <MudItem xs="12" sm="6">
             <div class="form-outline mb-2">
                 <input @bind-value="@Model.ConfirmPassword" type="password" id="form2Example22" class="form-control form-control-lg" />
-                <ValidationMessage For="()=>Model.ConfirmPassword" />
+                <MudText Typo="Typo.caption"><ValidationMessage For="()=>Model.ConfirmPassword" /></MudText>
                 <label class="form-label" for="form2Example22">Confirm Password</label>
             </div>
         </MudItem>        
