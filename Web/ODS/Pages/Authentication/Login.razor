@@ -12,13 +12,13 @@
 
     <div class="form-outline mb-4">
         <input @bind-value="@Model.UserName" type="email" id="form2Example17" class="form-control form-control-lg" />
-        <ValidationMessage For="()=>Model.UserName"/>
+        <MudText Typo="Typo.caption"><ValidationMessage For="()=>Model.UserName" /></MudText>
         <label class="form-label" for="form2Example17">Email address</label>
     </div>
     
     <div class="form-outline mb-4">
         <input @bind-value="@Model.Password" type="password" id="form2Example27" class="form-control form-control-lg" />
-        <ValidationMessage For="()=>Model.Password"/>
+        <MudText Typo="Typo.caption"><ValidationMessage For="()=>Model.Password" /></MudText>
         <label class="form-label" for="form2Example27">Password</label>
     </div>
 
