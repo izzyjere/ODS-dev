@@ -2,7 +2,7 @@
 
 namespace ODS.Core.Extensions
 {
-    public static class ServiceColletionExtensions
+    public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddDomainServices(this IServiceCollection services)
         {

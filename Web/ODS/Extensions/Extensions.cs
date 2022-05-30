@@ -47,5 +47,19 @@ namespace ODS.Extensions
             services.AddScoped<IUserClaimsPrincipalFactory<User>, SystemUserClaimsFactory>();
             return services;
         }
+        public static IApplicationBuilder SeedDatabase(this IApplicationBuilder app)
+        {
+            var scope = app.ApplicationServices.CreateScope();
+            var seeder = scope.ServiceProvider.GetService<ISeeder>();
+            if (seeder != null)
+            {
+                seeder.Seed();
+            }
+            else
+            {
+                throw new Exception("Seeder not registered");
+            }            
+            return app;
+        }
     }
 }
