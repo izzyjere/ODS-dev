@@ -2,7 +2,7 @@
 {
     public class TokenRequest<TUser> where TUser : class
     {
-        [Required(ErrorMessage = "Username is required")]
+        [Required(ErrorMessage = "Email is required")]
         public string UserName { get; set; }
 
         [Required(ErrorMessage = "Password is required")]
