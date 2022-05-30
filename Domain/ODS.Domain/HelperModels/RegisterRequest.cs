@@ -12,7 +12,11 @@
         [Required]
         [MinLength(6)]
         public string UserName { get; set; }
+        [Required]
         public string Password { get; set; }
+        [Required, Compare(nameof(Password), ErrorMessage = "Password and Confirm Password must match")]
+        public string ConfirmPassword { get; set; }
+        
         public string? PhoneNumber { get; set; }
 
         public bool ActivateUser { get; set; } = false;
