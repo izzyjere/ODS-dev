@@ -4,7 +4,7 @@ namespace ODS.Domain.Models
 {
     public class Donation : AuditableEntity<int>
     {
-        public int OrphanageId { get; set; }
+     
         public DateTime Date { get; set; }
         public int DonorId { get; set; }
         public string? Description { get; set; }

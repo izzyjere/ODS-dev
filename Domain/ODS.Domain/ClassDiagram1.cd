@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" GroupingSetting="Access" MembersFormat="NameAndType">
+  <Class Name="ODS.Domain.Contracts.AuditableEntity&lt;TKey&gt;">
+    <Position X="1" Y="5.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAACAAQAQAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAE=</HashCode>
+      <FileName>Contracts\EntityContracts.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="ODS.Domain.Contracts.Entity&lt;TKey&gt;">
+    <Position X="4.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Contracts\EntityContracts.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="ODS.Domain.Models.Donation">
+    <Position X="1" Y="8" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAACAQgAABAAAAAAACAAAAAAAABAQAAAAAAAAA=</HashCode>
+      <FileName>Models\Donation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ODS.Domain.Models.Donor">
+    <Position X="1.25" Y="2.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAgAAAAAgAAQAwAAAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Donor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ODS.Domain.Models.Orphanage">
+    <Position X="7" Y="2.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAAACAEAAAAAQAAAgAAAACAAAAIAAAAIA=</HashCode>
+      <FileName>Models\Orphanage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ODS.Domain.Models.UploadFile">
+    <Position X="4.25" Y="2.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAACAAAAAAAAAAIAAAAAAAAAAAAAABAAABAAAA=</HashCode>
+      <FileName>Models\UploadFile.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
