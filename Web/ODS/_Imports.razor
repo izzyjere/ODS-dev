@@ -9,8 +9,19 @@
 @using System.Security.Claims
 @using MudBlazor
 @using ODS
+@using ODS.Domain.Models
+@using ODS.Domain.Enums
+@using ODS.Core.Models
+@using ODS.Core.Services.Identity
+@using ODS.Core.Services.Domain
 @using ODS.Shared
 @using ODS.Shared.Layouts
 @using ODS.Domain.HelperModels
 
 @inject ISnackbar snackBar
+@inject IUserAccountService userAccountService
+@inject DonationService donationService
+@inject DonorService donorService
+@inject OrphanageService orphanageService
+@inject IUploadService uploadService
+@inject NavigationManager Navigation

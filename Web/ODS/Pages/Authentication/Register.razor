@@ -1,75 +1,236 @@
 ﻿@page "/register"
 @layout AuthLayout
+<div class="d-flex align-items-center mb-3 pb-1">
+    <img class="me-3" src="assets/img/logo/logo2.png" />
+</div>
+<MudTabs Border="true">
+    <MudTabPanel Text="Register as a Donor">
+        <EditForm id="editForm" OnValidSubmit="SubmitAsync" Model="@Model"
+            OnInvalidSubmit='()=> { snackBar.Add("Please fill in all required field",Severity.Error);}'>
 
-<EditForm OnValidSubmit="SubmitAsync" Model="@Model" OnInvalidSubmit='()=> { snackBar.Add("Please fill in all required field",Severity.Error);}'>
+            <DataAnnotationsValidator />
 
-    <DataAnnotationsValidator />
-    <div class="d-flex align-items-center mb-3 pb-1">
-        <img class="me-3" src="assets/img/logo/logo2.png" />
-    </div>
+            <h5 class="fw-normal m-3 pb-3" style="letter-spacing: 1px;">Create a new account</h5>
+            <MudGrid>
+                <MudItem xs="12" sm="6">
+                    <div class="form-outline">
+                        <input @bind-value="@Model.FirstName" type="text" id="form2Example17"
+                            class="form-control form-control-lg" />
+                        <MudText Typo="Typo.caption">
+                            <ValidationMessage For="()=>Model.FirstName" />
+                        </MudText>
+                        <label class="form-label" for="form2Example17">First Name</label>
+                    </div>
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <div class="form-outline">
+                        <input @bind-value="@Model.LastName" type="text" id="form2Example18"
+                            class="form-control form-control-lg" />
+                        <MudText Typo="Typo.caption">
+                            <ValidationMessage For="()=>Model.LastName" />
+                        </MudText>
+                        <label class="form-label" for="form2Example18">Last Name</label>
+                    </div>
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <div class="form-outline">
+                        <input @bind-value="@Model.Email" type="email" id="form2Example19"
+                            class="form-control form-control-lg" />
+                        <MudText Typo="Typo.caption">
+                            <ValidationMessage For="()=>Model.Email" />
+                        </MudText>
+                        <label class="form-label" for="form2Example19">Email</label>
+                    </div>
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <div class="form-outline">
+                        <input @bind-value="@Model.PhoneNumber" type="tel" id="form2Example20"
+                            class="form-control form-control-lg" />
+                        <MudText Typo="Typo.caption">
+                            <ValidationMessage For="()=>Model.PhoneNumber" />
+                        </MudText>
+                        <label class="form-label" for="form2Example17">Phone Number</label>
+                    </div>
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <div class="form-outline">
+                        <input @bind-value="@Model.Password" type="password" id="form2Example21"
+                            class="form-control form-control-lg" />
+                        <MudText Typo="Typo.caption">
+                            <ValidationMessage For="()=>Model.Password" />
+                        </MudText>
+                        <label class="form-label" for="form2Example17">Password</label>
+                    </div>
+                </MudItem>
 
-    <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Create a new account</h5>
-    <MudGrid>
-        <MudItem xs="12" sm="6">
-            <div class="form-outline">
-                <input @bind-value="@Model.FirstName" type="text" id="form2Example17" class="form-control form-control-lg" />
-                <MudText Typo="Typo.caption"><ValidationMessage For="()=>Model.FirstName" /></MudText>
-                <label class="form-label" for="form2Example17">First Name</label>
+                <MudItem xs="12" sm="6">
+                    <div class="form-outline mb-2">
+                        <input @bind-value="@Model.ConfirmPassword" type="password" id="form2Example22"
+                            class="form-control form-control-lg" />
+                        <MudText Typo="Typo.caption">
+                            <ValidationMessage For="()=>Model.ConfirmPassword" />
+                        </MudText>
+                        <label class="form-label" for="form2Example22">Confirm Password</label>
+                    </div>
+                </MudItem>
+            </MudGrid>
+            <div class="pt-1 mb-3">
+                <button form="editForm" class="btn btn-dark btn-lg btn-block" type="submit">Create Account</button>
             </div>
-        </MudItem>
-        <MudItem xs="12" sm="6">
-             <div class="form-outline">
-                <input @bind-value="@Model.LastName" type="text" id="form2Example18" class="form-control form-control-lg" />
-                <MudText Typo="Typo.caption"><ValidationMessage For="()=>Model.LastName" /></MudText>
-                <label class="form-label" for="form2Example18">Last Name</label>
+            <p class="mb-4 pb-lg-2" style="color: #393f81;">
+                Already have an account? <a href="login" style="color: #393f81;">Login here</a>
+            </p>
+            <a href="#!" class="small text-muted">Terms of use.</a>
+            <a href="#!" class="small text-muted">Privacy policy</a>
+        </EditForm>
+    </MudTabPanel>
+    <MudTabPanel Text="Register as an Orphanage">
+        <EditForm if="editForm2" OnValidSubmit="Submit" Model="@Model2"
+            OnInvalidSubmit='()=> { snackBar.Add("Please fill in all required field",Severity.Error);}'>
+
+            <DataAnnotationsValidator />
+
+            <h5 class="fw-normal m-3 pb-3" style="letter-spacing: 1px;">Registering a new Orphanage</h5>
+            <MudGrid>
+                <MudItem xs="12" sm="6">
+                    <div class="form-outline">
+                        <input @bind-value="@Model2.Name" type="text" id="form2Example170"
+                            class="form-control form-control-lg" />
+                        <MudText Typo="Typo.caption">
+                            <ValidationMessage For="()=>Model2.Name" />
+                        </MudText>
+                        <label class="form-label" for="form2Example170">Name</label>
+                    </div>
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <div class="form-outline">
+                        <input @bind-value="@Model2.Address" type="text" id="form2Example180"
+                            class="form-control form-control-lg" />
+                        <MudText Typo="Typo.caption">
+                            <ValidationMessage For="()=>Model2.Address" />
+                        </MudText>
+                        <label class="form-label" for="form2Example180">Physical Address</label>
+                    </div>
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <div class="form-outline">
+                        <input @bind-value="@Model2.Email" type="email" id="form2Example190"
+                            class="form-control form-control-lg" />
+                        <MudText Typo="Typo.caption">
+                            <ValidationMessage For="()=>Model2.Email" />
+                        </MudText>
+                        <label class="form-label" for="form2Example190">Email</label>
+                    </div>
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <div class="form-outline">
+                        <input @bind-value="@Model2.Phone" type="tel" id="form2Example20"
+                            class="form-control form-control-lg" />
+                        <MudText Typo="Typo.caption">
+                            <ValidationMessage For="()=>Model2.Phone" />
+                        </MudText>
+                        <label class="form-label" for="form2Example170">Phone Number</label>
+                    </div>
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <div class="form-outline">
+                        <input @bind-value="@Model2.Orphans" type="numeric" id="form2Example210"
+                            class="form-control form-control-lg" />
+                        <MudText Typo="Typo.caption">
+                            <ValidationMessage For="()=>Model2.Orphans" />
+                        </MudText>
+                        <label class="form-label" for="form2Example210">Number of Orphans</label>
+                    </div>
+                </MudItem>
+
+                <MudItem xs="12" sm="6">
+                    <div class="form-outline mb-2">
+                        <InputFile OnChange="OnUpload" multiple accept=".pdf,.docx" type="file" id="form2Example220"
+                            class="form-control form-control-lg" />
+                        <label class="form-label" for="form2Example220">Upload Certificates</label>
+                    </div>
+                </MudItem>
+            </MudGrid>
+            <div class="pt-1 mb-3">
+                <button form="editForm2" class="btn btn-dark btn-lg btn-block" type="submit">Submit</button>
             </div>
-        </MudItem>
-        <MudItem xs="12" sm="6">
-            <div class="form-outline">
-                <input @bind-value="@Model.Email" type="email" id="form2Example19" class="form-control form-control-lg" />
-                <MudText Typo="Typo.caption"><ValidationMessage For="()=>Model.Email" /></MudText>
-                <label class="form-label" for="form2Example19">Email</label>
-            </div>
-        </MudItem>
-        <MudItem xs="12" sm="6">
-            <div class="form-outline">
-                <input @bind-value="@Model.PhoneNumber" type="tel" id="form2Example20" class="form-control form-control-lg" />
-                <MudText Typo="Typo.caption"><ValidationMessage For="()=>Model.PhoneNumber" /></MudText>
-                <label class="form-label" for="form2Example17">Phone Number</label>
-            </div>
-        </MudItem>
-        <MudItem xs="12" sm="6">
-            <div class="form-outline">
-                <input @bind-value="@Model.Password" type="password" id="form2Example21" class="form-control form-control-lg" />
-               <MudText Typo="Typo.caption"><ValidationMessage For="()=>Model.Password" /></MudText>
-                <label class="form-label" for="form2Example17">Password</label>
-            </div>
-        </MudItem>
-        
-        <MudItem xs="12" sm="6">
-            <div class="form-outline mb-2">
-                <input @bind-value="@Model.ConfirmPassword" type="password" id="form2Example22" class="form-control form-control-lg" />
-                <MudText Typo="Typo.caption"><ValidationMessage For="()=>Model.ConfirmPassword" /></MudText>
-                <label class="form-label" for="form2Example22">Confirm Password</label>
-            </div>
-        </MudItem>        
-    </MudGrid>
-    <div class="pt-1 mb-3">
-        <button class="btn btn-dark btn-lg btn-block" type="submit">Create Account</button>
-    </div>
-    <p class="mb-4 pb-lg-2" style="color: #393f81;">
-        Already have an account? <a href="login"
-                                  style="color: #393f81;">Login here</a>
-    </p>
-    <a href="#!" class="small text-muted">Terms of use.</a>
-    <a href="#!" class="small text-muted">Privacy policy</a>
-</EditForm>
+            <p class="mb-4 pb-lg-2" style="color: #393f81;">
+                Already have an account? <a href="login" style="color: #393f81;">Login here</a>
+            </p>
+            <a href="#!" class="small text-muted">Terms of use.</a>
+            <a href="#!" class="small text-muted">Privacy policy</a>
+        </EditForm>
+    </MudTabPanel>
+</MudTabs>
+
 
 @code {
     RegisterRequest Model { get; set; } = new();
-    async Task SubmitAsync()
+    Orphanage Model2 { get; set; } = new();
+    async Task Submit()
     {
+        var result = await orphanageService.Create(Model2);
+        if (result.Succeeded)
+        {
+            var registerModel = new RegisterRequest()
+            {
+                UserName = Model2.Email,
+                FirstName = Model2.Name,
+                LastName = Model2.Name,
+                Password = "test1234",
+                ConfirmPassword = "test1234",
+                PhoneNumber = Model2.Phone
 
+            };
+            var result1 = await userAccountService.RegisterAsync(registerModel);
+            if (result1.Succeeded)
+            {
+                snackBar.Add("Your account was created successfully.", Severity.Success);
+                Navigation.NavigateTo("/");
+            }
+            else
+            {
+                snackBar.Add(result1.Messages.First(), Severity.Error);
+            }
+        }
 
     }
+    void OnUpload(InputFileChangeEventArgs args)
+    {
+
+    }
+    async Task SubmitAsync()
+    {
+        Model.UserName = Model.Email;
+        Model.ActivateUser = true;
+        Model.AutoConfirmEmail = true;
+        var result = await userAccountService.RegisterAsync(Model);
+        if (result.Succeeded)
+        {
+
+            var donor = new Donor
+            {
+                UserId = result.Data,
+                Email = Model.Email,
+                PhoneNumber = Model.PhoneNumber,
+                Name = Model.FirstName + " " + Model.LastName
+            };
+            var res = await donorService.Create(donor);
+            if (res.Succeeded)
+            {
+                snackBar.Add(result.Messages.First(), Severity.Success);
+                Navigation.NavigateTo("/");
+            }
+            else
+            {
+                snackBar.Add(res.Messages.First(), Severity.Error);
+            }
+
+        }
+        else
+        {
+            snackBar.Add(result.Messages.First(), Severity.Error);
+        }
+    }
+
 }

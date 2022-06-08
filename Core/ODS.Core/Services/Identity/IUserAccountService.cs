@@ -9,7 +9,7 @@ namespace ODS.Core.Services.Identity
         Task<Result<TokenResponse>> GetRefreshTokenAsync(RefreshTokenRequest model);
         Task<IResult> UpdateProfileAsync(UpdateProfileRequest request, int userId);
         Task<IResult<List<UserResponse>>> GetAllUsersAsync();
-        Task<IResult> RegisterAsync(RegisterRequest request);
+        Task<IResult<Guid>> RegisterAsync(RegisterRequest request);
 
         Task<RegisterRequest> GetUserAsync(int id);
 

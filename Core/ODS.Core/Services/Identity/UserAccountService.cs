@@ -236,17 +236,17 @@ namespace ODS.Core.Services.Identity
                 return await Result.FailAsync(string.Format("Email {0} is already used.", request.Email));
             }
         }
-        public async Task<IResult> RegisterAsync(RegisterRequest request)
+        public async Task<IResult<Guid>> RegisterAsync(RegisterRequest request)
         {
             var userWithSameEmail = await userManager.FindByEmailAsync(request.Email);
             if (userWithSameEmail is not null)
             {
-                return Result.Fail($"User with email {request.Email} already exists.");
+                return Result<Guid>.Fail($"User with email {request.Email} already exists.");
             }
             var userWithSameUserName = await userManager.FindByNameAsync(request.UserName);
             if (userWithSameUserName is not null)
             {
-                return Result.Fail($"User with username is already taken.");
+                return Result<Guid>.Fail($"User with username is already taken.");
             }
             var user = new User
             {
@@ -268,11 +268,11 @@ namespace ODS.Core.Services.Identity
                 }               
                 else { }
                 await userManager.AddToRoleAsync(user, "BasicUser");
-                return Result.Success("user created successifully.");
+                return Result<Guid>.Success(user.UserGuid,"user created successifully.");
             }
             else                           
             {
-                return Result.Success(result.Errors.First().Description.ToString());
+                return Result<Guid>.Fail(result.Errors.First().Description.ToString());
             }
 
         }

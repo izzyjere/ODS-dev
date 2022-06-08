@@ -804,6 +804,17 @@ hr {
     border: 1px solid transparent;
     display: inline-block
 }
+.btn_2 {
+    background-color: blue;
+    color: #fff !important;
+    padding: 11px 20px;
+    font-size: 16px;
+    border-radius: 0;
+    font-weight: 400;
+    text-transform: capitalize;
+    border: 1px solid transparent;
+    display: inline-block
+}
 
     .btn_1 i {
         margin-right: 8px
