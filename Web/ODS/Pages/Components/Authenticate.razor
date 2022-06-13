@@ -1,0 +1,26 @@
+@page "/auth/{returnUrl}"
+
+@code{
+    
+    [CascadingParameter] Task<AuthenticationState> ContextTask { get; set; }
+    [Parameter] public string ReturnUrl {get; set;} 
+    ClaimsPrincipal claimsPrincipal = new();
+
+   protected override async Task OnInitializedAsync()
+    {
+        claimsPrincipal = (await ContextTask).User;
+        if(string.IsNullOrEmpty(ReturnUrl))
+        {
+            ReturnUrl = "/";
+        }
+        if(!claimsPrincipal.Identity.IsAuthenticated)
+        {
+            Navigation.NavigateTo($"login/"+ReturnUrl);
+        }
+        else
+        {
+            Navigation.NavigateTo(ReturnUrl);
+        }
+        StateHasChanged();
+    }
+}

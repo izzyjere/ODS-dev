@@ -1,25 +1,21 @@
 ﻿@inherits LayoutComponentBase
 <MudLayout>
-    <MudAppBar Elevation="25">
-        <MudHidden Breakpoint="Breakpoint.SmAndDown">
-            <MudIcon Icon="@Icons.Material.Filled.Groups" Size="Size.Large" />
-        </MudHidden>
+    <MudAppBar Class="mud-theme-secondary" Elevation="25">        
         <MudHidden Breakpoint="Breakpoint.MdAndUp">
             <MudIconButton Icon="@Icons.Material.Outlined.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
         </MudHidden>
         <MudHidden Breakpoint="Breakpoint.Xs">
-            <MudText Typo="Typo.h6" Class="ml-4">SES</MudText>
+            <MudText Typo="Typo.h6" Class="ml-4"></MudText>
         </MudHidden>
         <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
-            <MudText Typo="Typo.subtitle2">SES</MudText>
+            <MudText Typo="Typo.subtitle2">Kitwe Online Donation System</MudText>
         </MudHidden>
         <MudSpacer />      
         <MudMenu Direction="Direction.Left" OffsetX="true" Dense="true" Class="mt-1 ml-4">
             <ActivatorContent>
-                <MudAvatar Image="images/avatar_jonny.jpg" />
+                <MudAvatar Image="" />
             </ActivatorContent>
-            <ChildContent>
-                <PersonCard User="@claimsPrincipal" Class="mt-n2" />
+            <ChildContent>              
                 <MudDivider Class="mb-2" />
                 <MudListItem Text="Account" Icon="@Icons.Material.Outlined.Person" Href="/personal/account" />
                 <MudListItem Text="Logout" Icon="@Icons.Material.Outlined.Login" Href="/pages/authentication/login" />
@@ -27,7 +23,7 @@
         </MudMenu>
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" Elevation="25" ClipMode="DrawerClipMode.Always">
-        <NavMenu />
+        <NavMenu User="@claimsPrincipal" />
     </MudDrawer>
     <MudMainContent>
         <MudHidden Breakpoint="Breakpoint.SmAndDown">
@@ -56,6 +52,10 @@
     protected override async Task OnInitializedAsync()
     {
         claimsPrincipal = (await ContextTask).User;
+        if(!claimsPrincipal.Identity.IsAuthenticated)
+        {
+            Navigation.NavigateTo("/login");
+        }
         StateHasChanged();
     }
 

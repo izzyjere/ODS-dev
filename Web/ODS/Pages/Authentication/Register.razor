@@ -3,10 +3,10 @@
 <div class="d-flex align-items-center mb-3 pb-1">
     <img class="me-3" src="assets/img/logo/logo2.png" />
 </div>
-<MudTabs Border="true">
+<MudTabs Class="mr-4" Border="true">
     <MudTabPanel Text="Register as a Donor">
         <EditForm id="editForm" OnValidSubmit="SubmitAsync" Model="@Model"
-            OnInvalidSubmit='()=> { snackBar.Add("Please fill in all required field",Severity.Error);}'>
+            OnInvalidSubmit='()=> { snackBar.Add("Please fill in all required fields",Severity.Error);}'>
 
             <DataAnnotationsValidator />
 
@@ -186,7 +186,7 @@
             if (result1.Succeeded)
             {
                 snackBar.Add("Your account was created successfully.", Severity.Success);
-                Navigation.NavigateTo("/");
+                Navigation.NavigateTo("dashboard-orphanage");
             }
             else
             {
@@ -219,7 +219,7 @@
             if (res.Succeeded)
             {
                 snackBar.Add(result.Messages.First(), Severity.Success);
-                Navigation.NavigateTo("/");
+                Navigation.NavigateTo("dashboard");
             }
             else
             {
