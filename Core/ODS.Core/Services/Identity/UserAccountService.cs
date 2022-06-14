@@ -267,7 +267,13 @@ namespace ODS.Core.Services.Identity
                     await userManager.SetPhoneNumberAsync(user, request.PhoneNumber);
                 }               
                 else { }
-                await userManager.AddToRoleAsync(user, "BasicUser");
+                var role = await roleManager.FindByNameAsync(request.Role);
+                if(role is null)
+                {
+                    role = new Role{Name = request.Role, Description=request.Role};
+                    await roleManager.CreateAsync(role);
+                }
+                await userManager.AddToRoleAsync(user, request.Role);
                 return Result<Guid>.Success(user.UserGuid,"user created successifully.");
             }
             else                           

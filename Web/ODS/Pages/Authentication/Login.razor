@@ -2,7 +2,7 @@
 @page "/login/{returnUrl}"
 @layout AuthLayout
 
-<EditForm OnValidSubmit="LoginAsync" Model="@Model" OnInvalidSubmit='()=> { snackBar.Add("Please fill in all required field",Severity.Error);}'>
+<EditForm OnValidSubmit="LoginAsync" Model="@Model" OnInvalidSubmit='()=> { snackBar.Add("Please fill in all required fields",Severity.Error);}'>
 
     <DataAnnotationsValidator/>
     <div class="d-flex align-items-center mb-3 pb-1">
@@ -50,6 +50,16 @@
     }
 
     async Task LoginAsync()
-    {
+    {  
+        var result = await userAccountService.LoginAsync(Model);
+        if(result.Succeeded)
+        {    
+
+             snackBar.Add(result.Messages.First(), Severity.Success);
+             Navigation.NavigateTo($"login/?key={result.Data.TokenKey}", true);
+        }
+        else{
+            snackBar.Add(result.Messages.First(), Severity.Error);
+        }
     }
 }

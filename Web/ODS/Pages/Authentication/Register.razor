@@ -203,6 +203,7 @@
     {
         Model.UserName = Model.Email;
         Model.ActivateUser = true;
+        Model.Role = "Donor";
         Model.AutoConfirmEmail = true;
         var result = await userAccountService.RegisterAsync(Model);
         if (result.Succeeded)
@@ -211,15 +212,16 @@
             var donor = new Donor
             {
                 UserId = result.Data,
-                Email = Model.Email,
+                Email = Model.Email,                
                 PhoneNumber = Model.PhoneNumber,
-                Name = Model.FirstName + " " + Model.LastName
+                Name = Model.FirstName + " " + Model.LastName,
+
             };
             var res = await donorService.Create(donor);
             if (res.Succeeded)
             {
                 snackBar.Add(result.Messages.First(), Severity.Success);
-                Navigation.NavigateTo("dashboard");
+                Navigation.NavigateTo("login");
             }
             else
             {

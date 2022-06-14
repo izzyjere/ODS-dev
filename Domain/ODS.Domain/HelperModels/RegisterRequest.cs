@@ -15,6 +15,7 @@
         [Required, Compare(nameof(Password), ErrorMessage = "Password and Confirm Password must match")]
         public string ConfirmPassword { get; set; }
         
+        public string Role {get; set;}
         public string? PhoneNumber { get; set; }
 
         public bool ActivateUser { get; set; } = false;
