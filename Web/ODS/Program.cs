@@ -1,6 +1,8 @@
 
 
 
+using ODS.Core.Middleware;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -36,6 +38,7 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseMiddleware<SignInMiddleware<User>>();
 app.MapControllers();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");

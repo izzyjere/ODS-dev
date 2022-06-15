@@ -52,10 +52,10 @@
     protected override async Task OnInitializedAsync()
     {
         claimsPrincipal = (await ContextTask).User;
-        if(!claimsPrincipal.Identity.IsAuthenticated)
-        {
-            Navigation.NavigateTo("/login");
-        }
+        //if(!claimsPrincipal.Identity.IsAuthenticated)
+        //{
+        //    Navigation.NavigateTo("/login");
+        //}
         StateHasChanged();
     }
 

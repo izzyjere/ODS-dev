@@ -257,7 +257,7 @@ namespace ODS.Core.Services.Identity
                 IsActive = true,
                 EmailConfirmed = request.AutoConfirmEmail,               
             };
-            var result = await userManager.CreateAsync(user, "kmc1234");
+            var result = await userManager.CreateAsync(user, request.Password);
             if (result.Succeeded)
             {
                 user.PhoneNumber = request.PhoneNumber;
