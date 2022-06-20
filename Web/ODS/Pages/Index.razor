@@ -16,16 +16,22 @@
                                 <nav>
                                     <ul id="navigation">
                                         <li><a href="#">Home</a></li>
-                                        <li><a href="#">Orphanages</a></li>
-                                        <li><a href="#">About</a></li>                                        
-                                        <li><a href="#">Contact Us</a></li>
+                                        <li><a href="#opharnages">Orphanages</a></li>
+                                        <li><a href="#about">About</a></li>                                        
+                                        <li><a href="#contact">Contact Us</a></li>
                                     </ul>
                                 </nav>
                             </div>
                         </div>
                         <div class="header-right-btn f-right  ml-15">
-                            <a href="#" class="header-btn2 d-none d-xxl-inline-block">Call Us : <span>+260 9675 3674</span></a>
-                            <a href="register" class="btn_1 header-btn"><i class="fas fa-user"></i>Signup</a>                           
+                           @if(isAuthenticated)
+                           {
+                             <a href="dashboard" class="btn_1 header-btn"><i class="fas fa-user"></i>Dashboard</a> 
+                           }
+                           else{
+                           <a href="login" class="btn_1 header-btn"><i class="fas fa-user"></i>Sign In</a> 
+                           }
+                                                      
                         </div>
 
                         <div class="col-12">
@@ -292,3 +298,15 @@
     <a title="Go to Top" href="#"><i class="fas fa-long-arrow-alt-up"></i></a>
 </div>
 
+@code{
+    [CascadingParameter] Task<AuthenticationState> authState { get; set; }
+    ClaimsPrincipal claimsPrincipal = new();
+    bool isAuthenticated;
+    protected override async Task OnInitializedAsync()
+    {
+        claimsPrincipal = (await authState).User;  
+        isAuthenticated = claimsPrincipal.Identity.IsAuthenticated;      
+    }
+
+
+}

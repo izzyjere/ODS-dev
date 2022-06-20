@@ -1,0 +1,65 @@
+@page "/payment-history"
+<MudTable Items="@PaymentsList" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Payment,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">My Payments</MudText>
+        <MudSpacer />
+        <MudButton Variant="Variant.Outlined" Color="Color.Success" StartIcon="@Icons.Material.Filled.Share">Export</MudButton>
+        <MudSpacer/>
+        <MudTextField @bind-Value="searchString1" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>No.</MudTh>
+        <MudTh>Date</MudTh>
+        <MudTh>Payment Method</MudTh>
+        <MudTh>Amount</MudTh>
+        <MudTh>Actions</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Id">@context.Id</MudTd>
+        <MudTd DataLabel="Date">@context.Date.ToString("dd MMM yyyy H:mm")</MudTd>
+        <MudTd DataLabel="PaymentMethod">@context.PaymentMethod.ToDescriptionString()</MudTd>
+        <MudTd DataLabel="Amount">@context.Amount.ToString("N2")</MudTd>
+        <MudTd DataLabel="Actions"></MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+<div class="d-flex flex-wrap mt-4">
+    <MudSwitch @bind-Checked="@hover" Color="Color.Primary">Hover</MudSwitch>
+    <MudSwitch @bind-Checked="@dense" Color="Color.Secondary">Dense</MudSwitch>
+    <MudSwitch @bind-Checked="@striped" Color="Color.Tertiary">Striped</MudSwitch>
+    <MudSwitch @bind-Checked="@bordered" Color="Color.Warning">Bordered</MudSwitch>
+    <MudSpacer />
+    
+</div>
+@code {
+    private bool dense = false;
+    private bool hover = true;
+    private bool striped = false;
+    private bool bordered = false;
+    private string searchString1 = "";
+    private Payment selectedItem1 = null;
+    private HashSet<Payment> selectedItems = new HashSet<Payment>();
+
+    private IEnumerable<Payment> PaymentsList = new List<Payment>();
+
+    protected override async Task OnInitializedAsync()
+    {
+       
+    }
+
+    private bool FilterFunc1(Payment payment) => FilterFunc(payment, searchString1);
+
+    private bool FilterFunc(Payment payment, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (payment.PaymentMethod.ToDescriptionString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (payment.Date.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;       
+        return false;
+    }
+}

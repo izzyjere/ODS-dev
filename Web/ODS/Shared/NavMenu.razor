@@ -1,12 +1,20 @@
-﻿<PersonCard User="@User" Style="background-color: var(--mud-palette-drawer-background);color: var(--mud-palette-drawer-text);" />
+﻿<PersonCard User="@User"
+    Style="background-color: var(--mud-palette-drawer-background);color: var(--mud-palette-drawer-text);" />
 <MudDivider Class="mb-4" />
 <MudNavMenu Class="mud-width-full">
     <MudText Class="m-4" Typo="Typo.h6">Dashboard</MudText>
-    <MudDivider/>
-    <MudNavLink IconColor="Color.Primary" Icon="@Icons.Material.Filled.Home" Href="/">Home</MudNavLink>
-    <MudNavLink IconColor="Color.Error"  Icon="@Icons.Material.Filled.Favorite" Href="donations">My Donations</MudNavLink>
-    <MudNavLink IconColor="Color.Success" Icon="@Icons.Material.Filled.Payments" Href="payment-history">Payments</MudNavLink>
-    <MudNavLink IconColor="Color.Info" Icon="@Icons.Material.Filled.Settings" Href="settings">Settings</MudNavLink>
+    <MudDivider />
+    <AuthorizeView Roles="Donor">
+        <Authorized>
+            <MudNavLink IconColor="Color.Primary" Icon="@Icons.Material.Filled.Home" Href="/">Home</MudNavLink>
+            <MudNavLink IconColor="Color.Error" Icon="@Icons.Material.Filled.Favorite" Href="donations">My Donations
+            </MudNavLink>
+            <MudNavLink IconColor="Color.Success" Icon="@Icons.Material.Filled.Payments" Href="payment-history">Payments
+            </MudNavLink>
+        </Authorized>
+    </AuthorizeView>
+    <MudNavLink Disabled IconColor="Color.Info" Icon="@Icons.Material.Filled.Settings" Href="settings">Settings
+    </MudNavLink>
 </MudNavMenu>
 @code {
     string donateIcon = @"";

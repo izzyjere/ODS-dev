@@ -1,0 +1,59 @@
+﻿@page "/donations"
+<MudTable Items="@DonationsList"  Filter="new Func<Donation,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">My Donations</MudText>
+        <MudSpacer />
+        <MudButton Variant="Variant.Filled" Color="Color.Secondary">
+            Donate Now
+        </MudButton>
+        <MudSpacer/>
+        <MudTextField @bind-Value="searchString1" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>No.</MudTh>
+        <MudTh>Date</MudTh>
+        <MudTh>Type</MudTh>
+        <MudTh>Amount</MudTh>
+        <MudTh>Actions</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Id">@context.Id</MudTd>
+        <MudTd DataLabel="Date">@context.Date.ToString("dd MMM yyyy H:mm")</MudTd>
+        <MudTd DataLabel="Type">@context.Type.ToString()</MudTd>
+        <MudTd DataLabel="Amount">@context.Amount.ToString("N2")</MudTd>
+        <MudTd DataLabel="Actions"></MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+
+@code {
+    
+    private string searchString1 = "";
+    private Donation selectedItem1 = null;
+    private HashSet<Donation> selectedItems = new HashSet<Donation>();
+
+    private IEnumerable<Donation> DonationsList = new List<Donation>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        
+    }
+
+    private bool FilterFunc1(Donation donation) => FilterFunc(donation, searchString1);
+
+    private bool FilterFunc(Donation donation, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (donation.Description.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (donation.Date.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (donation.Type.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
+}
