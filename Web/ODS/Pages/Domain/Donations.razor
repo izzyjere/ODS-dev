@@ -3,7 +3,7 @@
     <ToolBarContent>
         <MudText Typo="Typo.h6">My Donations</MudText>
         <MudSpacer />
-        <MudButton Variant="Variant.Filled" Color="Color.Secondary">
+        <MudButton OnClick="Donate" Variant="Variant.Filled" Color="Color.Secondary">
             Donate Now
         </MudButton>
         <MudSpacer/>
@@ -39,6 +39,12 @@
 
     protected override async Task OnInitializedAsync()
     {
+        
+    }
+    async void Donate ()
+    {
+        DialogOptions midWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true, Position = DialogPosition.Center, DisableBackdropClick = true };
+        var dialog = dialogService.Show<DonateDialog>("Donate");
         
     }
 
