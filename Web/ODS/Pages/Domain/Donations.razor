@@ -12,6 +12,7 @@
     <HeaderContent>
         <MudTh>No.</MudTh>
         <MudTh>Date</MudTh>
+        <MudTh>Description</MudTh>
         <MudTh>Type</MudTh>
         <MudTh>Quantity</MudTh>
         <MudTh>Amount</MudTh>
@@ -20,6 +21,7 @@
     <RowTemplate>
         <MudTd DataLabel="Id">@context.Id</MudTd>
         <MudTd DataLabel="Date">@context.Date.ToString("dd MMM yyyy H:mm")</MudTd>
+        <MudTd DataLabel="Description">@context.Description</MudTd>
         <MudTd DataLabel="Type">@context.Type.ToString()</MudTd>
         <MudTd DataLabel="Quantity">@context.Quantity</MudTd>
         <MudTd DataLabel="Amount">@context.Amount.ToString("N2")</MudTd>

@@ -68,7 +68,7 @@
 </MudDialog>
 
 @code {
- 
+
     [CascadingParameter] MudDialogInstance Dialog { get; set; }
     [CascadingParameter] Task<AuthenticationState> authenticateTask { get; set; }
     Payment Model { get; set; } = new();
@@ -82,7 +82,7 @@
     {   
         claimsPrincipal = (await authenticateTask).User;
         donor= await donorService.GetByUserId(claimsPrincipal.GetGuid());
-       
+
     }
     void SendOTP()
     {
@@ -93,11 +93,11 @@
         }
         OTPsent = true;
         StateHasChanged();
-       
+
     }
     void VerifyOTP()
     {   
-         if (string.IsNullOrWhiteSpace(OTP))
+        if (string.IsNullOrWhiteSpace(OTP))
         {
             snackBar.Add("Please enter a valid code", Severity.Error);
             return;
@@ -124,6 +124,7 @@
         if(res.Succeeded)
         {
             snackBar.Add("Thank you.");
+            Dialog.Close();
         }
         else{
             snackBar.Add("Something went wrong."); 
