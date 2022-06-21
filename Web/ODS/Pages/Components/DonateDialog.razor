@@ -63,21 +63,26 @@
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="Cancel">Cancel</MudButton>
-        <MudButton OnClick="Complete"  IconColor="Color.Error" StartIcon="@Icons.Material.Filled.Favorite" Variant="Variant.Filled">Donate</MudButton>
+        <MudButton OnClick="Donate"  IconColor="Color.Error" StartIcon="@Icons.Material.Filled.Favorite" Variant="Variant.Filled">Donate</MudButton>
     </DialogActions>
 </MudDialog>
 
 @code {
-    [Parameter] public int ApplicationId { get; set; }
+ 
     [CascadingParameter] MudDialogInstance Dialog { get; set; }
+    [CascadingParameter] Task<AuthenticationState> authenticateTask { get; set; }
     Payment Model { get; set; } = new();
     PaymentMethod paymentMethod;
     bool OTPsent,OTPverified;
+    ClaimsPrincipal claimsPrincipal = new();
     Donation Model2 {get; set;} = new();
+    Donor donor = new();
     string OTP;
     protected override async Task OnInitializedAsync()
-    {
-        
+    {   
+        claimsPrincipal = (await authenticateTask).User;
+        donor= await donorService.GetByUserId(claimsPrincipal.GetGuid());
+       
     }
     void SendOTP()
     {
@@ -106,7 +111,24 @@
     }
     async void Donate()
     {
-        
+        if(string.IsNullOrEmpty(Model2.Description)||string.IsNullOrEmpty(Model2.Quantity.ToString()))
+        {
+            snackBar.Add("Enter all required fields");
+            return;
+        }
+        Model2.DonorId = donor.Id;
+        Model2.Date = DateTime.Now;
+        Model2.Type = DonationType.Item;
+
+        var res = await donationService.Create(Model2);
+        if(res.Succeeded)
+        {
+            snackBar.Add("Thank you.");
+        }
+        else{
+            snackBar.Add("Something went wrong."); 
+        }
+       
     }
     void Cancel() => Dialog.Cancel();
 }

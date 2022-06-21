@@ -18,6 +18,7 @@ namespace ODS.Core.Factories
             identity.AddClaim(new Claim("FirstName", user.FirstName));
             identity.AddClaim(new Claim("LastName", user.LastName));
             identity.AddClaim(new Claim("UserId", user.Id.ToString()));
+            identity.AddClaim(new Claim("Guid", user.UserGuid.ToString()));
 
 
 

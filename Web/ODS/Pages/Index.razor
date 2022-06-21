@@ -54,7 +54,7 @@
                             <div class="hero-caption">
                                 <h1 data-animation="fadeInUp" data-delay=".2s">Give a helping hand to those who need it!</h1>
                                 <p data-animation="fadeInUp" data-delay=".4s">When a child gets access to good food, it can change just about everything.</p>
-                                <a href="auth/donate" class="btn_1 hero-btn" data-animation="fadeInUp" data-delay=".8s"><i class="fas fa-heart"></i>Make a Donation</a>
+                                <button @onclick="Donate" class="btn_1 hero-btn" data-animation="fadeInUp" data-delay=".8s"><i class="fas fa-heart"></i>Make a Donation</button>
                             </div>
                         </div>
                     </div>
@@ -306,6 +306,20 @@
     {
         claimsPrincipal = (await authState).User;  
         isAuthenticated = claimsPrincipal.Identity.IsAuthenticated;      
+    }
+     async void Donate ()
+    {   
+        if(!claimsPrincipal.Identity.IsAuthenticated)
+        {
+           
+         Navigation.NavigateTo("login"); return;
+        }
+        else{
+          DialogOptions midWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true, Position = DialogPosition.Center, DisableBackdropClick = true };
+           var dialog = dialogService.Show<DonateDialog>("Donate");
+        }
+       
+        
     }
 
 

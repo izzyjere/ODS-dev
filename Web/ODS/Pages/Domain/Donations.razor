@@ -13,6 +13,7 @@
         <MudTh>No.</MudTh>
         <MudTh>Date</MudTh>
         <MudTh>Type</MudTh>
+        <MudTh>Quantity</MudTh>
         <MudTh>Amount</MudTh>
         <MudTh>Actions</MudTh>
     </HeaderContent>
@@ -20,8 +21,11 @@
         <MudTd DataLabel="Id">@context.Id</MudTd>
         <MudTd DataLabel="Date">@context.Date.ToString("dd MMM yyyy H:mm")</MudTd>
         <MudTd DataLabel="Type">@context.Type.ToString()</MudTd>
+        <MudTd DataLabel="Quantity">@context.Quantity</MudTd>
         <MudTd DataLabel="Amount">@context.Amount.ToString("N2")</MudTd>
-        <MudTd DataLabel="Actions"></MudTd>
+        <MudTd DataLabel="Actions">
+            <MudButton Color="Color.Info" Variant="Variant.Outlined">More Details></MudButton>
+        </MudTd>
     </RowTemplate>
     <PagerContent>
         <MudTablePager />
@@ -39,13 +43,20 @@
 
     protected override async Task OnInitializedAsync()
     {
-        
+        var res = await donationService.GetAll();
+        DonationsList = res.Data;
     }
     async void Donate ()
     {
         DialogOptions midWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true, Position = DialogPosition.Center, DisableBackdropClick = true };
         var dialog = dialogService.Show<DonateDialog>("Donate");
-        
+        var res = await dialog.Result;
+        if(!res.Cancelled)
+        {
+             var res1 = await donationService.GetAll();
+             DonationsList = res1.Data;
+             StateHasChanged();
+        }
     }
 
     private bool FilterFunc1(Donation donation) => FilterFunc(donation, searchString1);
