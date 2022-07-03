@@ -293,6 +293,9 @@ namespace ODS.Core.Migrations
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("OrphanageId")
+                        .HasColumnType("int");
+
                     b.Property<int>("PaymentMethod")
                         .HasColumnType("int");
 
@@ -305,6 +308,8 @@ namespace ODS.Core.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("DonorId");
+
+                    b.HasIndex("OrphanageId");
 
                     b.ToTable("Donations", "Domain");
                 });
@@ -378,6 +383,37 @@ namespace ODS.Core.Migrations
                     b.ToTable("Orphanages", "Domain");
                 });
 
+            modelBuilder.Entity("ODS.Domain.Models.OrphanageNeed", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OpharnageId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrphanageId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Target")
+                        .HasColumnType("float");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrphanageId");
+
+                    b.ToTable("OrphanageNeeds", "Domain");
+                });
+
             modelBuilder.Entity("ODS.Core.Models.UserRole", b =>
                 {
                     b.HasOne("ODS.Core.Models.Role", "Role")
@@ -405,7 +441,15 @@ namespace ODS.Core.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ODS.Domain.Models.Orphanage", "Orphanage")
+                        .WithMany()
+                        .HasForeignKey("OrphanageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Donor");
+
+                    b.Navigation("Orphanage");
                 });
 
             modelBuilder.Entity("ODS.Domain.Models.Orphanage", b =>
@@ -441,6 +485,17 @@ namespace ODS.Core.Migrations
                     b.Navigation("Files");
                 });
 
+            modelBuilder.Entity("ODS.Domain.Models.OrphanageNeed", b =>
+                {
+                    b.HasOne("ODS.Domain.Models.Orphanage", "Orphanage")
+                        .WithMany("Needs")
+                        .HasForeignKey("OrphanageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Orphanage");
+                });
+
             modelBuilder.Entity("ODS.Core.Models.User", b =>
                 {
                     b.Navigation("Roles");
@@ -449,6 +504,11 @@ namespace ODS.Core.Migrations
             modelBuilder.Entity("ODS.Domain.Models.Donor", b =>
                 {
                     b.Navigation("Donations");
+                });
+
+            modelBuilder.Entity("ODS.Domain.Models.Orphanage", b =>
+                {
+                    b.Navigation("Needs");
                 });
 #pragma warning restore 612, 618
         }
