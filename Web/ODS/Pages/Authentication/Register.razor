@@ -198,6 +198,7 @@
                     FirstName = Model2.Name,
                     Email = Model2.Email,
                     LastName = Model2.Name,
+                    Role = "Orphanage",
                     Password = "test1234",
                     ConfirmPassword = "test1234",
                     PhoneNumber = Model2.Phone
@@ -207,7 +208,7 @@
             if (result1.Succeeded)
             {
                 snackBar.Add("Your account was created successfully.", Severity.Success);
-                Navigation.NavigateTo("dashboard-orphanage");
+                Navigation.NavigateTo("/");
             }
             else
             {
