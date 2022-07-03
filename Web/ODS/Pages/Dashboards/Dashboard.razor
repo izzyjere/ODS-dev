@@ -1,46 +1,106 @@
 @page "/dashboard"
-<MudGrid>
-    <MudItem xs="12" sm="6" md="4">
-        <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
-            <MudIcon Icon="@Icons.Material.Filled.Money" Color="Color.Primary" Class="mx-4"
-                Style="width:54px; height:54px;"></MudIcon>
-            <div>
-                <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">Total Donations</MudText>
-                <MudText Typo="Typo.h5">0 ZMW</MudText>
-            </div>
-        </MudPaper>
-    </MudItem>
-    <MudItem xs="12" sm="6" md="4">
-        <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
-            <MudIcon Icon="@Icons.Material.Filled.Favorite" Color="Color.Secondary" Class="mx-4"
-                Style="width:54px; height:54px;"></MudIcon>
-            <div>
-                <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">Items Donated</MudText>
-                <MudText Typo="Typo.h5">0</MudText>
-            </div>
-        </MudPaper>
-    </MudItem>
-    <MudItem xs="12" sm="6" md="4">
-        <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
-            <MudIcon Icon="@Icons.Material.Filled.Home" Color="Color.Success" Class="mx-4"
-                Style="width:54px; height:54px;"></MudIcon>
-            <div>
-                <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">Opharnages Helped</MudText>
-                <MudText Typo="Typo.h5">0</MudText>
-            </div>
-        </MudPaper>
-    </MudItem>
-    <MudItem xs="12" sm="6">
-      <MudPaper Height="500px" Elevation="24">
+<AuthorizeView Roles="Orphanage">
+<Authorized>
+    <MudMessageBox @ref="mbox" Title="Warning">
+    <MessageContent>
+        Your application is still in progress. Please contact the admin for more details.
+    </MessageContent>
+    <YesButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Success" >OK</MudButton>
+    </YesButton>
+</MudMessageBox>
+</Authorized>
+</AuthorizeView>
+<AuthorizeView Roles="Donor">
+    <Authorized>
+        <MudGrid>
+            <MudItem xs="12" sm="6" md="4">
+                <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+                    <MudIcon Icon="@Icons.Material.Filled.Money" Color="Color.Primary" Class="mx-4"
+                             Style="width:54px; height:54px;"></MudIcon>
+                    <div>
+                        <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">Total Donations</MudText>
+                        <MudText Typo="Typo.h5">@myDonations.ToString("N2") ZMW</MudText>
+                    </div>
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="12" sm="6" md="4">
+                <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+                    <MudIcon Icon="@Icons.Material.Filled.Favorite" Color="Color.Secondary" Class="mx-4"
+                             Style="width:54px; height:54px;"></MudIcon>
+                    <div>
+                        <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">Items Donated</MudText>
+                        <MudText Typo="Typo.h5">@itemsTotal</MudText>
+                    </div>
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="12" sm="6" md="4">
+                <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+                    <MudIcon Icon="@Icons.Material.Filled.Home" Color="Color.Success" Class="mx-4"
+                             Style="width:54px; height:54px;"></MudIcon>
+                    <div>
+                        <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">Opharnages Helped</MudText>
+                        <MudText Typo="Typo.h5">@homesTotal</MudText>
+                    </div>
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="12" sm="6">
+                <MudPaper Height="500px" Elevation="24">
 
-      </MudPaper>
-    </MudItem>
-    <MudItem xs="12" sm="6">
-         <MudPaper Height="500px" Elevation="24">
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="12" sm="6">
+                <MudPaper Height="500px" Elevation="24">
 
-      </MudPaper>
-    </MudItem>
-</MudGrid>
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+    </Authorized>
+</AuthorizeView>
 @code {
+    Orphanage Orphanage { get; set; } = new();
+    Donor Donor { get; set; } = new();
+    [CascadingParameter] Task<AuthenticationState> authState { get; set; } 
+    ClaimsPrincipal claimsPrincipal = new();
+    MudMessageBox mbox { get; set; }
+    decimal myDonations = 0;
+    int itemsTotal, homesTotal = 0;
+    protected override async Task OnInitializedAsync()
+    {
+        await Init();
+    }
+    async Task Init()
+    {
+        claimsPrincipal = (await authState).User;
+        if (claimsPrincipal.Identity.IsAuthenticated)
+        {
+            if(claimsPrincipal.IsInRole("Orphanage"))
+            {
+                Orphanage = await orphanageService.GetByEmail(claimsPrincipal.Identity.Name);
+                if(!Orphanage.IsActive)
+                {
+                    await mbox.Show();
+                    Navigation.NavigateTo("/");
 
+                }
+            }
+            else if(claimsPrincipal.IsInRole("Donor"))
+            {
+                Donor = await donorService.GetByUserId(claimsPrincipal.GetGuid());
+                if (Donor.Donations.Any())
+                {
+                    itemsTotal = Donor.Donations.Count(d => d.Type == DonationType.Item);
+                    myDonations = Donor.Donations.Sum(d => d.Amount);
+                }
+            }
+            else
+            {
+                Navigation.NavigateTo("/");
+            }
+        }
+        else
+        {
+            Navigation.NavigateTo("login");
+        }
+    }
 }

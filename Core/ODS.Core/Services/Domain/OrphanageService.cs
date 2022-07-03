@@ -5,5 +5,9 @@
         public OrphanageService(IUnitOfWork<int> unitOfWork) : base(unitOfWork)
         {
         }
+        public async Task<Orphanage> GetByEmail(string email)
+        {
+            return await Repository.Entities().FirstOrDefaultAsync(x => x.Email == email);
+        }
     }
 }

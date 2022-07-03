@@ -6,14 +6,14 @@
     <MudDivider />
     <AuthorizeView Roles="Donor">
         <Authorized>
-            <MudNavLink IconColor="Color.Primary" Icon="@Icons.Material.Filled.Home" Href="/">Home</MudNavLink>
+            <MudNavLink IconColor="Color.Primary" Icon="@Icons.Material.Filled.Home" Href="dashboard">Dashboard</MudNavLink>
             <MudNavLink IconColor="Color.Error" Icon="@Icons.Material.Filled.Money" Href="donations">My Donations</MudNavLink>
             <MudNavLink IconColor="Color.Success" Icon="@Icons.Material.Filled.Payments" Href="payment-history">Payments</MudNavLink>
         </Authorized>
     </AuthorizeView>
     <AuthorizeView Roles="Orphanage">
         <Authorized>
-            <MudNavLink IconColor="Color.Primary" Icon="@Icons.Material.Filled.Home" Href="/">Home</MudNavLink>
+            <MudNavLink IconColor="Color.Primary" Icon="@Icons.Material.Filled.Home" Href="dasboard">Dashboard</MudNavLink>
             <MudNavLink IconColor="Color.Error" Icon="@Icons.Material.Filled.Money" Href="our-donations">Donations</MudNavLink>
             <MudNavLink IconColor="Color.Success" Icon="@Icons.Material.Filled.Payments" Href="payment-history">Needs</MudNavLink>
         </Authorized>
