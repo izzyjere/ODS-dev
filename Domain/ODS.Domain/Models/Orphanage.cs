@@ -11,10 +11,10 @@ namespace ODS.Domain.Models
         public string Phone { get; set; }
         [Required]
         public string Email { get; set; }
-        [Required]
-        public string ImageUrl { get; set; }
-        [Required]
-        public string AccountNumber { get; set; }
+      
+        public string? ImageUrl { get; set; }
+      
+        public string? AccountNumber { get; set; }
         public bool IsActive { get; set; }
         public List<UploadFile> Files { get; set; }
 

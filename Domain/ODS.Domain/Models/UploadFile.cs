@@ -1,6 +1,6 @@
 ﻿namespace ODS.Domain.Models
 {
-    public class UploadFile : Entity<int>
+    public class UploadFile
     {
         public int OrphanageId { get; set; }
         public string FileName { get; set; }

@@ -346,7 +346,6 @@ namespace ODS.Core.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("AccountNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Address")
@@ -358,7 +357,6 @@ namespace ODS.Core.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
@@ -414,6 +412,9 @@ namespace ODS.Core.Migrations
                 {
                     b.OwnsMany("ODS.Domain.Models.UploadFile", "Files", b1 =>
                         {
+                            b1.Property<int>("OrphanageId")
+                                .HasColumnType("int");
+
                             b1.Property<int>("Id")
                                 .ValueGeneratedOnAdd()
                                 .HasColumnType("int");
@@ -427,12 +428,7 @@ namespace ODS.Core.Migrations
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
-                            b1.Property<int>("OrphanageId")
-                                .HasColumnType("int");
-
-                            b1.HasKey("Id");
-
-                            b1.HasIndex("OrphanageId");
+                            b1.HasKey("OrphanageId", "Id");
 
                             b1.ToTable("FileUploads", "Domain");
 
