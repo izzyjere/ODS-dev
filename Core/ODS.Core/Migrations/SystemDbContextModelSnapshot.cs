@@ -427,10 +427,6 @@ namespace ODS.Core.Migrations
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
-                            b1.Property<string>("FilePath")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
                             b1.Property<int>("OrphanageId")
                                 .HasColumnType("int");
 

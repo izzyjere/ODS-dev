@@ -21,4 +21,8 @@
     <ProjectReference Include="..\..\Domain\ODS.Domain\ODS.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\fileUploads\" />
+  </ItemGroup>
+
 </Project>

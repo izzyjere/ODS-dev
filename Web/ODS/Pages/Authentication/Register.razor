@@ -6,16 +6,14 @@
 <MudTabs Class="mr-4" Border="true">
     <MudTabPanel Text="Register as a Donor">
         <EditForm id="editForm" OnValidSubmit="SubmitAsync" Model="@Model"
-            OnInvalidSubmit='()=> { snackBar.Add("Please fill in all required fields",Severity.Error);}'>
-
+                  OnInvalidSubmit='()=> { snackBar.Add("Please fill in all required fields",Severity.Error);}'>
             <DataAnnotationsValidator />
-
             <h5 class="fw-normal m-3 pb-3" style="letter-spacing: 1px;">Create a new account</h5>
             <MudGrid>
                 <MudItem xs="12" sm="6">
                     <div class="form-outline">
                         <input @bind-value="@Model.FirstName" type="text" id="form2Example17"
-                            class="form-control form-control-lg" />
+                               class="form-control form-control-lg" />
                         <MudText Typo="Typo.caption">
                             <ValidationMessage For="()=>Model.FirstName" />
                         </MudText>
@@ -25,7 +23,7 @@
                 <MudItem xs="12" sm="6">
                     <div class="form-outline">
                         <input @bind-value="@Model.LastName" type="text" id="form2Example18"
-                            class="form-control form-control-lg" />
+                               class="form-control form-control-lg" />
                         <MudText Typo="Typo.caption">
                             <ValidationMessage For="()=>Model.LastName" />
                         </MudText>
@@ -35,7 +33,7 @@
                 <MudItem xs="12" sm="6">
                     <div class="form-outline">
                         <input @bind-value="@Model.Email" type="email" id="form2Example19"
-                            class="form-control form-control-lg" />
+                               class="form-control form-control-lg" />
                         <MudText Typo="Typo.caption">
                             <ValidationMessage For="()=>Model.Email" />
                         </MudText>
@@ -45,7 +43,7 @@
                 <MudItem xs="12" sm="6">
                     <div class="form-outline">
                         <input @bind-value="@Model.PhoneNumber" type="tel" id="form2Example20"
-                            class="form-control form-control-lg" />
+                               class="form-control form-control-lg" />
                         <MudText Typo="Typo.caption">
                             <ValidationMessage For="()=>Model.PhoneNumber" />
                         </MudText>
@@ -55,7 +53,7 @@
                 <MudItem xs="12" sm="6">
                     <div class="form-outline">
                         <input @bind-value="@Model.Password" type="password" id="form2Example21"
-                            class="form-control form-control-lg" />
+                               class="form-control form-control-lg" />
                         <MudText Typo="Typo.caption">
                             <ValidationMessage For="()=>Model.Password" />
                         </MudText>
@@ -66,7 +64,7 @@
                 <MudItem xs="12" sm="6">
                     <div class="form-outline mb-2">
                         <input @bind-value="@Model.ConfirmPassword" type="password" id="form2Example22"
-                            class="form-control form-control-lg" />
+                               class="form-control form-control-lg" />
                         <MudText Typo="Typo.caption">
                             <ValidationMessage For="()=>Model.ConfirmPassword" />
                         </MudText>
@@ -85,17 +83,15 @@
         </EditForm>
     </MudTabPanel>
     <MudTabPanel Text="Register as an Orphanage">
-        <EditForm if="editForm2" OnValidSubmit="Submit" Model="@Model2"
-            OnInvalidSubmit='()=> { snackBar.Add("Please fill in all required field",Severity.Error);}'>
-
+        <EditForm id="editForm2" OnValidSubmit="Submit" Model="@Model2"
+                  OnInvalidSubmit='()=> { snackBar.Add("Please fill in all required field",Severity.Error);}'>
             <DataAnnotationsValidator />
-
             <h5 class="fw-normal m-3 pb-3" style="letter-spacing: 1px;">Registering a new Orphanage</h5>
             <MudGrid>
                 <MudItem xs="12" sm="6">
                     <div class="form-outline">
                         <input @bind-value="@Model2.Name" type="text" id="form2Example170"
-                            class="form-control form-control-lg" />
+                               class="form-control form-control-lg" />
                         <MudText Typo="Typo.caption">
                             <ValidationMessage For="()=>Model2.Name" />
                         </MudText>
@@ -105,7 +101,7 @@
                 <MudItem xs="12" sm="6">
                     <div class="form-outline">
                         <input @bind-value="@Model2.Address" type="text" id="form2Example180"
-                            class="form-control form-control-lg" />
+                               class="form-control form-control-lg" />
                         <MudText Typo="Typo.caption">
                             <ValidationMessage For="()=>Model2.Address" />
                         </MudText>
@@ -115,7 +111,7 @@
                 <MudItem xs="12" sm="6">
                     <div class="form-outline">
                         <input @bind-value="@Model2.Email" type="email" id="form2Example190"
-                            class="form-control form-control-lg" />
+                               class="form-control form-control-lg" />
                         <MudText Typo="Typo.caption">
                             <ValidationMessage For="()=>Model2.Email" />
                         </MudText>
@@ -125,7 +121,7 @@
                 <MudItem xs="12" sm="6">
                     <div class="form-outline">
                         <input @bind-value="@Model2.Phone" type="tel" id="form2Example20"
-                            class="form-control form-control-lg" />
+                               class="form-control form-control-lg" />
                         <MudText Typo="Typo.caption">
                             <ValidationMessage For="()=>Model2.Phone" />
                         </MudText>
@@ -135,7 +131,7 @@
                 <MudItem xs="12" sm="6">
                     <div class="form-outline">
                         <input @bind-value="@Model2.Orphans" type="numeric" id="form2Example210"
-                            class="form-control form-control-lg" />
+                               class="form-control form-control-lg" />
                         <MudText Typo="Typo.caption">
                             <ValidationMessage For="()=>Model2.Orphans" />
                         </MudText>
@@ -145,9 +141,22 @@
 
                 <MudItem xs="12" sm="6">
                     <div class="form-outline mb-2">
-                        <InputFile OnChange="OnUpload" multiple accept=".pdf,.docx" type="file" id="form2Example220"
-                            class="form-control form-control-lg" />
-                        <label class="form-label" for="form2Example220">Upload Certificates</label>
+                        <InputFile hidden id="fileInput" OnChange="OnUpload" multiple accept=".pdf,.docx" type="file"
+                                   class="form-control form-control-lg" />
+                        <MudButton HtmlTag="label"
+                                   title="Upload certificates for verification"
+                                   Variant="Variant.Filled"
+                                   Color="Color.Primary"
+                                   FullWidth="true"
+                                   StartIcon="@Icons.Filled.CloudUpload"
+                                   for="fileInput">
+                            Upload Files
+                        </MudButton>
+                        <MudProgressLinear Class="mt-3" @bind-Value="@uploadedFileSize" Rounded=true Color=Color.Success />
+                        @if (Model2.Files.Any())
+                        {
+                            <MudText @onclick="ClearFiles" Color=Color.Error Typo=Typo.caption>Clear @Model2.Files.Count uploaded file(s)</MudText>
+                        }
                     </div>
                 </MudItem>
             </MudGrid>
@@ -167,21 +176,32 @@
 @code {
     RegisterRequest Model { get; set; } = new();
     Orphanage Model2 { get; set; } = new();
+    InputFile files;
+    protected override void OnInitialized()
+    {
+        Model2.Files = new();
+        base.OnInitialized();
+    }
     async Task Submit()
     {
+        if (!Model2.Files.Any())
+        {
+            snackBar.Add("Please upload at least one file for verification", Severity.Error);
+            return;
+        }
         var result = await orphanageService.Create(Model2);
         if (result.Succeeded)
         {
             var registerModel = new RegisterRequest()
-            {
-                UserName = Model2.Email,
-                FirstName = Model2.Name,
-                LastName = Model2.Name,
-                Password = "test1234",
-                ConfirmPassword = "test1234",
-                PhoneNumber = Model2.Phone
+                {
+                    UserName = Model2.Email,
+                    FirstName = Model2.Name,
+                    LastName = Model2.Name,
+                    Password = "test1234",
+                    ConfirmPassword = "test1234",
+                    PhoneNumber = Model2.Phone
 
-            };
+                };
             var result1 = await userAccountService.RegisterAsync(registerModel);
             if (result1.Succeeded)
             {
@@ -195,12 +215,52 @@
         }
 
     }
-    void OnUpload(InputFileChangeEventArgs args)
+    double uploadedFileSize = 0;
+    async void OnUpload(InputFileChangeEventArgs args)
     {
+        foreach (var file in args.GetMultipleFiles(4))
+        {
+            if (file.Size > 5000000)
+            {
+                snackBar.Add("file size should not be more than 5mbs.", Severity.Error);
+                return;
+            }
+            try
+            {
+                uploadedFileSize = file.Size;
+                var ms = new MemoryStream();
+                var stream = file.OpenReadStream(5000000);
+                await stream.CopyToAsync(ms);
+                var fileName = await uploadService.UploadFileAsync(file.Name, ms);
+                Model2.Files.Add(new UploadFile { FileName = fileName, DateUploaded = DateTime.Now });
+
+
+            }
+            catch (Exception)
+            {
+                snackBar.Add("An error occured. Try uploading again.", Severity.Error);
+                return;
+            }
+        }
+        snackBar.Add($"{Model2.Files.Count} file(s) uploaded.", Severity.Info);
+        StateHasChanged();
+    }
+    async void ClearFiles()
+    {
+        foreach (var item in Model2.Files)
+        {
+            await uploadService.DeleteFileAsync(item.FileName);
+        }
+        snackBar.Add($"{Model2.Files.Count} file(s) removed.", Severity.Info);
+        Model2.Files.Clear();
+        uploadedFileSize = 0;
+        StateHasChanged();
+
 
     }
     async Task SubmitAsync()
     {
+
         Model.UserName = Model.Email;
         Model.ActivateUser = true;
         Model.Role = "Donor";
@@ -210,14 +270,14 @@
         {
 
             var donor = new Donor
-            {
-                UserId = result.Data,
-                Email = Model.Email,                
-                PhoneNumber = Model.PhoneNumber,
-                Name = Model.FirstName + " " + Model.LastName,
-               
+                {
+                    UserId = result.Data,
+                    Email = Model.Email,
+                    PhoneNumber = Model.PhoneNumber,
+                    Name = Model.FirstName + " " + Model.LastName,
 
-            };
+
+                };
             var res = await donorService.Create(donor);
             if (res.Succeeded)
             {

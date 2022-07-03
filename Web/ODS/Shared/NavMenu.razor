@@ -7,10 +7,15 @@
     <AuthorizeView Roles="Donor">
         <Authorized>
             <MudNavLink IconColor="Color.Primary" Icon="@Icons.Material.Filled.Home" Href="/">Home</MudNavLink>
-            <MudNavLink IconColor="Color.Error" Icon="@Icons.Material.Filled.Favorite" Href="donations">My Donations
-            </MudNavLink>
-            <MudNavLink IconColor="Color.Success" Icon="@Icons.Material.Filled.Payments" Href="payment-history">Payments
-            </MudNavLink>
+            <MudNavLink IconColor="Color.Error" Icon="@Icons.Material.Filled.Money" Href="donations">My Donations</MudNavLink>
+            <MudNavLink IconColor="Color.Success" Icon="@Icons.Material.Filled.Payments" Href="payment-history">Payments</MudNavLink>
+        </Authorized>
+    </AuthorizeView>
+    <AuthorizeView Roles="Opharnage">
+        <Authorized>
+            <MudNavLink IconColor="Color.Primary" Icon="@Icons.Material.Filled.Home" Href="/">Home</MudNavLink>
+            <MudNavLink IconColor="Color.Error" Icon="@Icons.Material.Filled.Favorite" Href="our-donations">Donations</MudNavLink>
+            <MudNavLink IconColor="Color.Success" Icon="@Icons.Material.Filled.Payments" Href="payment-history">Needs</MudNavLink>
         </Authorized>
     </AuthorizeView>
     <MudNavLink Disabled IconColor="Color.Info" Icon="@Icons.Material.Filled.Settings" Href="settings">Settings
