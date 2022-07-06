@@ -95,12 +95,12 @@
         <div class="container-fluid p-0">
             <div class="class-offer-active row p-4">
                 @foreach (var item in Orphanages)
-                {
+                { var ims = string.IsNullOrEmpty(item.ImageUrl)?"assets/img/gallery/xclass-img1.jpg.pagespeed.ic.pGecepnPjS.jpg":item.ImageUrl;
                     <div class="col-lg-4 col-md-6 col-sm-6">
                         <div class="properties pb-30">
                             <div class="properties__card">
                                 <div class="properties__img">
-                                    <a href="#"><img src="assets/img/gallery/xclass-img1.jpg.pagespeed.ic.pGecepnPjS.jpg" alt=""></a>
+                                    <a href="#"><img  src="@ims" alt=""></a>
                                 </div>
                                 <div class="properties__caption">
                                     <h3><a href="#">@item.Name</a></h3>

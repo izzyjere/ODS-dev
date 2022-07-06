@@ -1,0 +1,222 @@
+﻿@page "/orphanage-profile"
+
+@inject ISnackbar Snackbar
+@using System.Text.RegularExpressions
+@using System.ComponentModel.DataAnnotations
+
+<MudText Typo="Typo.h5" Color="Color.Primary" Class="mb-4">Account</MudText>
+<MudTabs Elevation="1" Rounded="true" PanelClass="mt-6">
+    <MudTabPanel Text="General">
+        <MudGrid>
+            <MudItem xs="12" sm="4" md="3">
+                <MudCard>
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText>Public Profile</MudText>
+                        </CardHeaderContent>
+                    </MudCardHeader>
+                    <MudCardContent>
+                        <div class="d-flex justify-center mb-4">
+                            <MudAvatar Image="@AvatarImageLink" Style="height:100px; width:100px;">
+                                @if (AvatarImageLink == null)
+                                {
+                                    <MudIcon Icon="@AvatarIcon" Size="Size.Large"></MudIcon>
+                                }
+                            </MudAvatar>
+
+                        </div>
+                        <MudText Align="Align.Center">@Model2.Name</MudText>
+                        <MudText Align="Align.Center">@claimsPrincipal.GetUserRole()</MudText>
+                    </MudCardContent>
+                    <MudCardActions Class="d-flex justify-center">
+                        <InputFile hidden id="fileInput" OnChange="OnUpload" multiple accept=".jpg,.png" type="file"
+                                   class="form-control form-control-lg" />
+                        <MudButton HtmlTag="label"
+                                   title="Upload certificates for verification"
+                                   Variant="Variant.Filled"
+                                   Color="Color.Primary"
+                                   FullWidth="true"
+                                   StartIcon="@Icons.Filled.CloudUpload"
+                                   for="fileInput">
+                            @AvatarButtonText
+                        </MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+            <MudItem xs="12" sm="8" md="9">
+                <MudCard>
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText>Profile Details</MudText>
+                        </CardHeaderContent>
+                    </MudCardHeader>
+                    <MudCardContent>
+                        <MudGrid>
+
+                            <MudItem xs="12" md="6">
+                                <MudTextField ReadOnly="true" Value="@Model2.Name" Label="Orphanage Name" Variant="Variant.Outlined" />
+                            </MudItem>
+                            <MudItem xs="12" md="6">
+                                <MudTextField ReadOnly="true" Value="@Model2.AccountNumber" Label="Account Number" Variant="Variant.Outlined" />
+                            </MudItem>
+                            <MudItem xs="12" md="6">
+                                <MudTextField ReadOnly="true" Value="@claimsPrincipal.GetUserRole()" Label="Role" Variant="Variant.Outlined" />
+                            </MudItem>
+                            <MudItem xs="12" md="6">
+                                <MudTextField ReadOnly="true" Value="@Model2.Email" Label="Email" Variant="Variant.Outlined" HelperText="Dont worry, we shall not spam!" InputType="InputType.Email" />
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudText>
+                                    <b>Visible Only To Admins</b>
+                                </MudText>
+                                <MudText Typo="Typo.body2">
+                                    Means that only admins will be able to see your contact details.
+                                </MudText>
+                                <MudSwitch @bind-Checked="@FriendSwitch" Color="Color.Secondary" />
+                            </MudItem>
+                        </MudGrid>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+    </MudTabPanel>
+    <MudTabPanel Text="Security">
+        <EditForm OnValidSubmit="SaveChanges" Model="@Model">
+            <DataAnnotationsValidator />
+            <FluentValidationValidator />
+            <MudCard>
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText>Change Password</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudGrid>
+                        <MudItem xs="12" md="6">
+                            <MudTextField @bind-Value="@Model.NewPassword" T="string" Label="Password" Variant="Variant.Outlined" InputType="InputType.Password" For="()=>Model.NewPassword" Required="true" RequiredError="Password is required!" />
+                        </MudItem>
+                        <MudItem xs="12" md="6">
+                            <MudTextField T="string" @bind-Value="@Model.ConfirmNewPassword" Label="Password Confirmation" Variant="Variant.Outlined" InputType="InputType.Password" For="()=>Model.ConfirmNewPassword" />
+                        </MudItem>
+                        <MudItem xs="12">
+                            <MudTextField T="string" @bind-Value="@Model.Password" Label="Current Password" Variant="Variant.Outlined" For="()=>Model.Password" InputType="InputType.Password" />
+                        </MudItem>
+                    </MudGrid>
+                </MudCardContent>
+                <MudCardActions Class="pb-4 pl-4">
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Change Password</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </EditForm>
+    </MudTabPanel>
+</MudTabs>
+
+@code {
+    public string AvatarImageLink { get; set; } = string.Empty;
+    public string AvatarIcon { get; set; }
+    public string AvatarButtonText { get; set; } = "Change Picture";
+    public Color AvatarButtonColor { get; set; } = Color.Error;
+    public bool FriendSwitch { get; set; } = true;
+    ChangePasswordRequest Model { get; set; } = new();
+    Orphanage Model2 { get; set; } = new();
+
+    ClaimsPrincipal claimsPrincipal = new();
+    [CascadingParameter] Task<AuthenticationState> AuthenticationStateTask { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        claimsPrincipal = (await AuthenticationStateTask).User;
+        await Refresh();
+
+    }
+    async Task Refresh()
+    {
+        Model2 = await orphanageService.GetByEmail(claimsPrincipal.Identity.Name);
+        AvatarImageLink = Model2.ImageUrl;
+        AvatarButtonText = string.IsNullOrEmpty(AvatarImageLink) ? "Upload Picture" : AvatarButtonText;
+        StateHasChanged();
+    }
+    void DeletePicture()
+    {
+        if (!String.IsNullOrEmpty(AvatarImageLink))
+        {
+            AvatarImageLink = null;
+            AvatarIcon = Icons.Material.Outlined.SentimentVeryDissatisfied;
+            AvatarButtonText = "Upload Picture";
+            AvatarButtonColor = Color.Primary;
+        }
+        else
+        {
+            return;
+        }
+    }
+
+    async void SaveChanges()
+    {
+        var response = await userAccountService.ChangePasswordAsync(Model, claimsPrincipal.GetId());
+        if (response.Succeeded)
+        {
+            snackBar.Add(response.Messages.First(), Severity.Success);
+            await Refresh();
+        }
+        else
+        {
+            snackBar.Add(response.Messages.First(), Severity.Error);
+        }
+    }
+
+    MudForm form;
+    MudTextField<string> pwField1;
+
+    private IEnumerable<string> PasswordStrength(string pw)
+    {
+        if (string.IsNullOrWhiteSpace(pw))
+        {
+            yield return "Password is required!";
+            yield break;
+        }
+        if (pw.Length < 8)
+            yield return "Password must be at least of length 8";
+        if (!Regex.IsMatch(pw, @"[A-Z]"))
+            yield return "Password must contain at least one capital letter";
+        if (!Regex.IsMatch(pw, @"[a-z]"))
+            yield return "Password must contain at least one lowercase letter";
+        if (!Regex.IsMatch(pw, @"[0-9]"))
+            yield return "Password must contain at least one digit";
+    }
+
+    private string PasswordMatch(string arg)
+    {
+        if (pwField1.Value != arg)
+            return "Passwords don't match";
+        return null;
+    }
+    async void OnUpload(InputFileChangeEventArgs args)
+    {
+        foreach (var file in args.GetMultipleFiles(4))
+        {
+            if (file.Size > 5000000)
+            {
+                snackBar.Add("file size should not be more than 5mbs.", Severity.Error);
+                return;
+            }
+            try
+            {
+
+                var ms = new MemoryStream();
+                var stream = file.OpenReadStream(5000000);
+                await stream.CopyToAsync(ms);
+                var fileName = await uploadService.UploadFileAsync(file.Name, ms);
+                Model2.ImageUrl = "fileUploads/" + fileName;
+                await orphanageService.Update(Model2);
+                await Refresh();
+
+
+            }
+            catch (Exception)
+            {
+                snackBar.Add("An error occured. Try uploading again.", Severity.Error);
+                return;
+            }
+        }
+    }
+} 

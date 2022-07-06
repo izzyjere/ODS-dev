@@ -14,9 +14,10 @@ namespace ODS.Core.Extensions
         public static string GetLastName(this ClaimsPrincipal claimsPrincipal)
         => claimsPrincipal.FindFirstValue("LastName");
         public static string GetFullName(this ClaimsPrincipal claimsPrincipal)
-        => claimsPrincipal.FindFirstValue("FullName");
+        => claimsPrincipal.GetUserRole()!="Orphanage"?claimsPrincipal.FindFirstValue("FullName"):claimsPrincipal.FindFirstValue("FirstName");
         public static string GetUserRole(this ClaimsPrincipal claimsPrincipal)
         => claimsPrincipal.FindFirstValue(ClaimTypes.Role);
+        
 
         
     }
