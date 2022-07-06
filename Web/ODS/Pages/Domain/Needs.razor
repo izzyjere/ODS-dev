@@ -1,6 +1,76 @@
 ﻿@page "/our-needs"
 <h3>Needs</h3>
 
-@code {
+<MudTable Items="@OrphanageNeeds" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<OrphanageNeed,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1">
+    <ToolBarContent>
+        <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="()=>ToggleAdd()">Add New</MudButton>
+        <MudSpacer />
+        <MudTextField @bind-Value="searchString1" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>Id</MudTh>
+        <MudTh>Need</MudTh>
+        <MudTh>Type</MudTh>
+        <MudTh>Added On</MudTh>
+        <MudTh>Target</MudTh>
+        <MudTh>Raised</MudTh>
+        <MudTh>Actions</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Id">@context.Id</MudTd>
+        <MudTd DataLabel="Description">@context.Description</MudTd>
+        <MudTd DataLabel="Type">@context.Type.ToString()</MudTd>
+        <MudTd DataLabel="CreatedOn">@context.CreatedOn.ToString("dd MMM yyyy H:mm")</MudTd>
+        <MudTd DataLabel="Target">@context.GetTarget()</MudTd>
+        <MudTd DataLabel="Raised">@context.GetRaised()</MudTd>
+        <MudTd>
 
+        </MudTd>
+
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+<div class="d-flex flex-wrap mt-4">
+    <MudSwitch @bind-Checked="@hover" Color="Color.Primary">Hover</MudSwitch>
+    <MudSwitch @bind-Checked="@dense" Color="Color.Secondary">Dense</MudSwitch>
+    <MudSwitch @bind-Checked="@striped" Color="Color.Tertiary">Striped</MudSwitch>
+    <MudSwitch @bind-Checked="@bordered" Color="Color.Warning">Bordered</MudSwitch>
+    <MudSpacer />    
+</div>
+@code {
+    private bool dense = false;
+    private bool hover = true;
+    private bool striped = false;
+    private bool bordered = false;
+    private string searchString1 = "";
+    private OrphanageNeed selectedItem1 = null;
+    private HashSet<OrphanageNeed> selectedItems = new HashSet<OrphanageNeed>();
+
+    private IEnumerable<OrphanageNeed> OrphanageNeeds = new List<OrphanageNeed>();
+
+    protected override async Task OnInitializedAsync()
+    {
+
+    }
+    public void ToggleAdd(bool edit = false,OrphanageNeed record = null)
+    {
+        
+    }
+    private bool FilterFunc1(OrphanageNeed orphanageNeed) => FilterFunc(orphanageNeed, searchString1);
+
+    private bool FilterFunc(OrphanageNeed orphanageNeed, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (orphanageNeed.Description.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (orphanageNeed.Type.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if ($"{orphanageNeed.CreatedOn}".Contains(searchString))
+            return true;
+        return false;
+    }
 }
