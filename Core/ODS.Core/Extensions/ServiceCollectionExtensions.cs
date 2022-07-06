@@ -8,6 +8,7 @@ namespace ODS.Core.Extensions
         {
             services.AddTransient<DonationService>()
                     .AddTransient<OrphanageService>()
+                    .AddTransient<OrphanageNeedService>()
                     .AddTransient<DonorService>();
             return services;
         }
