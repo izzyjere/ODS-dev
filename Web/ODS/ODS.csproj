@@ -22,10 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\fileUploads\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Update="Pages\Domain\Payments.razor">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>

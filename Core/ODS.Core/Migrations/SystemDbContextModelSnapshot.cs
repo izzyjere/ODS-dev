@@ -138,7 +138,7 @@ namespace ODS.Core.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AuditTrails", (string)null);
+                    b.ToTable("AuditTrails");
                 });
 
             modelBuilder.Entity("ODS.Core.Models.Role", b =>
@@ -391,6 +391,9 @@ namespace ODS.Core.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -400,6 +403,9 @@ namespace ODS.Core.Migrations
 
                     b.Property<int>("OrphanageId")
                         .HasColumnType("int");
+
+                    b.Property<double>("Raised")
+                        .HasColumnType("float");
 
                     b.Property<double>("Target")
                         .HasColumnType("float");
@@ -442,7 +448,7 @@ namespace ODS.Core.Migrations
                         .IsRequired();
 
                     b.HasOne("ODS.Domain.Models.Orphanage", "Orphanage")
-                        .WithMany()
+                        .WithMany("Donations")
                         .HasForeignKey("OrphanageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -454,7 +460,7 @@ namespace ODS.Core.Migrations
 
             modelBuilder.Entity("ODS.Domain.Models.Orphanage", b =>
                 {
-                    b.OwnsMany("ODS.Domain.Models.Orphanage.Files#ODS.Domain.Models.UploadFile", "Files", b1 =>
+                    b.OwnsMany("ODS.Domain.Models.UploadFile", "Files", b1 =>
                         {
                             b1.Property<int>("OrphanageId")
                                 .HasColumnType("int");
@@ -508,6 +514,8 @@ namespace ODS.Core.Migrations
 
             modelBuilder.Entity("ODS.Domain.Models.Orphanage", b =>
                 {
+                    b.Navigation("Donations");
+
                     b.Navigation("Needs");
                 });
 #pragma warning restore 612, 618
