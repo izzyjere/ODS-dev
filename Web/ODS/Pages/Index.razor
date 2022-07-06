@@ -136,11 +136,11 @@
                                 </div>
                                 <div class="properties__footer d-flex flex-wrap justify-content-between align-items-center">
                                     <div class="class-day">
-                                        <span>ZMW 0</span>
+                                        <span>ZMW @item.OrphanageNeeds.Where(n => n.Type == DonationType.Money).Sum(i=>i.Target)</span>
                                         <p>Money Needed</p>
                                     </div>
                                     <div class="class-day">
-                                        <span>ZMW 0</span>
+                                        <span>ZMW @item.OrphanageNeeds.Where(n => n.Type == DonationType.Money).Sum(i=>i.Raised)</span>
                                         <p>Raised</p>
                                     </div>
                                     <div class="class-day">

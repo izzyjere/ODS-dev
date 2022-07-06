@@ -57,7 +57,7 @@
     }
     async Task Submit()
     {
-        Model.OpharnageId = claimsPrincipal.GetOrphanageId();
+        Model.OrphanageId = claimsPrincipal.GetOrphanageId();
         if (!IsEditing)
         {
             var result = await orphanageNeedService.Create(Model);

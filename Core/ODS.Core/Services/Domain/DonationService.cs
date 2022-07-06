@@ -9,7 +9,7 @@
         {
             if(entity.Type == DonationType.Item)
             {
-                var item = await unitOfWork.Repository<OrphanageNeed>().Entities().FirstOrDefaultAsync(on=>on.OpharnageId==entity.OrphanageId && on.Type==entity.Type&&entity.Description.Contains(entity.Description,StringComparison.InvariantCultureIgnoreCase) && on.MonthStart.Value.Month == DateTime.Today.Month);
+                var item = await unitOfWork.Repository<OrphanageNeed>().Entities().FirstOrDefaultAsync(on=>on.OrphanageId==entity.OrphanageId && on.Type==entity.Type&&entity.Description.Contains(entity.Description,StringComparison.InvariantCultureIgnoreCase) && on.MonthStart.Value.Month == DateTime.Today.Month);
                 if(item!=null)
                 {
                     item.Raised +=(double)entity.Quantity;
@@ -17,7 +17,7 @@
             }
             else if (entity.Type == DonationType.Money)
             {
-                var item = await unitOfWork.Repository<OrphanageNeed>().Entities().FirstOrDefaultAsync(on => on.OpharnageId == entity.OrphanageId && on.Type == entity.Type && on.MonthStart.Value.Month==DateTime.Today.Month);
+                var item = await unitOfWork.Repository<OrphanageNeed>().Entities().FirstOrDefaultAsync(on => on.OrphanageId == entity.OrphanageId && on.Type == entity.Type && on.MonthStart.Value.Month==DateTime.Today.Month);
                 if (item != null)
                 {
                     item.Raised += (double)entity.Amount;

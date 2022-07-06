@@ -138,7 +138,7 @@ namespace ODS.Core.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AuditTrails", (string)null);
+                    b.ToTable("AuditTrails");
                 });
 
             modelBuilder.Entity("ODS.Core.Models.Role", b =>
@@ -398,9 +398,6 @@ namespace ODS.Core.Migrations
                     b.Property<DateTime?>("MonthStart")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("OpharnageId")
-                        .HasColumnType("int");
-
                     b.Property<int>("OrphanageId")
                         .HasColumnType("int");
 
@@ -460,7 +457,7 @@ namespace ODS.Core.Migrations
 
             modelBuilder.Entity("ODS.Domain.Models.Orphanage", b =>
                 {
-                    b.OwnsMany("ODS.Domain.Models.Orphanage.Files#ODS.Domain.Models.UploadFile", "Files", b1 =>
+                    b.OwnsMany("ODS.Domain.Models.UploadFile", "Files", b1 =>
                         {
                             b1.Property<int>("OrphanageId")
                                 .HasColumnType("int");
@@ -494,7 +491,7 @@ namespace ODS.Core.Migrations
             modelBuilder.Entity("ODS.Domain.Models.OrphanageNeed", b =>
                 {
                     b.HasOne("ODS.Domain.Models.Orphanage", "Orphanage")
-                        .WithMany("Needs")
+                        .WithMany("OrphanageNeeds")
                         .HasForeignKey("OrphanageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -516,7 +513,7 @@ namespace ODS.Core.Migrations
                 {
                     b.Navigation("Donations");
 
-                    b.Navigation("Needs");
+                    b.Navigation("OrphanageNeeds");
                 });
 #pragma warning restore 612, 618
         }
