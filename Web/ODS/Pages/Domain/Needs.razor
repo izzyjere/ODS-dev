@@ -11,7 +11,7 @@
         <MudTh>Id</MudTh>
         <MudTh>Need</MudTh>
         <MudTh>Type</MudTh>
-        <MudTh>Added On</MudTh>
+        <MudTh>Month</MudTh>
         <MudTh>Target</MudTh>
         <MudTh>Raised</MudTh>
         <MudTh>Actions</MudTh>
@@ -20,13 +20,12 @@
         <MudTd DataLabel="Id">@context.Id</MudTd>
         <MudTd DataLabel="Description">@context.Description</MudTd>
         <MudTd DataLabel="Type">@context.Type.ToString()</MudTd>
-        <MudTd DataLabel="CreatedOn">@context.CreatedOn.ToString("dd MMM yyyy H:mm")</MudTd>
+        <MudTd DataLabel="Month">@context.MonthStart.Value.ToString("MMM yyyy")</MudTd>
         <MudTd DataLabel="Target">@context.GetTarget()</MudTd>
         <MudTd DataLabel="Raised">@context.GetRaised()</MudTd>
         <MudTd>
-
+            <MudButton OnClick="()=>ToggleAdd(true,context)" Variant="Variant.Filled" Color="Color.Success">Edit</MudButton>
         </MudTd>
-
     </RowTemplate>
     <PagerContent>
         <MudTablePager />
@@ -54,18 +53,21 @@
 
     protected override async Task OnInitializedAsync()
     {
-
+        await LoadData();
     }
     async Task LoadData()
-    {  var user = (await authenticationState).User;
-        if(user.Identity.IsAuthenticated && user.IsInRole("Orphanage"))
+    {
+        var user = (await authenticationState).User;
+        if (user.Identity.IsAuthenticated && user.IsInRole("Orphanage"))
         {
-            OrphanageNeeds = await orphanageNeedService.GetAllByEmail(user.Identity.Name); 
+            OrphanageNeeds = await orphanageNeedService.GetAllByEmail(user.Identity.Name);
+            StateHasChanged();
         }
-        else{
+        else
+        {
             Navigation.NavigateTo("/");
         }
-        
+
     }
     public async void ToggleAdd(bool edit = false, OrphanageNeed record = null)
     {
@@ -77,20 +79,19 @@
             var res = await dialog.Result;
             if (!res.Cancelled)
             {
+                await LoadData();
 
-                StateHasChanged();
             }
         }
         else
         {
             var parms = new DialogParameters { ["Model"] = record, ["IsEditing"] = true };
-            var dialog = dialogService.Show<AddEditDialog>("Add Needs",parms);
+            var dialog = dialogService.Show<AddEditDialog>("Add Needs", parms);
             var res = await dialog.Result;
             if (!res.Cancelled)
             {
-
-                StateHasChanged();
-            } 
+                await LoadData();
+            }
         }
 
     }
@@ -104,7 +105,7 @@
             return true;
         if (orphanageNeed.Type.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if ($"{orphanageNeed.CreatedOn}".Contains(searchString))
+        if ($"{orphanageNeed.MonthStart}".Contains(searchString))
             return true;
         return false;
     }

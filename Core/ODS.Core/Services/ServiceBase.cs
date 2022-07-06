@@ -4,14 +4,14 @@ namespace ODS.Core.Services
 {
     public class ServiceBase<T, TKey> : IService<T, TKey> where T : class, IEntity<TKey>
     {
-        private IUnitOfWork<TKey> unitOfWork;
+        protected IUnitOfWork<TKey> unitOfWork;
         public ServiceBase(IUnitOfWork<TKey> unitOfWork)
         {
             this.unitOfWork = unitOfWork;
         }
         protected IRepository<T, TKey> Repository { get => unitOfWork.Repository<T>(); }
 
-        public async Task<IResult> Create(T entity)
+        public virtual async Task<IResult> Create(T entity)
         {
             try
             {
@@ -27,7 +27,7 @@ namespace ODS.Core.Services
             }
         }
 
-        public async Task<IResult> Delete(T entity)
+        public virtual async Task<IResult> Delete(T entity)
         {
             try
             {
@@ -43,12 +43,12 @@ namespace ODS.Core.Services
             }
         }
 
-        public async Task<IResult<List<T>>> GetAll()
+        public virtual async Task<IResult<List<T>>> GetAll()
         {
             return await Result<List<T>>.SuccessAsync(await unitOfWork.Repository<T>().GetAll());
         }
 
-        public async Task<IResult<T>> GetById(TKey id)
+        public virtual async Task<IResult<T>> GetById(TKey id)
         {
             var record = await unitOfWork.Repository<T>().Get(id);
             if (record == null)

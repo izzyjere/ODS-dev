@@ -16,10 +16,10 @@ namespace ODS.Domain.Models
         [Required, Range(1, double.MaxValue)]
         public double Target { get; set; }
         public double Raised { get; set; }
-        public DateTime CreatedOn { get; set;}
+        public DateTime? MonthStart { get; set;}
         public OrphanageNeed()
         {
-            CreatedOn = DateTime.Now;
+            MonthStart = DateTime.Now;
         }
         public string GetTarget()
         {

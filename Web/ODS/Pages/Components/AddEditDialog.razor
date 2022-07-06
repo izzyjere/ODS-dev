@@ -18,6 +18,9 @@
                 <MudItem xs=12>
                     <MudTextField For="()=>Model.Target" @bind-Value="Model.Target" Variant="Variant.Outlined" Label="Target" />
                 </MudItem>
+                 <MudItem xs=12>
+                    <MudDatePicker  FixYear="@DateTime.Today.Year"  @bind-Date="Model.MonthStart" Variant="Variant.Outlined" Label="For Month" />
+                </MudItem>
             </MudGrid>
         </EditForm>
     </DialogContent>

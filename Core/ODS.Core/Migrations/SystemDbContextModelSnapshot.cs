@@ -391,12 +391,12 @@ namespace ODS.Core.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("MonthStart")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("OpharnageId")
                         .HasColumnType("int");
