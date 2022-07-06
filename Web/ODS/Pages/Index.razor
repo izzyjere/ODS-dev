@@ -95,21 +95,49 @@
         <div class="container-fluid p-0">
             <div class="class-offer-active row p-4">
                 @foreach (var item in Orphanages)
-                { var ims = string.IsNullOrEmpty(item.ImageUrl)?"assets/img/gallery/xclass-img1.jpg.pagespeed.ic.pGecepnPjS.jpg":item.ImageUrl;
+                {
+                    var ims = string.IsNullOrEmpty(item.ImageUrl) ? "assets/img/gallery/xclass-img1.jpg.pagespeed.ic.pGecepnPjS.jpg" : item.ImageUrl;
                     <div class="col-lg-4 col-md-6 col-sm-6">
                         <div class="properties pb-30">
                             <div class="properties__card">
                                 <div class="properties__img">
-                                    <a href="#"><img  src="@ims" alt=""></a>
+                                    <a href="#"><img src="@ims" alt=""></a>
                                 </div>
                                 <div class="properties__caption">
                                     <h3><a href="#">@item.Name</a></h3>
                                     <p>Sedac odio aliquet, fringilla odio eget, tincidunt nunc duis aliquet pulvinar ante start in life and the opportunity to learn. </p>
                                 </div>
+                                <div class="properties__footer">
+                                    <MudExpansionPanel Text="View Needed Items">
+                                        @if (item.Needs.Any())
+                                        {
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Item</th>
+                                                        <th>Target</th>
+                                                        <th>Raised</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var need in item.Needs.Where(n => n.Type == DonationType.Item))
+                                                    {
+                                                        <tr>
+                                                            <td>@need.Description</td>
+                                                            <td>@need.GetTarget()</td>
+                                                            <td>@need.GetRaised()</td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        }
+
+                                    </MudExpansionPanel>
+                                </div>
                                 <div class="properties__footer d-flex flex-wrap justify-content-between align-items-center">
                                     <div class="class-day">
                                         <span>ZMW 0</span>
-                                        <p>Goal</p>
+                                        <p>Money Needed</p>
                                     </div>
                                     <div class="class-day">
                                         <span>ZMW 0</span>

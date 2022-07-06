@@ -18,15 +18,15 @@
                 <MudItem xs=12>
                     <MudTextField For="()=>Model.Target" @bind-Value="Model.Target" Variant="Variant.Outlined" Label="Target" />
                 </MudItem>
-                 <MudItem xs=12>
-                    <MudDatePicker FixDay="1" DateFormat="MMMM yyyy"  FixYear="@DateTime.Today.Year"  @bind-Date="Model.MonthStart" Variant="Variant.Outlined" Label="For Month" />
+                <MudItem xs=12>
+                    <MudDatePicker FixDay="1" DateFormat="MMMM yyyy" FixYear="@DateTime.Today.Year" @bind-Date="Model.MonthStart" Variant="Variant.Outlined" Label="For Month" />
                 </MudItem>
             </MudGrid>
         </EditForm>
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="Cancel">Cancel</MudButton>
-        <MudButton UserAttributes='@(new Dictionary<string,object>{["form"]="editForm"})' IconColor="Color.Error" StartIcon="@Icons.Material.Filled.Save" Variant="Variant.Filled">Save</MudButton>
+        <MudButton ButtonType="ButtonType.Submit" UserAttributes='@attri' IconColor="Color.Error" StartIcon="@Icons.Material.Filled.Save" Variant="Variant.Filled">Save</MudButton>
     </DialogActions>
 </MudDialog>
 @code {
@@ -36,9 +36,14 @@
     [Parameter]
     public OrphanageNeed? Model { get; set; }
     [Parameter]
+    public int Id { get; set; }
+    [Parameter]
     public bool IsEditing { get; set; }
+    Dictionary<string, object> attri = new();
     protected override void OnInitialized()
     {
+        attri.Clear();
+        attri.Add("form", "editForm");
         if (!IsEditing)
         {
             Model = new();
@@ -46,6 +51,7 @@
     }
     async Task Submit()
     {
+        Model.OpharnageId = Id;
         if (!IsEditing)
         {
             var result = await orphanageNeedService.Create(Model);

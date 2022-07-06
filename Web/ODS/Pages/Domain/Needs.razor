@@ -47,6 +47,7 @@
     private string searchString1 = "";
     private OrphanageNeed selectedItem1 = null;
     [CascadingParameter] Task<AuthenticationState> authenticationState { get; set; }
+    ClaimsPrincipal claimsPrincipal = new();
     private HashSet<OrphanageNeed> selectedItems = new HashSet<OrphanageNeed>();
 
     private IEnumerable<OrphanageNeed> OrphanageNeeds = new List<OrphanageNeed>();
@@ -71,11 +72,11 @@
     }
     public async void ToggleAdd(bool edit = false, OrphanageNeed record = null)
     {
-
+         var parms = new DialogParameters { ["Id"] = claimsPrincipal.GetOrphanageId() };
         DialogOptions midWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true, Position = DialogPosition.Center, DisableBackdropClick = true };
         if (!edit)
         {
-            var dialog = dialogService.Show<AddEditDialog>("Add Needs");
+            var dialog = dialogService.Show<AddEditDialog>("Add Needs",parms);
             var res = await dialog.Result;
             if (!res.Cancelled)
             {
@@ -85,8 +86,8 @@
         }
         else
         {
-            var parms = new DialogParameters { ["Model"] = record, ["IsEditing"] = true };
-            var dialog = dialogService.Show<AddEditDialog>("Add Needs", parms);
+            var parms2 = new DialogParameters {["Id"] = claimsPrincipal.GetOrphanageId() , ["Model"] = record, ["IsEditing"] = true };
+            var dialog = dialogService.Show<AddEditDialog>("Add Needs", parms2);
             var res = await dialog.Result;
             if (!res.Cancelled)
             {

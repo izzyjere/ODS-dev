@@ -7,6 +7,8 @@ namespace ODS.Core.Extensions
 
         public static int GetId(this ClaimsPrincipal claimsPrincipal)
         => Convert.ToInt32(claimsPrincipal.FindFirstValue("UserId"));
+        public static int GetOrphanageId(this ClaimsPrincipal claimsPrincipal)
+       => Convert.ToInt32(claimsPrincipal.FindFirstValue("OId"));
         public static Guid GetGuid(this ClaimsPrincipal claimsPrincipal)
         => Guid.Parse(claimsPrincipal.FindFirstValue("Guid"));
         public static string GetFirstName(this ClaimsPrincipal claimsPrincipal)
