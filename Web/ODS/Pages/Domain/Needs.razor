@@ -58,10 +58,10 @@
     }
     async Task LoadData()
     {
-        var user = (await authenticationState).User;
-        if (user.Identity.IsAuthenticated && user.IsInRole("Orphanage"))
+        claimsPrincipal = (await authenticationState).User;
+        if (claimsPrincipal.Identity.IsAuthenticated && claimsPrincipal.IsInRole("Orphanage"))
         {
-            OrphanageNeeds = await orphanageNeedService.GetAllByEmail(user.Identity.Name);
+            OrphanageNeeds = await orphanageNeedService.GetAllByEmail(claimsPrincipal.Identity.Name);
             StateHasChanged();
         }
         else
@@ -72,11 +72,11 @@
     }
     public async void ToggleAdd(bool edit = false, OrphanageNeed record = null)
     {
-         var parms = new DialogParameters { ["Id"] = claimsPrincipal.GetOrphanageId() };
+     
         DialogOptions midWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true, Position = DialogPosition.Center, DisableBackdropClick = true };
         if (!edit)
         {
-            var dialog = dialogService.Show<AddEditDialog>("Add Needs",parms);
+            var dialog = dialogService.Show<AddEditDialog>("Add Needs");
             var res = await dialog.Result;
             if (!res.Cancelled)
             {
@@ -86,7 +86,7 @@
         }
         else
         {
-            var parms2 = new DialogParameters {["Id"] = claimsPrincipal.GetOrphanageId() , ["Model"] = record, ["IsEditing"] = true };
+            var parms2 = new DialogParameters { ["Model"] = record, ["IsEditing"] = true };
             var dialog = dialogService.Show<AddEditDialog>("Add Needs", parms2);
             var res = await dialog.Result;
             if (!res.Cancelled)

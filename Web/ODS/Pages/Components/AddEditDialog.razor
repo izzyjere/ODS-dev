@@ -34,14 +34,20 @@
     [CascadingParameter]
     MudDialogInstance Dialog { get; set; }
     [Parameter]
-    public OrphanageNeed? Model { get; set; }
-    [Parameter]
-    public int Id { get; set; }
+    public OrphanageNeed? Model { get; set; } 
     [Parameter]
     public bool IsEditing { get; set; }
     Dictionary<string, object> attri = new();
-    protected override void OnInitialized()
-    {
+    [CascadingParameter] Task<AuthenticationState> authenticationState { get; set; }
+    ClaimsPrincipal claimsPrincipal = new();   
+    protected override async void OnInitialized()
+    {   
+
+        claimsPrincipal = (await authenticationState).User;
+        if(claimsPrincipal.GetOrphanageId()==0)
+        {
+            Cancel();
+        }
         attri.Clear();
         attri.Add("form", "editForm");
         if (!IsEditing)
@@ -51,10 +57,23 @@
     }
     async Task Submit()
     {
-        Model.OpharnageId = Id;
+        Model.OpharnageId = claimsPrincipal.GetOrphanageId();
         if (!IsEditing)
         {
             var result = await orphanageNeedService.Create(Model);
+            if (result.Succeeded)
+            {
+                snackBar.Add(result.Messages.First(), Severity.Success);
+                Dialog.Close();
+            }
+            else
+            {
+                snackBar.Add(result.Messages.First(), Severity.Error);
+            }
+        }
+        else
+        {
+            var result = await orphanageNeedService.Update(Model);
             if (result.Succeeded)
             {
                 snackBar.Add(result.Messages.First(), Severity.Success);

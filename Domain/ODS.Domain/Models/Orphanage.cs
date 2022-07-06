@@ -12,7 +12,7 @@ namespace ODS.Domain.Models
         [Required]
         public string Email { get; set; }        
         public string? ImageUrl { get; set; }
-        public virtual List<OrphanageNeed> Needs { get; set; }
+        public virtual List<OrphanageNeed> OrphanageNeeds { get; set; }
         public string? AccountNumber { get; set; }
         public bool IsActive { get; set; }
         public List<UploadFile> Files { get; set; }

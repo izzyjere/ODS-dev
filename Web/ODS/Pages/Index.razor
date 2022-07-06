@@ -109,7 +109,7 @@
                                 </div>
                                 <div class="properties__footer">
                                     <MudExpansionPanel Text="View Needed Items">
-                                        @if (item.Needs.Any())
+                                        @if (item.OrphanageNeeds.Any())
                                         {
                                             <table class="table table-striped">
                                                 <thead>
@@ -120,7 +120,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @foreach (var need in item.Needs.Where(n => n.Type == DonationType.Item))
+                                                    @foreach (var need in item.OrphanageNeeds.Where(n => n.Type == DonationType.Item))
                                                     {
                                                         <tr>
                                                             <td>@need.Description</td>

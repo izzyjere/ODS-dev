@@ -7,11 +7,11 @@
         }
         public async Task<Orphanage> GetByEmail(string email)
         {
-            return await Repository.Entities().Include(d=>d.Donations).ThenInclude(d=>d.Donor).Include(o=>o.Needs).FirstOrDefaultAsync(x => x.Email == email);
+            return await Repository.Entities().Include(d=>d.Donations).ThenInclude(d=>d.Donor).Include(o=>o.OrphanageNeeds).FirstOrDefaultAsync(x => x.Email == email);
         }
         public async Task<List<Orphanage>> GetAll()
         {
-            return await Repository.Entities().Include(o=>o.Needs).ToListAsync();
+            return await Repository.Entities().Include(o=>o.OrphanageNeeds).ToListAsync();
         }
         public async Task<bool> IsEmailUsed(string email)
         {
