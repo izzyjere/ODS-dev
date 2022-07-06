@@ -1,0 +1,44 @@
+﻿<MudDialog>
+    <DialogContent>
+        <EditForm Model="@Model" OnInvalidSubmit='()=>snackBar.Add("Fill in all required fields")' OnValidSubmit="Submit">
+            <DataAnnotationsValidator/>
+        </EditForm>
+    </DialogContent>
+    <DialogActions>
+
+    </DialogActions>
+</MudDialog>
+@code {
+
+    [CascadingParameter]
+    MudDialogInstance Dialog { get; set; }
+    [Parameter]
+    public OrphanageNeed? Model { get; set; }
+    [Parameter]
+    public bool IsEditing { get; set; }
+    protected override void OnInitialized()
+    {
+        if(!IsEditing)
+        {
+            Model = new();
+        }
+    }
+    async Task Submit()
+    {   
+        if(!IsEditing)
+        {
+            var result = await orphanageNeedService.Create(Model);
+            if(result.Succeeded)
+            {
+                snackBar.Add(result.Messages.First(), Severity.Success);
+                Dialog.Close();
+            }
+            else
+            {
+                snackBar.Add(result.Messages.First(), Severity.Error);
+            }
+        }
+        
+    }
+    void Cancel() => Dialog.Cancel();
+}
