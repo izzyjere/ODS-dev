@@ -55,7 +55,7 @@
                             <div class="hero-caption">
                                 <h1 data-animation="fadeInUp" data-delay=".2s">Give a helping hand to those who need it!</h1>
                                 <p data-animation="fadeInUp" data-delay=".4s">When a child gets access to good food, it can change just about everything.</p>
-                                <button @onclick="Donate" class="btn_1 hero-btn" data-animation="fadeInUp" data-delay=".8s"><i class="fas fa-heart"></i>Make a Donation</button>
+                                <button @onclick="()=>Donate()" class="btn_1 hero-btn" data-animation="fadeInUp" data-delay=".8s"><i class="fas fa-heart"></i>Make a Donation</button>
                             </div>
                         </div>
                     </div>
@@ -144,7 +144,7 @@
                                         <p>Raised</p>
                                     </div>
                                     <div class="class-day">
-                                        <a href="#" class="btn_01">Donate</a>
+                                        <button @onclick="()=>Donate(true,item.Id)" class="btn_01">Donate</button>
                                     </div>
                                 </div>
                             </div>
@@ -345,7 +345,7 @@
         isAuthenticated = claimsPrincipal.Identity.IsAuthenticated;
         Orphanages = await orphanageService.GetAll();
     }
-    async void Donate()
+    async void Donate(bool direct = false, int oid = 0)
     {
         if (!claimsPrincipal.Identity.IsAuthenticated)
         {
@@ -354,8 +354,16 @@
         }
         else
         {
-            DialogOptions midWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true, Position = DialogPosition.Center, DisableBackdropClick = true };
-            var dialog = dialogService.Show<DonateDialog>("Donate");
+            if (direct)
+            {
+                var paras = new DialogParameters { ["Oid"] = oid };
+                var dialog = dialogService.Show<DonateDialog>("Donate",paras);
+            }
+            else
+            {
+                var dialog = dialogService.Show<DonateDialog>("Donate");
+            }
+
         }
 
 

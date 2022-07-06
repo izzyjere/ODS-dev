@@ -6,7 +6,7 @@
             <DataAnnotationsValidator />
             <MudGrid Spacing="3">
                 <MudItem xs="12">
-                   <MudSelect T="int" @bind-Value="Model2.OrphanageId" Variant="Variant.Outlined" Label="Orphange">
+                   <MudSelect  ReadOnly="@editing" T="int" @bind-Value="Model2.OrphanageId" Variant="Variant.Outlined" Label="Orphange">
                        <MudSelectItem Value="0">Select orphanage</MudSelectItem>
                        @foreach (var item in orphanages)
                        {
@@ -49,7 +49,7 @@
                         <MudText Typo="Typo.caption" Color="Color.Info">*Haven't received the code?</MudText>
                     </MudItem>
                     <MudItem xs="4">
-                        <SfButton @onclick="VerifyOTP"  CssClass="e-success">Verify Code</SfButton>
+                        <MudButton  OnClick="VerifyOTP"  Color="Color.Success">Verify Code</MudButton>
                     </MudItem>
                 }
             </MudGrid>
@@ -66,7 +66,7 @@
                    <MudTextField @bind-Value="Model2.Quantity" Variant="Variant.Outlined" Label="Quantity"/> 
                 </MudItem> 
                 <MudItem xs="12">
-                   <MudSelect T="int" @bind-Value="Model2.OrphanageId" Variant="Variant.Outlined" Label="Orphange">
+                   <MudSelect ReadOnly="@editing" T="int" @bind-Value="Model2.OrphanageId" Variant="Variant.Outlined" Label="Orphange">
                        <MudSelectItem Value="0">Select orphanage</MudSelectItem>
                        @foreach (var item in orphanages)
                        {
@@ -90,18 +90,25 @@
     [CascadingParameter] MudDialogInstance Dialog { get; set; }
     [CascadingParameter] Task<AuthenticationState> authenticateTask { get; set; }
     Payment Model { get; set; } = new();
+    [Parameter] public int Oid { get; set; }
     PaymentMethod paymentMethod;
     bool OTPsent,OTPverified;
     List<Orphanage> orphanages = new();
     ClaimsPrincipal claimsPrincipal = new();
     Donation Model2 {get; set;} = new();
     Donor donor = new();
+    bool editing = false;
     string OTP;
     protected override async Task OnInitializedAsync()
     {   
         claimsPrincipal = (await authenticateTask).User;
         donor= await donorService.GetByUserId(claimsPrincipal.GetGuid());
         orphanages = await orphanageService.GetAll();
+        if(Oid>0)
+        {
+            Model2.OrphanageId = Oid;
+            editing = true;
+        }
 
     }
     void SendOTP()
