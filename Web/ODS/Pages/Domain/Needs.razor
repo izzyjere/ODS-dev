@@ -38,7 +38,7 @@
     <MudSwitch @bind-Checked="@dense" Color="Color.Secondary">Dense</MudSwitch>
     <MudSwitch @bind-Checked="@striped" Color="Color.Tertiary">Striped</MudSwitch>
     <MudSwitch @bind-Checked="@bordered" Color="Color.Warning">Bordered</MudSwitch>
-    <MudSpacer />    
+    <MudSpacer />
 </div>
 @code {
     private bool dense = false;
@@ -47,6 +47,7 @@
     private bool bordered = false;
     private string searchString1 = "";
     private OrphanageNeed selectedItem1 = null;
+    [CascadingParameter] Task<AuthenticationState> authenticationState { get; set; }
     private HashSet<OrphanageNeed> selectedItems = new HashSet<OrphanageNeed>();
 
     private IEnumerable<OrphanageNeed> OrphanageNeeds = new List<OrphanageNeed>();
@@ -55,9 +56,43 @@
     {
 
     }
-    public void ToggleAdd(bool edit = false,OrphanageNeed record = null)
-    {
+    async Task LoadData()
+    {  var user = (await authenticationState).User;
+        if(user.Identity.IsAuthenticated && user.IsInRole("Orphanage"))
+        {
+            OrphanageNeeds = await orphanageNeedService.GetAllByEmail(user.Identity.Name); 
+        }
+        else{
+            Navigation.NavigateTo("/");
+        }
         
+    }
+    public async void ToggleAdd(bool edit = false, OrphanageNeed record = null)
+    {
+
+        DialogOptions midWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true, Position = DialogPosition.Center, DisableBackdropClick = true };
+        if (!edit)
+        {
+            var dialog = dialogService.Show<AddEditDialog>("Add Needs");
+            var res = await dialog.Result;
+            if (!res.Cancelled)
+            {
+
+                StateHasChanged();
+            }
+        }
+        else
+        {
+            var parms = new DialogParameters { ["Model"] = record, ["IsEditing"] = true };
+            var dialog = dialogService.Show<AddEditDialog>("Add Needs",parms);
+            var res = await dialog.Result;
+            if (!res.Cancelled)
+            {
+
+                StateHasChanged();
+            } 
+        }
+
     }
     private bool FilterFunc1(OrphanageNeed orphanageNeed) => FilterFunc(orphanageNeed, searchString1);
 

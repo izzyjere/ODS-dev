@@ -13,5 +13,9 @@
         {
             return await Repository.Entities().Include(o=>o.Needs).ToListAsync();
         }
+        public async Task<bool> IsEmailUsed(string email)
+        {
+            return await Repository.Entities().AnyAsync(o => o.Email == email);
+        }
     }
 }

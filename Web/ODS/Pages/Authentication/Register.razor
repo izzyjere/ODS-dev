@@ -189,6 +189,11 @@
             snackBar.Add("Please upload at least one file for verification", Severity.Error);
             return;
         }
+        if(await orphanageService.IsEmailUsed(Model2.Email))
+        {
+            snackBar.Add("This email has already been used.", Severity.Error);
+            return; 
+        }
         var result = await orphanageService.Create(Model2);
         if (result.Succeeded)
         {

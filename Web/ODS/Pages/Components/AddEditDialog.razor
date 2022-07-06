@@ -1,11 +1,29 @@
 ﻿<MudDialog>
     <DialogContent>
-        <EditForm Model="@Model" OnInvalidSubmit='()=>snackBar.Add("Fill in all required fields")' OnValidSubmit="Submit">
-            <DataAnnotationsValidator/>
+        <EditForm id="editForm" Model="@Model" OnInvalidSubmit='()=>snackBar.Add("Fill in all required fields")' OnValidSubmit="Submit">
+            <DataAnnotationsValidator />
+            <MudGrid>
+                <MudItem xs=12>
+                    <MudTextField For="()=>Model.Description" @bind-Value="Model.Description" Variant="Variant.Outlined" Label="Item Description" />
+                </MudItem>
+                <MudItem xs=12>
+                    <MudSelect For="()=>Model.Type" T="DonationType" @bind-Value="Model.Type" Variant="Variant.Outlined" Label="Type">
+
+                        @foreach (var item in Enum.GetValues<DonationType>())
+                        {
+                            <MudSelectItem Value="@item">@item.ToString()</MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
+                <MudItem xs=12>
+                    <MudTextField For="()=>Model.Target" @bind-Value="Model.Target" Variant="Variant.Outlined" Label="Target" />
+                </MudItem>
+            </MudGrid>
         </EditForm>
     </DialogContent>
     <DialogActions>
-
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton UserAttributes='@(new Dictionary<string,object>{["form"]="editForm"})' IconColor="Color.Error" StartIcon="@Icons.Material.Filled.Save" Variant="Variant.Filled">Save</MudButton>
     </DialogActions>
 </MudDialog>
 @code {
@@ -18,17 +36,17 @@
     public bool IsEditing { get; set; }
     protected override void OnInitialized()
     {
-        if(!IsEditing)
+        if (!IsEditing)
         {
             Model = new();
         }
     }
     async Task Submit()
-    {   
-        if(!IsEditing)
+    {
+        if (!IsEditing)
         {
             var result = await orphanageNeedService.Create(Model);
-            if(result.Succeeded)
+            if (result.Succeeded)
             {
                 snackBar.Add(result.Messages.First(), Severity.Success);
                 Dialog.Close();
@@ -38,7 +56,7 @@
                 snackBar.Add(result.Messages.First(), Severity.Error);
             }
         }
-        
+
     }
     void Cancel() => Dialog.Cancel();
 }
