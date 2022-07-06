@@ -16,6 +16,7 @@ namespace ODS.Domain.Models
         public string? AccountNumber { get; set; }
         public bool IsActive { get; set; }
         public List<UploadFile> Files { get; set; }
+        public virtual List<Donation> Donations { get; set; }
 
 
     }

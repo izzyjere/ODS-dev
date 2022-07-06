@@ -13,6 +13,7 @@
         <MudTh>No.</MudTh>
         <MudTh>Date</MudTh>
         <MudTh>Description</MudTh>
+        <MudTh>Donated To</MudTh>
         <MudTh>Type</MudTh>
         <MudTh>Quantity</MudTh>
         <MudTh>Amount</MudTh>
@@ -22,9 +23,10 @@
         <MudTd DataLabel="Id">@context.Id</MudTd>
         <MudTd DataLabel="Date">@context.Date.ToString("dd MMM yyyy H:mm")</MudTd>
         <MudTd DataLabel="Description">@context.Description</MudTd>
+        <MudTd DataLabel="Orphanage.Name">@context.Orphanage.Name</MudTd>
         <MudTd DataLabel="Type">@context.Type.ToString()</MudTd>
         <MudTd DataLabel="Quantity">@context.Quantity</MudTd>
-        <MudTd DataLabel="Amount">@context.Amount.ToString("N2")</MudTd>
+        <MudTd DataLabel="Amount">@(context.Type==DonationType.Item?"N/A":context.Amount.ToString("N2"))</MudTd>
         <MudTd DataLabel="Actions">
             <MudButton Color="Color.Info" Variant="Variant.Outlined">More Details></MudButton>
         </MudTd>

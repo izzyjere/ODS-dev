@@ -6,6 +6,15 @@
             <DataAnnotationsValidator />
             <MudGrid Spacing="3">
                 <MudItem xs="12">
+                   <MudSelect T="int" @bind-Value="Model2.OrphanageId" Variant="Variant.Outlined" Label="Orphange">
+                       <MudSelectItem Value="0">Select orphanage</MudSelectItem>
+                       @foreach (var item in orphanages)
+                       {
+                           <MudSelectItem Value="@item.Id">@item.Name</MudSelectItem>
+                       }
+                   </MudSelect>
+                </MudItem> 
+                <MudItem xs="12">
                     <MudChip Label="true" Class="mb-3" Variant="Variant.Text" Color="Color.Info" Icon="@Icons.Material.Filled.Payment">Choose Payment Method</MudChip>
                     <MudRadioGroup T="PaymentMethod" @bind-SelectedOption="@paymentMethod">
                         <MudGrid Justify="Justify.SpaceBetween">
@@ -55,7 +64,16 @@
                 </MudItem>
                 <MudItem xs="12">
                    <MudTextField @bind-Value="Model2.Quantity" Variant="Variant.Outlined" Label="Quantity"/> 
-                </MudItem>                              
+                </MudItem> 
+                <MudItem xs="12">
+                   <MudSelect T="int" @bind-Value="Model2.OrphanageId" Variant="Variant.Outlined" Label="Orphange">
+                       <MudSelectItem Value="0">Select orphanage</MudSelectItem>
+                       @foreach (var item in orphanages)
+                       {
+                           <MudSelectItem Value="@item.Id">@item.Name</MudSelectItem>
+                       }
+                   </MudSelect>
+                </MudItem> 
             </MudGrid>
         </EditForm>
            </MudTabPanel>
@@ -74,6 +92,7 @@
     Payment Model { get; set; } = new();
     PaymentMethod paymentMethod;
     bool OTPsent,OTPverified;
+    List<Orphanage> orphanages = new();
     ClaimsPrincipal claimsPrincipal = new();
     Donation Model2 {get; set;} = new();
     Donor donor = new();
@@ -82,6 +101,7 @@
     {   
         claimsPrincipal = (await authenticateTask).User;
         donor= await donorService.GetByUserId(claimsPrincipal.GetGuid());
+        orphanages = await orphanageService.GetAll();
 
     }
     void SendOTP()

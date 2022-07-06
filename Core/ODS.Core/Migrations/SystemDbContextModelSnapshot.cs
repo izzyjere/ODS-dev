@@ -138,7 +138,7 @@ namespace ODS.Core.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AuditTrails");
+                    b.ToTable("AuditTrails", (string)null);
                 });
 
             modelBuilder.Entity("ODS.Core.Models.Role", b =>
@@ -454,7 +454,7 @@ namespace ODS.Core.Migrations
 
             modelBuilder.Entity("ODS.Domain.Models.Orphanage", b =>
                 {
-                    b.OwnsMany("ODS.Domain.Models.UploadFile", "Files", b1 =>
+                    b.OwnsMany("ODS.Domain.Models.Orphanage.Files#ODS.Domain.Models.UploadFile", "Files", b1 =>
                         {
                             b1.Property<int>("OrphanageId")
                                 .HasColumnType("int");

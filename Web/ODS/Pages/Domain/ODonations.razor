@@ -1,6 +1,133 @@
 ﻿@page "/our-donations"
-<h3>ODonations</h3>
+<h3>Donations</h3>
+<MudTabs Border="true">
+    @if (Model != null)
+    {
+        <MudTabPanel Text="Monetary Donations">
 
+            <MudTable Items="@MoneyD" Filter="new Func<Donation,bool>(FilterFunc1)">
+                <ToolBarContent>
+                    <MudSpacer />
+                    <MudTextField @bind-Value="searchString1" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                </ToolBarContent>
+                <HeaderContent>
+                    <MudTh>No.</MudTh>
+                    <MudTh>Date</MudTh>
+                    <MudTh>Donated By</MudTh>
+                    <MudTh>Payment Method</MudTh>
+                    <MudTh>Quantity</MudTh>
+                    <MudTh>Amount</MudTh>
+                    <MudTh>Actions</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd DataLabel="Id">@context.Id</MudTd>
+                    <MudTd DataLabel="Date">@context.Date.ToString("dd MMM yyyy H:mm")</MudTd>
+                    <MudTd DataLabel="Description">@context.Donor.Name</MudTd>
+                    <MudTd DataLabel="PaymentMethod">@context.PaymentMethod.ToString()</MudTd>
+                    <MudTd DataLabel="Quantity">@context.Quantity</MudTd>
+                    <MudTd DataLabel="Amount">@context.Amount.ToString("N2")</MudTd>
+                    <MudTd DataLabel="Actions">
+                        <MudButton Color="Color.Info" Variant="Variant.Outlined">More Details></MudButton>
+                    </MudTd>
+                </RowTemplate>
+                <PagerContent>
+                    <MudTablePager />
+                </PagerContent>
+            </MudTable>
+
+        </MudTabPanel>
+        <MudTabPanel Text="Item Donations">
+            <MudTable Items="@ItemsD" Filter="new Func<Donation,bool>(FilterFunc1)">
+                <ToolBarContent>
+                    <MudSpacer />
+                    <MudTextField @bind-Value="searchString1" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                </ToolBarContent>
+                <HeaderContent>
+                    <MudTh>No.</MudTh>
+                    <MudTh>Date</MudTh>
+                    <MudTh>Description</MudTh>
+                    <MudTh>Donated By</MudTh>
+                    <MudTh>Payment Method</MudTh>
+                    <MudTh>Quantity</MudTh>                    
+                    <MudTh>Actions</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd DataLabel="Id">@context.Id</MudTd>
+                    <MudTd DataLabel="Date">@context.Date.ToString("dd MMM yyyy H:mm")</MudTd>
+                    <MudTd DataLabel="Description">@context.Description</MudTd>
+                    <MudTd DataLabel="Donor.Name">@context.Donor.Name</MudTd>
+                    <MudTd DataLabel="PaymentMethod">@context.PaymentMethod.ToString()</MudTd>
+                    <MudTd DataLabel="Quantity">@context.Quantity</MudTd>                   
+                    <MudTd DataLabel="Actions">
+                        <MudButton Color="Color.Info" Variant="Variant.Outlined">More Details></MudButton>
+                    </MudTd>
+                </RowTemplate>
+                <PagerContent>
+                    <MudTablePager />
+                </PagerContent>
+            </MudTable>
+        </MudTabPanel>
+    }
+    else
+    {
+        <MudAlert Severity="Severity.Info" Class="m-6">No danations yet.</MudAlert>
+    }
+</MudTabs>
 @code {
 
+}
+
+@code {
+    private bool dense = false;
+    private bool hover = true;
+    private bool striped = false;
+    private bool bordered = false;
+    private string searchString1 = "";
+    private Donation selectedItem1 = null;
+    private HashSet<Donation> selectedItems = new HashSet<Donation>();
+    Orphanage Model { get; set; } = new();
+    private IEnumerable<Donation> Donations = new List<Donation>();
+    [CascadingParameter] Task<AuthenticationState> authState { get; set; }
+    ClaimsPrincipal claimsPrincipal = new();
+    protected override async Task OnInitializedAsync()
+    {
+        await Init();
+    }
+    IEnumerable<Donation> MoneyD = Enumerable.Empty<Donation>();
+    IEnumerable<Donation> ItemsD = Enumerable.Empty<Donation>();
+    async Task Init()
+    {
+        claimsPrincipal = (await authState).User;
+        if (claimsPrincipal.Identity.IsAuthenticated)
+        {
+            if (claimsPrincipal.IsInRole("Orphanage"))
+            {
+                Model = await orphanageService.GetByEmail(claimsPrincipal.Identity.Name);
+                if (!Model.IsActive)
+                {
+                    Navigation.NavigateTo("/");
+                }
+                MoneyD = Model.Donations.Where(d => d.Type == DonationType.Money);
+                ItemsD = Model.Donations.Where(d => d.Type == DonationType.Item);
+
+            }
+        }
+        else
+        {
+            Navigation.NavigateTo("/");
+        }
+
+    }
+    private bool FilterFunc1(Donation donation) => FilterFunc(donation, searchString1);
+
+    private bool FilterFunc(Donation donation, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (donation.Description.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (donation.Amount.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
 }
