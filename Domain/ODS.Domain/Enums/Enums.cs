@@ -2,8 +2,7 @@
 {
     public enum PaymentMethod
     {
-        None,
-        MTNMomo,
+        MTNMomo=1,
         AirtelMoney,
         ZamtelKwacha
     }

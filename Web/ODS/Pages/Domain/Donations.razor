@@ -1,4 +1,4 @@
-﻿@page "/donations"
+﻿@page "/my-donations"
 <MudTable Items="@DonationsList"  Filter="new Func<Donation,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1">
     <ToolBarContent>
         <MudText Typo="Typo.h6">My Donations</MudText>
@@ -23,7 +23,7 @@
         <MudTd DataLabel="Id">@context.Id</MudTd>
         <MudTd DataLabel="Date">@context.Date.ToString("dd MMM yyyy H:mm")</MudTd>
         <MudTd DataLabel="Description">@context.Description</MudTd>
-        <MudTd DataLabel="Orphanage.Name">@context.Orphanage.Name</MudTd>
+        <MudTd DataLabel="Orphanage.Name">@context.Orphanage?.Name</MudTd>
         <MudTd DataLabel="Type">@context.Type.ToString()</MudTd>
         <MudTd DataLabel="Quantity">@context.Quantity</MudTd>
         <MudTd DataLabel="Amount">@(context.Type==DonationType.Item?"N/A":context.Amount.ToString("N2"))</MudTd>
@@ -38,17 +38,20 @@
 
 
 @code {
-    
+
     private string searchString1 = "";
     private Donation selectedItem1 = null;
     private HashSet<Donation> selectedItems = new HashSet<Donation>();
-
+    [CascadingParameter] Task<AuthenticationState> authenticationState { get; set; }
+    ClaimsPrincipal claimsPrincipal = new();
     private IEnumerable<Donation> DonationsList = new List<Donation>();
-
+    Donor donor = new();
     protected override async Task OnInitializedAsync()
     {
-        var res = await donationService.GetAll();
-        DonationsList = res.Data;
+        claimsPrincipal = (await authenticationState).User;
+        donor = await donorService.GetByUserId(claimsPrincipal.GetGuid());
+        DonationsList = donor.Donations;
+
     }
     async void Donate ()
     {
@@ -56,9 +59,9 @@
         var dialog = dialogService.Show<DonateDialog>("Donate");
         var res = await dialog.Result;
         if(!res.Cancelled)
-        {
-             var res1 = await donationService.GetAll();
-             DonationsList = res1.Data;
+       {
+            donor = await donorService.GetByUserId(claimsPrincipal.GetGuid());
+            DonationsList = donor.Donations;
              StateHasChanged();
         }
     }
