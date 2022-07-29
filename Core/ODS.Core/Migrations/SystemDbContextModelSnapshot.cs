@@ -138,7 +138,7 @@ namespace ODS.Core.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AuditTrails", (string)null);
+                    b.ToTable("AuditTrails");
                 });
 
             modelBuilder.Entity("ODS.Core.Models.Role", b =>
@@ -302,7 +302,7 @@ namespace ODS.Core.Migrations
                     b.Property<int?>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<int>("Type")
+                    b.Property<int?>("Type")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -359,6 +359,9 @@ namespace ODS.Core.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Founder")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageUrl")
@@ -457,7 +460,7 @@ namespace ODS.Core.Migrations
 
             modelBuilder.Entity("ODS.Domain.Models.Orphanage", b =>
                 {
-                    b.OwnsMany("ODS.Domain.Models.Orphanage.Files#ODS.Domain.Models.UploadFile", "Files", b1 =>
+                    b.OwnsMany("ODS.Domain.Models.UploadFile", "Files", b1 =>
                         {
                             b1.Property<int>("OrphanageId")
                                 .HasColumnType("int");
