@@ -4,7 +4,7 @@
 @using System.Text.RegularExpressions
 @using System.ComponentModel.DataAnnotations
 
-<MudText Typo="Typo.h5" Color="Color.Primary" Class="mb-4">Account</MudText>
+<MudText Typo="Typo.h5" Color="Color.Primary" Class="mb-4">Profile</MudText>
 <MudTabs Elevation="1" Rounded="true" PanelClass="mt-6">
     <MudTabPanel Text="General">
         <MudGrid>
@@ -54,16 +54,19 @@
                         <MudGrid>
 
                             <MudItem xs="12" md="6">
-                                <MudTextField ReadOnly="true" Value="@Model2.Name" Label="Orphanage Name" Variant="Variant.Outlined" />
+                                <MudTextField ReadOnly="true" @bind-Value="@Model2.Name" Label="Orphanage Name" Variant="Variant.Outlined" />
+                            </MudItem> 
+                            <MudItem xs="12" md="6">
+                                <MudTextField ReadOnly="true" @bind-Value="@Model2.Founder" Label="Orphanage Founder" Variant="Variant.Outlined" />
                             </MudItem>
                             <MudItem xs="12" md="6">
-                                <MudTextField ReadOnly="true" Value="@Model2.AccountNumber" Label="Account Number" Variant="Variant.Outlined" />
+                                <MudTextField ReadOnly="true" @bind-Value="@Model2.AccountNumber" Label="Account Number" Variant="Variant.Outlined" />
                             </MudItem>
                             <MudItem xs="12" md="6">
-                                <MudTextField ReadOnly="true" Value="@claimsPrincipal.GetUserRole()" Label="Role" Variant="Variant.Outlined" />
+                                <MudTextField ReadOnly="true" @bind-Value="@Model2.Address" Label="Physical Address" Variant="Variant.Outlined" />
                             </MudItem>
                             <MudItem xs="12" md="6">
-                                <MudTextField ReadOnly="true" Value="@Model2.Email" Label="Email" Variant="Variant.Outlined" HelperText="Dont worry, we shall not spam!" InputType="InputType.Email" />
+                                <MudTextField ReadOnly="true" @bind-Value="@Model2.Email" Label="Email" Variant="Variant.Outlined" HelperText="Dont worry, we shall not spam!" InputType="InputType.Email" />
                             </MudItem>
                             <MudItem xs="12">
                                 <MudText>
