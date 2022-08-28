@@ -5,7 +5,7 @@ VisualStudioVersion = 17.1.31911.260
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{DFFDE353-0807-454E-AA22-1FAD3F5EF544}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ODS", "Web\ODS\ODS.csproj", "{7CF4B70D-A4DE-4578-BE7E-C4DE5CF85B46}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ODS", "src\ODS\ODS.csproj", "{D53E222D-6BEA-4450-9AEB-5805BEF0A93F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,16 +13,16 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7CF4B70D-A4DE-4578-BE7E-C4DE5CF85B46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7CF4B70D-A4DE-4578-BE7E-C4DE5CF85B46}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7CF4B70D-A4DE-4578-BE7E-C4DE5CF85B46}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7CF4B70D-A4DE-4578-BE7E-C4DE5CF85B46}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D53E222D-6BEA-4450-9AEB-5805BEF0A93F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D53E222D-6BEA-4450-9AEB-5805BEF0A93F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D53E222D-6BEA-4450-9AEB-5805BEF0A93F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D53E222D-6BEA-4450-9AEB-5805BEF0A93F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{7CF4B70D-A4DE-4578-BE7E-C4DE5CF85B46} = {DFFDE353-0807-454E-AA22-1FAD3F5EF544}
+		{D53E222D-6BEA-4450-9AEB-5805BEF0A93F} = {DFFDE353-0807-454E-AA22-1FAD3F5EF544}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {69C27442-6B6A-4138-80C7-93E18F3EB6C8}

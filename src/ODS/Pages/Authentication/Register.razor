@@ -184,6 +184,7 @@
     }
     async Task Submit()
     {
+        Model2.IsActive = true;
         if (!Model2.Files.Any())
         {
             snackBar.Add("Please upload at least one file for verification", Severity.Error);
