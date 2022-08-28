@@ -1,7 +1,4 @@
-
-
-
-using ODS.Core.Middleware;
+using ODS.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 

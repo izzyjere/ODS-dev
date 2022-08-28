@@ -1,6 +1,4 @@
-﻿
-
-using ODS.Core.Factories;
+﻿using ODS.Factories;
 
 namespace ODS.Extensions
 {
