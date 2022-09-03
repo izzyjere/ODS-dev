@@ -27,22 +27,12 @@ namespace ODS.Services.Domain
         }
         public override async Task<Wrapper.IResult> Create(Donation entity)
         {
-            if (entity.Type == DonationType.Item)
+            var item = await unitOfWork.Repository<OrphanageNeed>().Entities().FirstOrDefaultAsync(on => on.OrphanageId == entity.OrphanageId && on.Type == DonationType.Item && entity.Description.Contains(entity.Description, StringComparison.InvariantCultureIgnoreCase) && on.MonthStart.Value.Month == DateTime.Today.Month);
+            if (item != null)
             {
-                var item = await unitOfWork.Repository<OrphanageNeed>().Entities().FirstOrDefaultAsync(on => on.OrphanageId == entity.OrphanageId && on.Type == entity.Type && entity.Description.Contains(entity.Description, StringComparison.InvariantCultureIgnoreCase) && on.MonthStart.Value.Month == DateTime.Today.Month);
-                if (item != null)
-                {
-                    item.Raised += (double)entity.Quantity;
-                }
+                item.Raised += (double)entity.Quantity;
             }
-            else if (entity.Type == DonationType.Money)
-            {
-                var item = await unitOfWork.Repository<OrphanageNeed>().Entities().FirstOrDefaultAsync(on => on.OrphanageId == entity.OrphanageId && on.Type == entity.Type && on.MonthStart.Value.Month == DateTime.Today.Month);
-                if (item != null)
-                {
-                    item.Raised += (double)entity.Amount;
-                }
-            }
+
             return await base.Create(entity);
         }
     }

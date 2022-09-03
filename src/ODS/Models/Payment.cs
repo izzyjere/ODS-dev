@@ -14,6 +14,7 @@ public class Payment : AuditableEntity<int>
     public string LastName { get; set; }
     public string Email { get; set; }
     public string Phone { get; set; }
+    public string FWReference { get; set; }
     public string TransactionRef { get; set; }
     public virtual Donor Donor { get; set; }
     public virtual Orphanage Orphanage { get; set; }     

@@ -107,6 +107,35 @@
         }
 
     }
+    [JSInvokable]
+    async Task VerifyPayment(string paymentResponse)
+    {   
+        var response = JsonConvert.DeserializeObject<PaymentResponse>(paymentResponse);
+        if (response!=null && response.Stutus == "successful")
+        {   
+            //Send Email ETC
+            Model.FWReference = response.FWReference;         
+            Model.Phone = response.Customer.PhoneNumber;
+            Model.Date = DateTime.Now;
+            //save to db
+            var res = await paymentService.Create(Model);
+            if (res.Succeeded)
+            {
+                snackBar.Add("Payment Complete", Severity.Success);
+                Dialog.Close();
+            }
+            else
+            {
+                snackBar.Add("Payment was complete but something went wrong at our end.", Severity.Warning);
+
+            }
+        }
+        else
+        {
+            snackBar.Add("Payment Failed.", Severity.Error);
+        }
+        
+    }
     async void ProcessPayment()
     {
         if (Model.Amount<1)
@@ -130,7 +159,7 @@
         string PbKey = "FLWPUBK_TEST-ac089c74f98cae65498954abcd767b3f-X";
         try
         {
-            await javaScript.InvokeAsync<object>("makePayment", PbKey, request.Amount, request.TransactionRef, request.DonorId, request.OrphanageId, donor.Name, request.Phone, donor.Email, request.Orphanage, $"{Navigation.BaseUri}/assets/img/icon/xfavicon.png.pagespeed.ic.YvM5dLVeS6.png");
+            await javaScript.InvokeAsync<object>("makePayment", PbKey, request.Amount, request.TransactionRef, request.DonorId, request.OrphanageId, donor.Name, request.Phone, donor.Email, request.Orphanage, $"{Navigation.BaseUri}/assets/img/icon/xfavicon.png.pagespeed.ic.YvM5dLVeS6.png", DotNetObjectReference.Create(this));
             snackBar.Add("Payment Initiated",Severity.Success);
 
         }
@@ -156,8 +185,7 @@
             return;
         }
         Model2.DonorId = donor.Id;
-        Model2.Date = DateTime.Now;
-        Model2.Type = DonationType.Item;
+        Model2.Date = DateTime.Now;    
 
         var res = await donationService.Create(Model2);
         if (res.Succeeded)

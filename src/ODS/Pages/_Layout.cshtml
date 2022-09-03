@@ -39,8 +39,8 @@
     <script src="assets/js/vendor/jquery-1.12.4.min.js"></script>
     <script src="assets/js/flutterwave-checkout-v3.js"></script>
     <script>
-        function makePayment(publicKey,amount,tranRef,donor_id,orphanage_id,donor,phone,email,orphanage, logo="") {
-            FlutterwaveCheckout({
+        function makePayment(publicKey,amount,tranRef,donor_id,orphanage_id,donor,phone,email,orphanage, logo="",dotnetHelper) {
+         const modal = FlutterwaveCheckout({
                 public_key: publicKey,
                 tx_ref: tranRef,
                 amount: amount,
@@ -60,6 +60,12 @@
                     title: "Kitwe Orphanage Donation System",
                     description: "Donation to "+ orphanage,
                     logo: logo,
+                },
+                callback: function (payment) {
+                    // Verify Payment
+                    var json = JSON.stringify(payment);
+                    dotnetHelper.invokeMethodAsync('VerifyPayment', json);                    
+                    modal.close();
                 },
             });
         }

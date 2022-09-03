@@ -16,7 +16,7 @@
                              Style="width:54px; height:54px;"></MudIcon>
                     <div>
                         <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">Total Donations</MudText>
-                        <MudText Typo="Typo.h5">@Orphanage.Donations?.Sum(d=>d.Amount).ToString("N2") ZMW</MudText>
+                        <MudText Typo="Typo.h5">@Orphanage.Payments?.Sum(d=>d.Amount).ToString("N2") ZMW</MudText>
                     </div>
                 </MudPaper>
             </MudItem>
@@ -26,7 +26,7 @@
                              Style="width:54px; height:54px;"></MudIcon>
                     <div>
                         <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">Items Donated</MudText>
-                        <MudText Typo="Typo.h5">@Orphanage.Donations?.Where(d=>d.Type==DonationType.Item).Sum(d=>d.Quantity)</MudText>
+                        <MudText Typo="Typo.h5">@Orphanage.Donations?.Sum(d=>d.Quantity)</MudText>
                     </div>
                 </MudPaper>
             </MudItem>
@@ -141,8 +141,8 @@
             if (claimsPrincipal.IsInRole("Orphanage"))
             {   
                 Orphanage = await orphanageService.GetByEmail(claimsPrincipal.Identity.Name);
-                data2.Add((double)Orphanage.Donations?.Where(d => d.Type == DonationType.Item).Sum(d => d.Quantity));
-                data2.Add((double)Orphanage.Donations?.Where(d => d.Type == DonationType.Money).Sum(d => d.Amount));
+                data2.Add((double)Orphanage.Donations?.Sum(d => d.Quantity));
+                data2.Add((double)Orphanage.Payments?.Sum(d => d.Amount));
                 if (!Orphanage.IsActive)
                 {
                     await mbox.Show();
@@ -155,8 +155,8 @@
                 Donor = await donorService.GetByUserId(claimsPrincipal.GetGuid());
                 if (Donor.Donations.Any())
                 {
-                    itemsTotal = Donor.Donations.Count(d => d.Type == DonationType.Item);
-                    myDonations = Donor.Donations.Sum(d => d.Amount);
+                    itemsTotal = Donor.Donations.Count;
+                    myDonations = Donor.Payments.Sum(d => d.Amount);
                     data.Add((double)itemsTotal);data.Add((double)myDonations);
             }
             }

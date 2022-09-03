@@ -18,6 +18,7 @@
         public bool IsActive { get; set; }
         public List<UploadFile> Files { get; set; }
         public virtual List<Donation> Donations { get; set; }
+        public virtual List<Payment> Payments { get; set; }
 
 
     }

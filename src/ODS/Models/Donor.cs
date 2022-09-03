@@ -9,6 +9,7 @@
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
         public virtual List<Donation> Donations { get; set; }
+        public virtual List<Payment> Payments { get; set; }
 
     }
 }

@@ -4,27 +4,28 @@
     @if (Model != null)
     {
         <MudTabPanel Text="Monetary Donations">
-
-            <MudTable Items="@MoneyD" Filter="new Func<Donation,bool>(FilterFunc1)">
+            <MudTable Items="@MoneyD" Filter="new Func<Payment,bool>(FilterFunc2)">
                 <ToolBarContent>
                     <MudSpacer />
                     <MudTextField @bind-Value="searchString1" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
                 </ToolBarContent>
                 <HeaderContent>
                     <MudTh>No.</MudTh>
+                    <MudTh>Transaction Id</MudTh>
                     <MudTh>Date</MudTh>
                     <MudTh>Donated By</MudTh>
                     <MudTh>Payment Method</MudTh>
-                    <MudTh>Quantity</MudTh>
+                    <MudTh>Reference</MudTh>
                     <MudTh>Amount</MudTh>
                     <MudTh>Actions</MudTh>
                 </HeaderContent>
                 <RowTemplate>
                     <MudTd DataLabel="Id">@context.Id</MudTd>
+                    <MudTd DataLabel="TransactioId">@context.</MudTd>
                     <MudTd DataLabel="Date">@context.Date.ToString("dd MMM yyyy H:mm")</MudTd>
                     <MudTd DataLabel="Description">@context.Donor.Name</MudTd>
                     <MudTd DataLabel="PaymentMethod">@context.PaymentMethod.ToString()</MudTd>
-                    <MudTd DataLabel="Quantity">@context.Quantity</MudTd>
+                    <MudTd DataLabel="Reference">@context.TransactionRef</MudTd>
                     <MudTd DataLabel="Amount">@context.Amount.ToString("N2")</MudTd>
                     <MudTd DataLabel="Actions">
                         <MudButton Color="Color.Info" Variant="Variant.Outlined">More Details></MudButton>
@@ -55,8 +56,7 @@
                     <MudTd DataLabel="Id">@context.Id</MudTd>
                     <MudTd DataLabel="Date">@context.Date.ToString("dd MMM yyyy H:mm")</MudTd>
                     <MudTd DataLabel="Description">@context.Description</MudTd>
-                    <MudTd DataLabel="Donor.Name">@context.Donor.Name</MudTd>
-                    <MudTd DataLabel="PaymentMethod">@context.PaymentMethod.ToString()</MudTd>
+                    <MudTd DataLabel="Donor.Name">@context.Donor.Name</MudTd>                 
                     <MudTd DataLabel="Quantity">@context.Quantity</MudTd>                   
                     <MudTd DataLabel="Actions">
                         <MudButton Color="Color.Info" Variant="Variant.Outlined">More Details></MudButton>
@@ -93,7 +93,7 @@
     {
         await Init();
     }
-    IEnumerable<Donation> MoneyD = Enumerable.Empty<Donation>();
+    IEnumerable<Payment> MoneyD = Enumerable.Empty<Payment>();
     IEnumerable<Donation> ItemsD = Enumerable.Empty<Donation>();
     async Task Init()
     {
@@ -107,8 +107,8 @@
                 {
                     Navigation.NavigateTo("/");
                 }
-                MoneyD = Model.Donations.Where(d => d.Type == DonationType.Money);
-                ItemsD = Model.Donations.Where(d => d.Type == DonationType.Item);
+                
+                ItemsD = Model.Donations;
 
             }
         }
@@ -119,15 +119,24 @@
 
     }
     private bool FilterFunc1(Donation donation) => FilterFunc(donation, searchString1);
+    private bool FilterFunc2(Payment donation) => FilterFunc3(donation, searchString1);
 
     private bool FilterFunc(Donation donation, string searchString)
     {
         if (string.IsNullOrWhiteSpace(searchString))
             return true;
         if (donation.Description.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;        
+        return false;
+    } 
+    private bool FilterFunc3(Payment donation, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
             return true;
-        if (donation.Amount.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        if (donation.Description.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
+        if (donation.FWReference.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;        
         return false;
     }
 }

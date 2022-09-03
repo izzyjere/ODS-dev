@@ -4,12 +4,14 @@
         <MudText Typo="Typo.h6">My Payments</MudText>
         <MudSpacer />
         <MudButton Variant="Variant.Outlined" Color="Color.Success" StartIcon="@Icons.Material.Filled.Share">Export</MudButton>
-        <MudSpacer/>
+        <MudSpacer />
         <MudTextField @bind-Value="searchString1" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
     </ToolBarContent>
     <HeaderContent>
         <MudTh>No.</MudTh>
         <MudTh>Date</MudTh>
+        <MudTh>Transaction Id</MudTh>
+        <MudTh>Orphanage</MudTh>
         <MudTh>Payment Method</MudTh>
         <MudTh>Amount</MudTh>
         <MudTh>Actions</MudTh>
@@ -17,6 +19,7 @@
     <RowTemplate>
         <MudTd DataLabel="Id">@context.Id</MudTd>
         <MudTd DataLabel="Date">@context.Date.ToString("dd MMM yyyy H:mm")</MudTd>
+        <MudTd DataLabel="Date">@context.Orphanage?.Name</MudTd>
         <MudTd DataLabel="PaymentMethod">@context.PaymentMethod.ToDescriptionString()</MudTd>
         <MudTd DataLabel="Amount">@context.Amount.ToString("N2")</MudTd>
         <MudTd DataLabel="Actions"></MudTd>
@@ -32,7 +35,7 @@
     <MudSwitch @bind-Checked="@striped" Color="Color.Tertiary">Striped</MudSwitch>
     <MudSwitch @bind-Checked="@bordered" Color="Color.Warning">Bordered</MudSwitch>
     <MudSpacer />
-    
+
 </div>
 @code {
     private bool dense = false;
@@ -42,12 +45,25 @@
     private string searchString1 = "";
     private Payment selectedItem1 = null;
     private HashSet<Payment> selectedItems = new HashSet<Payment>();
-
+    [CascadingParameter]
+    Task<AuthenticationState> authState { get; set; }
+    ClaimsPrincipal claimsPrincipal = new();
+    Donor donor = new Donor();
     private IEnumerable<Payment> PaymentsList = new List<Payment>();
 
     protected override async Task OnInitializedAsync()
     {
-       
+        claimsPrincipal = (await authState).User;
+        if (claimsPrincipal.Identity.IsAuthenticated)
+        {
+            donor = await donorService.GetByUserId(claimsPrincipal.GetGuid());
+            PaymentsList = donor.Payments;
+        }
+        else
+        {
+                Navigation.NavigateTo("/login");
+        }
+
     }
 
     private bool FilterFunc1(Payment payment) => FilterFunc(payment, searchString1);
@@ -59,7 +75,7 @@
         if (payment.PaymentMethod.ToDescriptionString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         if (payment.Date.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;       
+            return true;
         return false;
     }
 }

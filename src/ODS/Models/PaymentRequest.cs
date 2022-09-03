@@ -1,5 +1,7 @@
 ﻿using ODS.Enums;
 
+using static MudBlazor.Icons;
+
 namespace ODS.Models
 {
     public class PaymentRequest
@@ -19,5 +21,27 @@ namespace ODS.Models
         {
             TransactionRef = Guid.NewGuid().ToString();
         }
-    }   
+    }
+    public class PaymentResponse
+    {
+        public string Amount { get; set; }
+        public string Currency { get; set; }
+        public Customer Customer { get; set; }
+        [JsonProperty("flw_ref")]   
+        public string FWReference { get; set; }
+        public string Stutus { get; set; }
+        [JsonProperty("tx_ref")]
+        public string TransactionReference { get; set; }
+        [JsonProperty("transaction_id")]
+        public string TransactionId { get; set; }
+    }
+    public class Customer
+    {
+        public string Name { get; set; }
+        public string Email { get; set; }
+        [JsonProperty("phone_number")]
+        public string PhoneNumber { get; set; }
+
+    }
+
 }

@@ -23,10 +23,8 @@
         <MudTd DataLabel="Id">@context.Id</MudTd>
         <MudTd DataLabel="Date">@context.Date.ToString("dd MMM yyyy H:mm")</MudTd>
         <MudTd DataLabel="Description">@context.Description</MudTd>
-        <MudTd DataLabel="Orphanage.Name">@context.Orphanage?.Name</MudTd>
-        <MudTd DataLabel="Type">@context.Type.ToString()</MudTd>
-        <MudTd DataLabel="Quantity">@context.Quantity</MudTd>
-        <MudTd DataLabel="Amount">@(context.Type==DonationType.Item?"N/A":context.Amount.ToString("N2"))</MudTd>
+        <MudTd DataLabel="Orphanage.Name">@context.Orphanage?.Name</MudTd>       
+        <MudTd DataLabel="Quantity">@context.Quantity</MudTd>      
         <MudTd DataLabel="Actions">
             <MudButton Color="Color.Info" Variant="Variant.Outlined">More Details></MudButton>
         </MudTd>
@@ -74,9 +72,7 @@
             return true;
         if (donation.Description.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (donation.Date.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if (donation.Type.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        if (donation.Date.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase)) 
             return true;
         return false;
     }
