@@ -117,6 +117,7 @@
             Model.FWReference = response.FWReference;
             Model.TransactionRef = response.TransactionReference;
             Model.Email = response.Customer.Email;
+            Model.DonorId = donor.Id;
             Model.Phone = response.Customer.PhoneNumber;
             Model.Date = DateTime.Now;
             //save to db
