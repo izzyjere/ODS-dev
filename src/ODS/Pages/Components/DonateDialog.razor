@@ -109,12 +109,14 @@
     }
     [JSInvokable]
     public async Task VerifyPayment(string paymentResponse)    {
-        
+
         var response = JsonConvert.DeserializeObject<PaymentResponse>(paymentResponse);
         if (response!=null && response.Status == "successful")
         {   
             //Send Email ETC
-            Model.FWReference = response.FWReference;         
+            Model.FWReference = response.FWReference;
+            Model.TransactionRef = response.TransactionReference;
+            Model.Email = response.Customer.Email;
             Model.Phone = response.Customer.PhoneNumber;
             Model.Date = DateTime.Now;
             //save to db
@@ -134,7 +136,7 @@
         {
             snackBar.Add("Payment Failed.", Severity.Error);
         }
-        
+
     }
     async void ProcessPayment()
     {
@@ -156,6 +158,7 @@
                 OrphanageId = Model.OrphanageId,
                 PaymentMethod = Model.PaymentMethod
             };
+        Model.TransactionRef = request.TransactionRef;
         string PbKey = "FLWPUBK_TEST-ac089c74f98cae65498954abcd767b3f-X";
         try
         {
