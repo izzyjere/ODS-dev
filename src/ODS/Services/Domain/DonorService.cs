@@ -7,7 +7,7 @@
         }
         public async Task<Donor> GetByUserId(Guid id)
         {
-            return await Repository.Entities().Include(e => e.Donations).ThenInclude(d => d.Orphanage).FirstOrDefaultAsync(u => u.UserId == id);
+            return await Repository.Entities().Include(e => e.Donations).ThenInclude(d => d.Orphanage).Include(e => e.Payments).ThenInclude(p=>p.Orphanage).FirstOrDefaultAsync(u => u.UserId == id);
         }
     }
 }
