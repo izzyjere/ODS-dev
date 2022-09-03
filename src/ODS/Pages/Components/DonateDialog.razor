@@ -108,10 +108,10 @@
 
     }
     [JSInvokable]
-    public async Task VerifyPayment(string paymentResponse)
-    {   
+    public async Task VerifyPayment(string paymentResponse)    {
+        
         var response = JsonConvert.DeserializeObject<PaymentResponse>(paymentResponse);
-        if (response!=null && response.Stutus == "successful")
+        if (response!=null && response.Status == "successful")
         {   
             //Send Email ETC
             Model.FWReference = response.FWReference;         

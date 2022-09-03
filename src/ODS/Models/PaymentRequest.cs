@@ -29,7 +29,7 @@ namespace ODS.Models
         public Customer Customer { get; set; }
         [JsonProperty("flw_ref")]   
         public string FWReference { get; set; }
-        public string Stutus { get; set; }
+        public string Status { get; set; }
         [JsonProperty("tx_ref")]
         public string TransactionReference { get; set; }
         [JsonProperty("transaction_id")]
