@@ -38,37 +38,7 @@
     <script src="assets/js/vendor/modernizr-3.5.0.min.js"></script>
     <script src="assets/js/vendor/jquery-1.12.4.min.js"></script>
     <script src="assets/js/flutterwave-checkout-v3.js"></script>
-    <script>
-        function makePayment(publicKey,amount,tranRef,donor_id,orphanage_id,donor,phone,email,orphanage, logo="",dotnetHelper) {
-         const modal = FlutterwaveCheckout({
-                public_key: publicKey,
-                tx_ref: tranRef,
-                amount: amount,
-                currency: "ZMW",
-                payment_options: "mobilemoneyzambia",               
-                meta: {
-                    consumer_id: donor_id,
-                    consumer_mac: orphanage_id,
-                },
-                customer: {
-                    email: email,
-                    phone_number: phone,
-                    name: donor,
-                },
-                customizations: {
-                    title: "Kitwe Orphanage Donation System",
-                    description: "Donation to "+ orphanage,
-                    logo: logo,
-                },
-                callback: function (payment) {
-                    // Verify Payment
-                    var json = JSON.stringify(payment);
-                    dotnetHelper.invokeMethodAsync('VerifyPayment', json);
-                    modal.close();
-                },
-            });
-        }
-    </script>
+    
     <script src="assets/js/popper.min.js%2bbootstrap.min.js.pagespeed.jc.UN9ZorBW7c.js"></script>
     <script>eval(mod_pagespeed_jjf6qPvzZx);</script>
     <script>eval(mod_pagespeed_zdD9KKJ_05);</script>
@@ -100,6 +70,36 @@
 
         gtag('config', 'UA-23581568-13');
     </script>
-    <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v652eace1692a40cfa3763df669d7439c1639079717194" integrity="sha512-Gi7xpJR8tSkrpF7aordPZQlW2DLtzUlZcumS8dMQjwDHEnw9I7ZLyiOj/6tZStRBGtGgN6ceN6cMH8z7etPGlw==" data-cf-beacon='{"rayId":"712daf276a6a055e","token":"cd0b4b3a733644fc843ef0b185f98241","version":"2021.12.0","si":100}' crossorigin="anonymous"></script>
+    <script>
+        function makePayment(publicKey, amount, tranRef, donor_id, orphanage_id, donor, phone, email, orphanage, logo = "", dotnetHelper) {
+            const modal = FlutterwaveCheckout({
+                public_key: publicKey,
+                tx_ref: tranRef,
+                amount: amount,
+                currency: "ZMW",
+                payment_options: "mobilemoneyzambia",
+                meta: {
+                    consumer_id: donor_id,
+                    consumer_mac: orphanage_id,
+                },
+                customer: {
+                    email: email,
+                    phone_number: phone,
+                    name: donor,
+                },
+                customizations: {
+                    title: "Kitwe Orphanage Donation System",
+                    description: "Donation to " + orphanage,
+                    logo: logo,
+                },
+                callback: function (payment) {
+                    // Verify Payment
+                    var json = JSON.stringify(payment);
+                    dotnetHelper.invokeMethodAsync('VerifyPayment', json);
+                    modal.close();
+                },
+            });
+        }
+    </script>
 </body>
 </html>
