@@ -350,20 +350,16 @@
         isAuthenticated = claimsPrincipal.Identity.IsAuthenticated;
         Orphanages = await orphanageService.GetAll();
 
-    }
-    protected override Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
+        if (RedirectUrl == "donate")
         {
-            if (RedirectUrl == "donate")
-            {
-                Donate();
-                RedirectUrl = string.Empty;
-                StateHasChanged();
-            }
+            Donate();
+            RedirectUrl = string.Empty;
+            StateHasChanged();
         }
-        return base.OnAfterRenderAsync(firstRender);
+
+
     }
+
     async void Donate(bool direct = false, int oid = 0)
     {
         if (!claimsPrincipal.Identity.IsAuthenticated)
