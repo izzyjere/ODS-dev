@@ -1,87 +1,87 @@
 <MudDialog>
     <DialogContent>
         <MudTabs Border="true">
-           <MudTabPanel Text="Monetary">
+            <MudTabPanel Text="Monetary">
                 <EditForm Model="@Model" OnValidSubmit="Complete">
-            <DataAnnotationsValidator />
-            <MudGrid Spacing="3">
-                <MudItem xs="12">
-                   <MudSelect  ReadOnly="@editing" T="int" @bind-Value="Model2.OrphanageId" Variant="Variant.Outlined" Label="Orphange">
-                       <MudSelectItem Value="0">Select orphanage</MudSelectItem>
-                       @foreach (var item in orphanages)
-                       {
-                           <MudSelectItem Value="@item.Id">@item.Name</MudSelectItem>
-                       }
-                   </MudSelect>
-                </MudItem> 
-                <MudItem xs="12">
-                    <MudChip Label="true" Class="mb-3" Variant="Variant.Text" Color="Color.Info" Icon="@Icons.Material.Filled.Payment">Choose Payment Method</MudChip>
-                    <MudRadioGroup T="PaymentMethod" @bind-SelectedOption="@paymentMethod">
-                        <MudGrid Justify="Justify.SpaceBetween">
-                            @foreach (var item in (PaymentMethod[])Enum.GetValues(typeof(PaymentMethod)))
-                            {
-                                <MudItem xs="4">
-                                    <MudRadio title="@item.ToDescriptionString()" Option="@item" Color="Color.Primary">
-                                        <MudImage Width="50" Height="50" Alt="@item.ToString()" Src="@($"assets/img/gallery/{item.ToString()}.png")"></MudImage>
-                                    </MudRadio>
-                                </MudItem>
-                            }
-                        </MudGrid>
-                    </MudRadioGroup>
-                </MudItem>
-                <MudItem xs="8">
-                    <MudTextField Variant = "Variant.Outlined"
-                               @bind-Value="@Model.Phone"
-                               Label="Enter 10 Digit Phone number"
-                               Clearable="true" />
-                    <MudText Typo="Typo.caption" Color="Color.Error">*A request to approve the payment will be sent to you.</MudText>
-                </MudItem>
-                <MudItem xs="4">
-                    <MudButton @onclick="SendOTP" Color="Color.Primary" Variant="Variant.Filled">Send Code</MudButton>
-                </MudItem>
-                @if (OTPsent)
-                {
-                    <MudItem xs="8">
-                        <MudTextField Variant="Variant.Outlined"
-                               @bind-Value="@OTP"                             
-                               Label="Enter Verification Code"
-                               Clearable="true" />
-                        <MudText Typo="Typo.caption" Color="Color.Info">*Haven't received the code?</MudText>
-                    </MudItem>
-                    <MudItem xs="4">
-                        <MudButton  OnClick="VerifyOTP"  Color="Color.Success">Verify Code</MudButton>
-                    </MudItem>
-                }
-            </MudGrid>
-        </EditForm>
-           </MudTabPanel>
-           <MudTabPanel Text="Items">
+                    <DataAnnotationsValidator />
+                    <MudGrid Spacing="3">
+                        <MudItem xs="12">
+                            <MudSelect ReadOnly="@editing" T="int" @bind-Value="Model.OrphanageId" Variant="Variant.Outlined" Label="Orphange">
+                                <MudSelectItem Value="0">Select orphanage</MudSelectItem>
+                                @foreach (var item in orphanages)
+                                {
+                                    <MudSelectItem Value="@item.Id">@item.Name</MudSelectItem>
+                                }
+                            </MudSelect>
+                        </MudItem>
+                        <MudItem xs="12">
+                            <MudChip Label="true" Class="mb-3" Variant="Variant.Text" Color="Color.Info" Icon="@Icons.Material.Filled.Payment">Choose Payment Method</MudChip>
+                            <MudRadioGroup T="PaymentMethod" @bind-SelectedOption="@Model.PaymentMethod">
+                                <MudGrid Justify="Justify.SpaceBetween">
+                                    @foreach (var item in (PaymentMethod[])Enum.GetValues(typeof(PaymentMethod)))
+                                    {
+                                        <MudItem xs="4">
+                                            <MudRadio title="@item.ToDescriptionString()" Option="@item" Color="Color.Primary">
+                                                <MudImage Width="50" Height="50" Alt="@item.ToString()" Src="@($"assets/img/gallery/{item.ToString()}.png")"></MudImage>
+                                            </MudRadio>
+                                        </MudItem>
+                                    }
+                                </MudGrid>
+                            </MudRadioGroup>
+                        </MudItem>
+                        <MudItem xs="8">
+                            <MudTextField Variant="Variant.Outlined"
+                                          @bind-Value="@Model.Phone"
+                                          Label="Enter 10 Digit Phone number"
+                                          Clearable="true" />
+                            <MudText Typo="Typo.caption" Color="Color.Error">*A request to approve the payment will be sent to you.</MudText>
+                        </MudItem>
+                        <MudItem xs="4">
+                            <MudButton @onclick="ProcessPayment" Color="Color.Primary" Variant="Variant.Filled">Pay Now</MudButton>
+                        </MudItem>
+                       @* @if (OTPsent)
+                        {
+                            <MudItem xs="8">
+                                <MudTextField Variant="Variant.Outlined"
+                                          @bind-Value="@OTP"
+                                          Label="Enter Verification Code"
+                                          Clearable="true" />
+                                <MudText Typo="Typo.caption" Color="Color.Info">*Haven't received the code?</MudText>
+                            </MudItem>
+                            <MudItem xs="4">
+                                <MudButton OnClick="VerifyOTP" Color="Color.Success">Verify Code</MudButton>
+                            </MudItem>
+                        }*@
+                    </MudGrid>
+                </EditForm>
+            </MudTabPanel>
+            <MudTabPanel Text="Items">
                 <EditForm Model="@Model2" OnValidSubmit="Complete">
-            <DataAnnotationsValidator />
-            <MudGrid Spacing="3">
-                <MudItem xs="12">
-                    <MudTextField @bind-Value="Model2.Description" Variant="Variant.Outlined" Label="Item Description"/>                 
-                </MudItem>
-                <MudItem xs="12">
-                   <MudTextField @bind-Value="Model2.Quantity" Variant="Variant.Outlined" Label="Quantity"/> 
-                </MudItem> 
-                <MudItem xs="12">
-                   <MudSelect ReadOnly="@editing" T="int" @bind-Value="Model2.OrphanageId" Variant="Variant.Outlined" Label="Orphange">
-                       <MudSelectItem Value="0">Select orphanage</MudSelectItem>
-                       @foreach (var item in orphanages)
-                       {
-                           <MudSelectItem Value="@item.Id">@item.Name</MudSelectItem>
-                       }
-                   </MudSelect>
-                </MudItem> 
-            </MudGrid>
-        </EditForm>
-           </MudTabPanel>
-        </MudTabs>        
+                    <DataAnnotationsValidator />
+                    <MudGrid Spacing="3">
+                        <MudItem xs="12">
+                            <MudTextField @bind-Value="Model2.Description" Variant="Variant.Outlined" Label="Item Description" />
+                        </MudItem>
+                        <MudItem xs="12">
+                            <MudTextField @bind-Value="Model2.Quantity" Variant="Variant.Outlined" Label="Quantity" />
+                        </MudItem>
+                        <MudItem xs="12">
+                            <MudSelect ReadOnly="@editing" T="int" @bind-Value="Model2.OrphanageId" Variant="Variant.Outlined" Label="Orphange">
+                                <MudSelectItem Value="0">Select orphanage</MudSelectItem>
+                                @foreach (var item in orphanages)
+                                {
+                                    <MudSelectItem Value="@item.Id">@item.Name</MudSelectItem>
+                                }
+                            </MudSelect>
+                        </MudItem>
+                    </MudGrid>
+                </EditForm>
+            </MudTabPanel>
+        </MudTabs>
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="Cancel">Cancel</MudButton>
-        <MudButton OnClick="Donate"  IconColor="Color.Error" StartIcon="@Icons.Material.Filled.Favorite" Variant="Variant.Filled">Donate</MudButton>
+        <MudButton OnClick="Donate" IconColor="Color.Error" StartIcon="@Icons.Material.Filled.Favorite" Variant="Variant.Filled">Donate</MudButton>
     </DialogActions>
 </MudDialog>
 
@@ -92,38 +92,48 @@
     Payment Model { get; set; } = new();
     [Parameter] public int Oid { get; set; }
     PaymentMethod paymentMethod;
-    bool OTPsent,OTPverified;
+    bool OTPsent, OTPverified;
     List<Orphanage> orphanages = new();
     ClaimsPrincipal claimsPrincipal = new();
-    Donation Model2 {get; set;} = new();
+    Donation Model2 { get; set; } = new();
     Donor donor = new();
     bool editing = false;
     string OTP;
     protected override async Task OnInitializedAsync()
-    {   
+    {
         claimsPrincipal = (await authenticateTask).User;
-        donor= await donorService.GetByUserId(claimsPrincipal.GetGuid());
+        donor = await donorService.GetByUserId(claimsPrincipal.GetGuid());
         orphanages = await orphanageService.GetAll();
-        if(Oid>0)
+        if (Oid > 0)
         {
             Model2.OrphanageId = Oid;
             editing = true;
         }
+        if(donor!=null)
+        {
+            Model.FirstName = donor.FirstName;
+            Model.LastName = donor.LastName;
+            Model.Email = donor.Email;
+        }
+        else
+        {
+            Dialog.Cancel();
+        }
 
     }
-    void SendOTP()
+    async void ProcessPayment()
     {
         if (string.IsNullOrWhiteSpace(Model.Phone))
         {
             snackBar.Add("Please enter a valid phone number.", Severity.Error);
             return;
         }
-        OTPsent = true;
+        var response = await paymentService.ProcessPayment(Model);
         StateHasChanged();
 
     }
     void VerifyOTP()
-    {   
+    {
         if (string.IsNullOrWhiteSpace(OTP))
         {
             snackBar.Add("Please enter a valid code", Severity.Error);
@@ -138,7 +148,7 @@
     }
     async void Donate()
     {
-        if(string.IsNullOrEmpty(Model2.Description)||string.IsNullOrEmpty(Model2.Quantity.ToString()))
+        if (string.IsNullOrEmpty(Model2.Description) || string.IsNullOrEmpty(Model2.Quantity.ToString()))
         {
             snackBar.Add("Enter all required fields");
             return;
@@ -148,15 +158,16 @@
         Model2.Type = DonationType.Item;
 
         var res = await donationService.Create(Model2);
-        if(res.Succeeded)
+        if (res.Succeeded)
         {
             snackBar.Add("Thank you.");
             Dialog.Close();
         }
-        else{
-            snackBar.Add("Something went wrong."); 
+        else
+        {
+            snackBar.Add("Something went wrong.");
         }
-       
+
     }
     void Cancel() => Dialog.Cancel();
 }

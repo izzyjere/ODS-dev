@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
 using ODS.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,6 +36,12 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.MapPost("/api/payments",[Authorize] async (SystemDbContext context,[FromBody] Payment request) =>
+{
+    context.Set<Payment>().Add(request);
+    var res = await context.SaveChangesAsync();
+    return res > 0 ? Result.Success() : Result.Fail();
+});
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseMiddleware<SignInMiddleware<User>>();

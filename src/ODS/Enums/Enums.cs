@@ -2,8 +2,11 @@
 {
     public enum PaymentMethod
     {
+        [Description("MTN")]
         MTNMomo = 1,
+        [Description("Airtel")]
         AirtelMoney,
+        [Description("Zamtel")]
         ZamtelKwacha
     }
     public enum DonationType

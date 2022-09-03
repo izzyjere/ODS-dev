@@ -97,7 +97,7 @@
             modelBuilder.Entity<Donation>(e =>
             {
                 e.ToTable("Donations", "Domain");
-            });
+            });            
             modelBuilder.Entity<OrphanageNeed>(o =>
             {
                 o.ToTable("OrphanageNeeds", "Domain");
