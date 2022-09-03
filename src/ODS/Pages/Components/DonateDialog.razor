@@ -108,7 +108,7 @@
 
     }
     [JSInvokable]
-    async Task VerifyPayment(string paymentResponse)
+    public async Task VerifyPayment(string paymentResponse)
     {   
         var response = JsonConvert.DeserializeObject<PaymentResponse>(paymentResponse);
         if (response!=null && response.Stutus == "successful")

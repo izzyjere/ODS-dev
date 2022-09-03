@@ -63,7 +63,7 @@
                 callback: function (payment) {
                     // Verify Payment
                     var json = JSON.stringify(payment);
-                    dotnetHelper.invokeMethodAsync('VerifyPayment', json);                    
+                    dotnetHelper.invokeMethodAsync('VerifyPayment', json);
                     modal.close();
                 },
             });
