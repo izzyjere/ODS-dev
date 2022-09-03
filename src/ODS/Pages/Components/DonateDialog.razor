@@ -29,29 +29,17 @@
                                 </MudGrid>
                             </MudRadioGroup>
                         </MudItem>
-                        <MudItem xs="8">
-                            <MudTextField Variant="Variant.Outlined"
-                                          @bind-Value="@Model.Phone"
-                                          Label="Enter 10 Digit Phone number"
-                                          Clearable="true" />
-                            <MudText Typo="Typo.caption" Color="Color.Error">*A request to approve the payment will be sent to you.</MudText>
-                        </MudItem>
-                        <MudItem xs="4">
+                        <MudItem xs="12">
+                            <MudNumericField Variant="Variant.Outlined"
+                                             @bind-Value="@Model.Amount"
+                                             T="decimal"
+                                             Min="0"
+                                             Label="Amount in Kwacha"
+                                             Clearable="true" />                           
+                        </MudItem>                      
+                        <MudItem xs="12">
                             <MudButton @onclick="ProcessPayment" Color="Color.Primary" Variant="Variant.Filled">Pay Now</MudButton>
-                        </MudItem>
-                       @* @if (OTPsent)
-                        {
-                            <MudItem xs="8">
-                                <MudTextField Variant="Variant.Outlined"
-                                          @bind-Value="@OTP"
-                                          Label="Enter Verification Code"
-                                          Clearable="true" />
-                                <MudText Typo="Typo.caption" Color="Color.Info">*Haven't received the code?</MudText>
-                            </MudItem>
-                            <MudItem xs="4">
-                                <MudButton OnClick="VerifyOTP" Color="Color.Success">Verify Code</MudButton>
-                            </MudItem>
-                        }*@
+                        </MudItem>                      
                     </MudGrid>
                 </EditForm>
             </MudTabPanel>
@@ -90,15 +78,12 @@
     [CascadingParameter] MudDialogInstance Dialog { get; set; }
     [CascadingParameter] Task<AuthenticationState> authenticateTask { get; set; }
     Payment Model { get; set; } = new();
-    [Parameter] public int Oid { get; set; }
-    PaymentMethod paymentMethod;
-    bool OTPsent, OTPverified;
+    [Parameter] public int Oid { get; set; }  
     List<Orphanage> orphanages = new();
     ClaimsPrincipal claimsPrincipal = new();
     Donation Model2 { get; set; } = new();
     Donor donor = new();
-    bool editing = false;
-    string OTP;
+    bool editing = false;   
     protected override async Task OnInitializedAsync()
     {
         claimsPrincipal = (await authenticateTask).User;
@@ -109,11 +94,12 @@
             Model2.OrphanageId = Oid;
             editing = true;
         }
-        if(donor!=null)
+        if (donor != null)
         {
             Model.FirstName = donor.FirstName;
             Model.LastName = donor.LastName;
             Model.Email = donor.Email;
+            Model.Phone = donor.PhoneNumber;
         }
         else
         {
@@ -123,24 +109,40 @@
     }
     async void ProcessPayment()
     {
-        if (string.IsNullOrWhiteSpace(Model.Phone))
+        if (Model.Amount<1)
         {
-            snackBar.Add("Please enter a valid phone number.", Severity.Error);
+            snackBar.Add("Please enter a valid amount", Severity.Error);
             return;
         }
-        var response = await paymentService.ProcessPayment(Model);
+        var request = new PaymentRequest
+            {
+
+                Amount = Model.Amount,
+                FirstName = Model.FirstName,
+                LastName = Model.LastName,
+                Email = donor.Email,
+                Phone = Model.Phone,
+                Orphanage = orphanages.FirstOrDefault(x => x.Id == Model.OrphanageId)?.Name,
+                DonorId = donor.Id,
+                OrphanageId = Model.OrphanageId,
+                PaymentMethod = Model.PaymentMethod
+            };
+        string PbKey = "FLWPUBK_TEST-ac089c74f98cae65498954abcd767b3f-X";
+        try
+        {
+            await javaScript.InvokeAsync<object>("makePayment", PbKey, request.Amount, request.TransactionRef, request.DonorId, request.OrphanageId, donor.Name, request.Phone, donor.Email, request.Orphanage, $"{Navigation.BaseUri}/assets/img/icon/xfavicon.png.pagespeed.ic.YvM5dLVeS6.png");
+            snackBar.Add("Payment Initiated",Severity.Success);
+
+        }
+        catch (Exception ex)
+        {
+            WriteLine(ex.Message + ex.StackTrace);
+            snackBar.Add("An error occured, try again",Severity.Error);
+        }
+
         StateHasChanged();
 
-    }
-    void VerifyOTP()
-    {
-        if (string.IsNullOrWhiteSpace(OTP))
-        {
-            snackBar.Add("Please enter a valid code", Severity.Error);
-            return;
-        }
-        OTPverified = true;
-    }
+    }    
     async void Complete()
     {
 

@@ -1,4 +1,5 @@
 ﻿@page "/"
+@page "/{redirectUrl}"
 @layout IndexLayout
 <header>
     <div class="header-area header-transparent">
@@ -9,7 +10,7 @@
 
                         <div class="left-side d-flex align-items-center">
                             <div class="logo">
-                                <a href="index-2.html"><img src="assets/img/logo/logo.png" alt=""></a>
+                                <a href="/"><img src="assets/img/logo/logo.png" alt=""></a>
                             </div>
 
                             <div class="main-menu d-none d-lg-block">
@@ -340,19 +341,27 @@
     [CascadingParameter] Task<AuthenticationState> authState { get; set; }
     ClaimsPrincipal claimsPrincipal = new();
     bool isAuthenticated;
+    [Parameter]
+    public string RedirectUrl { get; set; }
     IEnumerable<Orphanage> Orphanages = Enumerable.Empty<Orphanage>();
     protected override async Task OnInitializedAsync()
     {
         claimsPrincipal = (await authState).User;
         isAuthenticated = claimsPrincipal.Identity.IsAuthenticated;
         Orphanages = await orphanageService.GetAll();
+        if(RedirectUrl == "donate")
+        {
+            Donate();
+            RedirectUrl = string.Empty;
+            StateHasChanged();
+        }
     }
     async void Donate(bool direct = false, int oid = 0)
     {
         if (!claimsPrincipal.Identity.IsAuthenticated)
         {
 
-            Navigation.NavigateTo("login"); return;
+            Navigation.NavigateTo("login/donate"); return;
         }
         else
         {

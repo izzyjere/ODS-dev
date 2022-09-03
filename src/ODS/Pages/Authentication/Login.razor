@@ -44,9 +44,9 @@
     {
         if(string.IsNullOrEmpty(ReturnUrl))
         {
-            ReturnUrl = "/dashboard";
+            ReturnUrl = "/";
         }
-        Model.ReturnUrl = ReturnUrl;
+        Model.ReturnUrl ="/"+ReturnUrl;
     }
 
     async Task LoginAsync()

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using ODS.Middleware;
+using ODS.Services.Domain;
 
 var builder = WebApplication.CreateBuilder(args);
 
