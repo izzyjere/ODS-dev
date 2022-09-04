@@ -13,11 +13,14 @@
 		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.3" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.3" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.3" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.3" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.3" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.3" />
+		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.22.1" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 		<PackageReference Include="MudBlazor" Version="6.0.9" />
 		<PackageReference Include="rave_csharp" Version="1.1.0" />
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.22.1" />
 	</ItemGroup>
   <ItemGroup>
     <Content Update="Pages\Domain\Payments.razor">
@@ -26,6 +29,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="wwwroot\assets\img\pics\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="app.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
