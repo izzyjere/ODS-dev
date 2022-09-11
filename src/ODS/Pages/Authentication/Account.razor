@@ -57,25 +57,19 @@
                                 <MudTextField ReadOnly="true" @bind-Value="@Model2.Name" Label="Orphanage Name" Variant="Variant.Outlined" />
                             </MudItem> 
                             <MudItem xs="12" md="6">
-                                <MudTextField ReadOnly="true" @bind-Value="@Model2.Founder" Label="Orphanage Founder" Variant="Variant.Outlined" />
+                                <MudTextField  @bind-Value="@Model2.Founder" Label="Orphanage Founder" Variant="Variant.Outlined" />
                             </MudItem>
                             <MudItem xs="12" md="6">
-                                <MudTextField ReadOnly="true" @bind-Value="@Model2.AccountNumber" Label="Account Number" Variant="Variant.Outlined" />
+                                <MudTextField  @bind-Value="@Model2.AccountNumber" Label="Account Number" Variant="Variant.Outlined" />
                             </MudItem>
                             <MudItem xs="12" md="6">
-                                <MudTextField ReadOnly="true" @bind-Value="@Model2.Address" Label="Physical Address" Variant="Variant.Outlined" />
+                                <MudTextField  @bind-Value="@Model2.Address" Label="Physical Address" Variant="Variant.Outlined" />
                             </MudItem>
                             <MudItem xs="12" md="6">
                                 <MudTextField ReadOnly="true" @bind-Value="@Model2.Email" Label="Email" Variant="Variant.Outlined" HelperText="Dont worry, we shall not spam!" InputType="InputType.Email" />
                             </MudItem>
-                            <MudItem xs="12">
-                                <MudText>
-                                    <b>Visible Only To Admins</b>
-                                </MudText>
-                                <MudText Typo="Typo.body2">
-                                    Means that only admins will be able to see your contact details.
-                                </MudText>
-                                <MudSwitch @bind-Checked="@FriendSwitch" Color="Color.Secondary" />
+                            <MudItem xs="12">                                
+                                <MudButton Variant="Variant.Filled" Color="Color.Secondary">Save</MudButton>
                             </MudItem>
                         </MudGrid>
                     </MudCardContent>
@@ -84,7 +78,7 @@
         </MudGrid>
     </MudTabPanel>
     <MudTabPanel Text="Security">
-        <EditForm OnValidSubmit="SaveChanges" Model="@Model">
+        <EditForm OnValidSubmit="ChangePass" Model="@Model">
             <DataAnnotationsValidator />          
             <MudCard>
                 <MudCardHeader>
@@ -130,6 +124,18 @@
         await Refresh();
 
     }
+    async Task SaveChanges()
+    {
+        var res = await orphanageService.Update(Model2);
+        if(res.Succeeded)
+        {
+            snackBar.Add("Saved.", Severity.Success);
+        }
+        else
+        {
+            snackBar.Add(res.Messages.First(), Severity.Error);
+        }
+    }
     async Task Refresh()
     {
         Model2 = await orphanageService.GetByEmail(claimsPrincipal.Identity.Name);
@@ -152,7 +158,7 @@
         }
     }
 
-    async void SaveChanges()
+    async void ChangePass()
     {
         var response = await userAccountService.ChangePasswordAsync(Model, claimsPrincipal.GetId());
         if (response.Succeeded)

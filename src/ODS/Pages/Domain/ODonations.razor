@@ -17,7 +17,7 @@
                     <MudTh>Payment Method</MudTh>
                     <MudTh>Reference</MudTh>
                     <MudTh>Amount</MudTh>
-                    <MudTh>Actions</MudTh>
+                    <MudTh>Get In Touch</MudTh>
                 </HeaderContent>
                 <RowTemplate>
                     <MudTd DataLabel="Id">@context.Id</MudTd>
@@ -27,8 +27,8 @@
                     <MudTd DataLabel="PaymentMethod">@context.PaymentMethod.ToString()</MudTd>
                     <MudTd DataLabel="Reference">@context.TransactionRef</MudTd>
                     <MudTd DataLabel="Amount">@context.Amount.ToString("N2")</MudTd>
-                    <MudTd DataLabel="Actions">
-                        <MudButton Color="Color.Info" Variant="Variant.Outlined">More Details></MudButton>
+                    <MudTd DataLabel="GetInTouch">
+                        <MudButton Link='@($"tel:{context.Donor.PhoneNumber}")' StartIcon="@Icons.Material.Filled.Call" Color="Color.Info" Variant="Variant.Outlined">@context.Donor.PhoneNumber</MudButton>
                     </MudTd>
                 </RowTemplate>
                 <PagerContent>
@@ -47,10 +47,9 @@
                     <MudTh>No.</MudTh>
                     <MudTh>Date</MudTh>
                     <MudTh>Description</MudTh>
-                    <MudTh>Donated By</MudTh>
-                    <MudTh>Payment Method</MudTh>
-                    <MudTh>Quantity</MudTh>                    
-                    <MudTh>Actions</MudTh>
+                    <MudTh>Donated By</MudTh>                 
+                    <MudTh>Quantity</MudTh>
+                    <MudTh>Get In Touch</MudTh>
                 </HeaderContent>
                 <RowTemplate>
                     <MudTd DataLabel="Id">@context.Id</MudTd>
@@ -58,8 +57,8 @@
                     <MudTd DataLabel="Description">@context.Description</MudTd>
                     <MudTd DataLabel="Donor.Name">@context.Donor.Name</MudTd>                 
                     <MudTd DataLabel="Quantity">@context.Quantity</MudTd>                   
-                    <MudTd DataLabel="Actions">
-                        <MudButton Color="Color.Info" Variant="Variant.Outlined">More Details></MudButton>
+                    <MudTd DataLabel="Get In Touch">
+                        <MudButton Link='@($"tel:{context.Donor.PhoneNumber}")' StartIcon="@Icons.Material.Filled.Call" Color="Color.Info" Variant="Variant.Outlined">@context.Donor.PhoneNumber</MudButton>
                     </MudTd>
                 </RowTemplate>
                 <PagerContent>
