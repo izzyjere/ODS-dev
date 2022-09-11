@@ -120,7 +120,7 @@
         await Init();
     }
     public List<ChartSeries> MonthlyDonations = new List<ChartSeries>();
-    public string[] XAxisLabels = {""};
+    public string[] XAxisLabels = { "" };
     private int Index = -1; //default value cannot be 0 -> first selectedindex is 0.
     int dataSize = 4;
     List<double> data = new();
@@ -147,14 +147,27 @@
             else if (claimsPrincipal.IsInRole("Donor"))
             {
                 Donor = await donorService.GetByUserId(claimsPrincipal.GetGuid());
-
                 if (Donor.Donations.Any())
                 {
-                    var months = Donor.Payments.Select(d => d.Date.ToString("MMMM"));
-                    XAxisLabels = months.ToArray();
-                    MonthlyDonations = new List<ChartSeries>();
                     itemsTotal = Donor.Donations.Count;
                     homesTotal = Donor.Donations.Select(d => d.Orphanage).Count();
+                }
+                if (Donor.Payments.Any())
+                {
+
+                    var months = new List<string>(){
+                        "January",
+                        "February",
+                        "March",
+                        "April",
+                        "May",
+                        "June",
+                        "July",
+                        "September",
+                        "October"
+                    };
+                    XAxisLabels = months.ToArray();
+                    MonthlyDonations = new List<ChartSeries>();
                     myDonations = Donor.Payments.Sum(d => d.Amount);
                     data.Add((double)itemsTotal); data.Add((double)myDonations);
                     if (Donor.Payments.Any())
