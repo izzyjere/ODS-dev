@@ -47,15 +47,16 @@
             ReturnUrl = "/dashboard";
             return;
         }
-        Model.ReturnUrl ="/home/"+ReturnUrl;
+        ReturnUrl ="/home/"+ReturnUrl;
     }
 
     async Task LoginAsync()
-    {  
+    {
+        Model.ReturnUrl = ReturnUrl;
         var result = await userAccountService.LoginAsync(Model);
         if(result.Succeeded)
         {    
-
+             
              snackBar.Add(result.Messages.First(), Severity.Success);
              Navigation.NavigateTo($"login/?key={result.Data.TokenKey}", true);
         }
