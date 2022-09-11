@@ -69,7 +69,7 @@
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="Cancel">Cancel</MudButton>
-        <MudButton OnClick="Donate" IconColor="Color.Error" StartIcon="@Icons.Material.Filled.Favorite" Variant="Variant.Filled">Donate</MudButton>
+        <MudButton Disabled="string.IsNullOrEmpty(Model2.Description)" OnClick="Donate" IconColor="Color.Error" Variant="Variant.Filled">Done</MudButton>
     </DialogActions>
 </MudDialog>
 
@@ -182,7 +182,7 @@
 
     }
     async void Donate()
-    {
+    {   
         if (string.IsNullOrEmpty(Model2.Description) || string.IsNullOrEmpty(Model2.Quantity.ToString()))
         {
             snackBar.Add("Enter all required fields");
