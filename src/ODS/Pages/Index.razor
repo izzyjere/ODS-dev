@@ -98,6 +98,10 @@
             </div>
             <div class="container-fluid p-0">
                 <div class="class-offer-active row p-4">
+                    @if(!searchResults.Any())
+                    {
+                        <MudAlert Severity="Severity.Info">No orphanages found..</MudAlert>
+                    }
                     @foreach (var item in searchResults)
                     {
                         var ims = string.IsNullOrEmpty(item.ImageUrl) ? "assets/img/gallery/xclass-img1.jpg.pagespeed.ic.pGecepnPjS.jpg" : item.ImageUrl;
