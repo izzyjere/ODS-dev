@@ -36,11 +36,11 @@
                                              T="decimal"
                                              Min="0"
                                              Label="Amount in Kwacha"
-                                             Clearable="true" />                           
-                        </MudItem>                      
+                                             Clearable="true" />
+                        </MudItem>
                         <MudItem xs="12">
                             <MudButton @onclick="ProcessPayment" Color="Color.Primary" Variant="Variant.Filled">Pay Now</MudButton>
-                        </MudItem>                      
+                        </MudItem>
                     </MudGrid>
                 </EditForm>
             </MudTabPanel>
@@ -79,12 +79,12 @@
     [CascadingParameter] MudDialogInstance Dialog { get; set; }
     [CascadingParameter] Task<AuthenticationState> authenticateTask { get; set; }
     Payment Model { get; set; } = new();
-    [Parameter] public int Oid { get; set; }  
+    [Parameter] public int Oid { get; set; }
     List<Orphanage> orphanages = new();
     ClaimsPrincipal claimsPrincipal = new();
     Donation Model2 { get; set; } = new();
     Donor donor = new();
-    bool editing = false;   
+    bool editing = false;
     protected override async Task OnInitializedAsync()
     {
         claimsPrincipal = (await authenticateTask).User;
@@ -109,11 +109,12 @@
 
     }
     [JSInvokable]
-    public async Task VerifyPayment(string paymentResponse)    {
+    public async Task VerifyPayment(string paymentResponse)
+    {
 
         var response = JsonConvert.DeserializeObject<PaymentResponse>(paymentResponse);
-        if (response!=null && response.Status == "successful")
-        {   
+        if (response != null && response.Status == "successful")
+        {
             //Send Email ETC
             Model.FWReference = response.FWReference;
             Model.TransactionRef = response.TransactionReference;
@@ -130,8 +131,8 @@
                          Thank You.<br/>
                          <table class='table table-bordered table-hover'>
                          <thead>
-                           <tr></tr> 
-                           <tr></tr>  
+                           <tr></tr>
+                           <tr></tr>
                          </thead>
                            <tbody>
                             <tr>
@@ -167,13 +168,13 @@
                               <td>{7}</td>
                             </tr>
                            </tbody>
-                         </table>", response.TransactionId, DateTime.Now.ToString(), response.Customer.Name, orphanages.FirstOrDefault(x => x.Id == Model.DonorId).Name, response.Amount, Model.PaymentMethod.ToDescriptionString(), response.TransactionReference, response.Customer.PhoneNumber)
-        };
+                         </table>", response.TransactionId, DateTime.Now.ToString(), response.Customer.Name, orphanages.FirstOrDefault(x => x.Id == Model.OrphanageId).Name, response.Amount, Model.PaymentMethod.ToDescriptionString(), response.TransactionReference, response.Customer.PhoneNumber)
+                };
             //save to db
             BackgroundJob.Enqueue(() => mailService.SendAsync(mailRequest));
             var mailRequest2 = new MailRequest
                 {
-                    To = orphanages.FirstOrDefault(x => x.Id == Model.DonorId).Email,
+                    To = orphanages.FirstOrDefault(x => x.Id == Model.OrphanageId).Email,
                     Subject = "Payment Receipt",
                     Body = string.Format(@"<h5>Hello</h5> <br/>
                          You have a new donation check details below. <br/>
@@ -217,7 +218,7 @@
                               <td>{7}</td>
                             </tr>
                            </tbody>
-                         </table>", response.TransactionId, DateTime.Now.ToString(), response.Customer.Name, orphanages.FirstOrDefault(x => x.Id == Model.DonorId).Name, response.Amount, Model.PaymentMethod.ToDescriptionString(), response.TransactionReference, response.Customer.PhoneNumber)
+                         </table>", response.TransactionId, DateTime.Now.ToString(), response.Customer.Name, orphanages.FirstOrDefault(x => x.Id == Model.OrphanageId).Name, response.Amount, Model.PaymentMethod.ToDescriptionString(), response.TransactionReference, response.Customer.PhoneNumber)
                 };
             BackgroundJob.Enqueue(() => mailService.SendAsync(mailRequest2));
             var res = await paymentService.Create(Model);
@@ -240,7 +241,7 @@
     }
     async void ProcessPayment()
     {
-        if (Model.Amount<1)
+        if (Model.Amount < 1)
         {
             snackBar.Add("Please enter a valid amount", Severity.Error);
             return;
@@ -263,36 +264,43 @@
         try
         {
             await javaScript.InvokeAsync<object>("makePayment", PbKey, request.Amount, request.TransactionRef, request.DonorId, request.OrphanageId, donor.Name, request.Phone, donor.Email, request.Orphanage, $"{Navigation.BaseUri}/assets/img/icon/xfavicon.png.pagespeed.ic.YvM5dLVeS6.png", DotNetObjectReference.Create(this));
-            snackBar.Add("Payment Initiated",Severity.Success);
+            snackBar.Add("Payment Initiated", Severity.Success);
 
         }
         catch (Exception ex)
         {
             WriteLine(ex.Message + ex.StackTrace);
-            snackBar.Add("An error occured, try again",Severity.Error);
+            snackBar.Add("An error occured, try again", Severity.Error);
         }
 
         StateHasChanged();
 
-    }    
+    }
     async void Complete()
     {
 
 
     }
     async void Donate()
-    {   
+    {
         if (string.IsNullOrEmpty(Model2.Description) || string.IsNullOrEmpty(Model2.Quantity.ToString()))
         {
             snackBar.Add("Enter all required fields");
             return;
         }
         Model2.DonorId = donor.Id;
-        Model2.Date = DateTime.Now;    
+        Model2.Date = DateTime.Now;
 
         var res = await donationService.Create(Model2);
         if (res.Succeeded)
         {
+            var mail = new MailRequest
+                {
+                    To = orphanages.FirstOrDefault(x => x.Id == Model.OrphanageId).Email,
+                    Subject = "Donation Notification",
+                    Body = $"Hello, this serves to infom you that a donor has donated {Model2.Quantity} {Model2.Description}. Login to the system fr more details."
+                };
+            BackgroundJob.Enqueue(() => mailService.SendAsync(mail));
             snackBar.Add("Thank you.");
             Dialog.Close();
         }
