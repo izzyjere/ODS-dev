@@ -90,7 +90,7 @@
     <section id="orphanages">
         <div class="class-offer-area fix">
             <div class="m-4" style="max-width:400px">
-                <MudTextField T="string" @onchange="OnSearch" Placeholder="Search for orphanages" Immediate="true" Adornment="Adornment.End"  AdornmentIcon="@Icons.Material.Filled.Search" Variant="Variant.Text" AdornmentColor="Color.Secondary" FullWidth="true"/>
+                <MudTextField T="string" ValueChanged="OnSearch" Placeholder="Search for orphanages" Immediate="true" Adornment="Adornment.End"  AdornmentIcon="@Icons.Material.Filled.Search" Variant="Variant.Text" AdornmentColor="Color.Secondary" FullWidth="true"/>
             </div>
             <div class="section-tittle m-4">
                 <span>Registered</span>
@@ -348,9 +348,9 @@
     public string RedirectUrl { get; set; }
     HashSet<Orphanage> Orphanages = new();
     IEnumerable<Orphanage> searchResults = Enumerable.Empty<Orphanage>();
-    void OnSearch(ChangeEventArgs args)
+    void OnSearch(string searchString)
     {
-        string searchString =(string)args.Value;
+        searchResults = Enumerable.Empty<Orphanage>();
         if(string.IsNullOrWhiteSpace(searchString))
         {
             searchResults = Orphanages;
@@ -358,8 +358,7 @@
             return;
         }        
         searchResults = Orphanages.Where(o => o.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase)||
-          o.Address.Contains(searchString, StringComparison.OrdinalIgnoreCase)||
-          o.Founder.Contains(searchString, StringComparison.OrdinalIgnoreCase));
+          o.Address.Contains(searchString, StringComparison.OrdinalIgnoreCase));
         StateHasChanged();
     }
     protected override async Task OnInitializedAsync()
