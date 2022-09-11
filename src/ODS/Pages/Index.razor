@@ -17,9 +17,9 @@
                                 <nav>
                                     <ul id="navigation">
                                         <li><a href="#">Home</a></li>
-                                        <li><a href="#orphanages">Orphanages</a></li>
+                                       @* <li><a href="#orphanages">Orphanages</a></li>
                                         <li><a href="#about">About</a></li>
-                                        <li><a href="#contact">Contact Us</a></li>
+                                        <li><a href="#contact">Contact Us</a></li>*@
                                     </ul>
                                 </nav>
                             </div>
@@ -89,13 +89,16 @@
     </section>
     <section id="orphanages">
         <div class="class-offer-area fix">
+            <div class="m-4" style="max-width:400px">
+                <MudTextField T="string" @onchange="OnSearch" Placeholder="Search for orphanages" Immediate="true" Adornment="Adornment.End"  AdornmentIcon="@Icons.Material.Filled.Search" Variant="Variant.Text" AdornmentColor="Color.Secondary" FullWidth="true"/>
+            </div>
             <div class="section-tittle m-4">
                 <span>Registered</span>
                 <h2>Orphanages</h2>
             </div>
             <div class="container-fluid p-0">
                 <div class="class-offer-active row p-4">
-                    @foreach (var item in Orphanages)
+                    @foreach (var item in searchResults)
                     {
                         var ims = string.IsNullOrEmpty(item.ImageUrl) ? "assets/img/gallery/xclass-img1.jpg.pagespeed.ic.pGecepnPjS.jpg" : item.ImageUrl;
                         <div class="col-lg-4 col-md-6 col-sm-6">
@@ -343,13 +346,28 @@
     bool isAuthenticated;
     [Parameter]
     public string RedirectUrl { get; set; }
-    IEnumerable<Orphanage> Orphanages = Enumerable.Empty<Orphanage>();
+    HashSet<Orphanage> Orphanages = new();
+    IEnumerable<Orphanage> searchResults = Enumerable.Empty<Orphanage>();
+    void OnSearch(ChangeEventArgs args)
+    {
+        string searchString =(string)args.Value;
+        if(string.IsNullOrWhiteSpace(searchString))
+        {
+            searchResults = Orphanages;
+            StateHasChanged();
+            return;
+        }        
+        searchResults = Orphanages.Where(o => o.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase)||
+          o.Address.Contains(searchString, StringComparison.OrdinalIgnoreCase)||
+          o.Founder.Contains(searchString, StringComparison.OrdinalIgnoreCase));
+        StateHasChanged();
+    }
     protected override async Task OnInitializedAsync()
     {
         claimsPrincipal = (await authState).User;
         isAuthenticated = claimsPrincipal.Identity.IsAuthenticated;
-        Orphanages = await orphanageService.GetAll();
-
+        Orphanages = new(await orphanageService.GetAll());
+        searchResults = Orphanages;
         if (RedirectUrl == "donate")
         {
             Donate();
