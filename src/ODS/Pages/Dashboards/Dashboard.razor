@@ -153,9 +153,11 @@
             else if (claimsPrincipal.IsInRole("Donor"))
             {
                 Donor = await donorService.GetByUserId(claimsPrincipal.GetGuid());
+
                 if (Donor.Donations.Any())
                 {
                     itemsTotal = Donor.Donations.Count;
+                    homesTotal = Donor.Donations.Select(d => d.Orphanage).Count();
                     myDonations = Donor.Payments.Sum(d => d.Amount);
                     data.Add((double)itemsTotal);data.Add((double)myDonations);
             }
