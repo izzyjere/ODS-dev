@@ -1,3 +1,4 @@
+@using Hangfire
 <MudDialog>
     <DialogContent>
         <MudTabs Border="true">
@@ -120,7 +121,105 @@
             Model.DonorId = donor.Id;
             Model.Phone = response.Customer.PhoneNumber;
             Model.Date = DateTime.Now;
+            var mailRequest = new MailRequest
+                {
+                    To = claimsPrincipal.Identity.Name,
+                    Subject = "Payment Receipt",
+                    Body = string.Format(@"<h5>Hello, {2}</h5> <br/>
+                         Below are details of your recent payment. Keep this email as reference. <br/>
+                         Thank You.<br/>
+                         <table class='table table-bordered table-hover'>
+                         <thead>
+                           <tr></tr> 
+                           <tr></tr>  
+                         </thead>
+                           <tbody>
+                            <tr>
+                              <td>Id: </td>
+                              <td>{0}</td>
+                            </tr>
+                            <tr>
+                              <td>Date: </td>
+                              <td>{1}</td>
+                            </tr>
+                             <tr>
+                              <td>Name: </td>
+                              <td>{2}</td>
+                            </tr>
+                             <tr>
+                              <td>Orphanage: </td>
+                              <td>{3}</td>
+                            </tr>
+                             <tr>
+                              <td>Amount: </td>
+                              <td>{4} ZMW</td>
+                            </tr>
+                            <tr>
+                              <td>Payment Method: </td>
+                              <td>{5}</td>
+                            </tr>
+                           <tr>
+                              <td>Transaction Reference: </td>
+                              <td>{6}</td>
+                            </tr>
+                            <tr>
+                              <td>Phone: </td>
+                              <td>{7}</td>
+                            </tr>
+                           </tbody>
+                         </table>", response.TransactionId, DateTime.Now.ToString(), response.Customer.Name, orphanages.FirstOrDefault(x => x.Id == Model.DonorId).Name, response.Amount, Model.PaymentMethod.ToDescriptionString(), response.TransactionReference, response.Customer.PhoneNumber)
+        };
             //save to db
+            BackgroundJob.Enqueue(() => mailService.SendAsync(mailRequest));
+            var mailRequest2 = new MailRequest
+                {
+                    To = orphanages.FirstOrDefault(x => x.Id == Model.DonorId).Email,
+                    Subject = "Payment Receipt",
+                    Body = string.Format(@"<h5>Hello</h5> <br/>
+                         You have a new donation check details below. <br/>
+                         Thank You.<br/>
+                         <table class='table table-bordered table-hover'>
+                         <thead>
+                           <tr></tr>
+                           <tr></tr>
+                         </thead>
+                           <tbody>
+                            <tr>
+                              <td>Id: </td>
+                              <td>{0}</td>
+                            </tr>
+                            <tr>
+                              <td>Date: </td>
+                              <td>{1}</td>
+                            </tr>
+                             <tr>
+                              <td>Name: </td>
+                              <td>{2}</td>
+                            </tr>
+                             <tr>
+                              <td>Orphanage: </td>
+                              <td>{3}</td>
+                            </tr>
+                             <tr>
+                              <td>Amount: </td>
+                              <td>{4} ZMW</td>
+                            </tr>
+                            <tr>
+                              <td>Payment Method: </td>
+                              <td>{5}</td>
+                            </tr>
+                           <tr>
+                              <td>Transaction Reference: </td>
+                              <td>{6}</td>
+                            </tr>
+                            <tr>
+                              <td>Phone: </td>
+                              <td>{7}</td>
+                            </tr>
+                           </tbody>
+                         </table>", response.TransactionId, DateTime.Now.ToString(), response.Customer.Name, orphanages.FirstOrDefault(x => x.Id == Model.DonorId).Name, response.Amount, Model.PaymentMethod.ToDescriptionString(), response.TransactionReference, response.Customer.PhoneNumber)
+                };
+            BackgroundJob.Enqueue(() => mailService.SendAsync(mailRequest2));
             var res = await paymentService.Create(Model);
             if (res.Succeeded)
             {
