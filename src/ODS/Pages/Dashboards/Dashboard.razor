@@ -117,6 +117,19 @@
     int itemsTotal, homesTotal = 0;
     protected override async Task OnInitializedAsync()
     {
+        var months = new List<string>(){
+                        "January",
+                        "February",
+                        "March",
+                        "April",
+                        "May",
+                        "June",
+                        "July",
+                        "September",
+                        "October"
+                    };
+        XAxisLabels = months.ToArray();
+        MonthlyDonations = new List<ChartSeries>();
         await Init();
     }
     public List<ChartSeries> MonthlyDonations = new List<ChartSeries>();
@@ -143,6 +156,29 @@
                     Navigation.NavigateTo("/");
 
                 }
+
+
+                if (Orphanage.Payments.Any())
+                {
+
+                    var series = new ChartSeries { Name = "Total Raised" };
+                    var data3 = new List<double>();
+                    foreach (var item in Orphanage.Payments)
+                    {
+                        foreach (var month in XAxisLabels)
+                        {
+                            if (item.Date.ToString("MMMM") == month)
+                            {
+                                data3.Add((double)item.Amount);
+                            }
+                            data3.Add(0);
+                        }
+                    }
+                    series.Data = data3.ToArray();
+                    MonthlyDonations.Add(series);
+                }
+
+
             }
             else if (claimsPrincipal.IsInRole("Donor"))
             {
@@ -155,19 +191,6 @@
                 if (Donor.Payments.Any())
                 {
 
-                    var months = new List<string>(){
-                        "January",
-                        "February",
-                        "March",
-                        "April",
-                        "May",
-                        "June",
-                        "July",
-                        "September",
-                        "October"
-                    };
-                    XAxisLabels = months.ToArray();
-                    MonthlyDonations = new List<ChartSeries>();
                     myDonations = Donor.Payments.Sum(d => d.Amount);
                     data.Add((double)itemsTotal); data.Add((double)myDonations);
                     if (Donor.Payments.Any())
@@ -178,7 +201,7 @@
                             var data2 = new List<double>();
                             foreach (var item in Donor.Payments.Where(p => p.OrphanageId == o.Id))
                             {
-                                foreach (var month in months)
+                                foreach (var month in XAxisLabels)
                                 {
                                     if (item.Date.ToString("MMMM") == month)
                                     {
