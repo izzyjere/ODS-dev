@@ -50,7 +50,7 @@
             </MudItem>
             <MudItem xs="12" sm="6">
                 <MudPaper Height="500px" Elevation="24">
-                     <center ><MudText Class="mt-4"Typo="Typo.h6">Disagregated by Type</MudText></center>
+                    <center><MudText Class="mt-4" Typo="Typo.h6">Disagregated by Type</MudText></center>
                     <MudChart Class="mt-4" ChartType="MudBlazor.ChartType.Pie" InputData="@(data2.ToArray())" @bind-SelectedIndex="Index" InputLabels="@Types" Width="300px" Height="300px" />
                 </MudPaper>
             </MudItem>
@@ -100,7 +100,7 @@
             </MudItem>
             <MudItem xs="12" sm="6">
                 <MudPaper Height="500px" Elevation="24">
-                     <center ><MudText Class="mt-4"Typo="Typo.h6">Disagregated by Type</MudText></center>
+                    <center><MudText Class="mt-4" Typo="Typo.h6">Disagregated by Type</MudText></center>
                     <MudChart Class="mt-4" ChartType="MudBlazor.ChartType.Pie" InputData="@data.ToArray()" @bind-SelectedIndex="Index" InputLabels="@Types" Width="300px" Height="300px" />
                 </MudPaper>
             </MudItem>
@@ -119,19 +119,13 @@
     {
         await Init();
     }
-    public List<ChartSeries> MonthlyDonations = new List<ChartSeries>()
-    {
-        new ChartSeries() { Name = "Orphanage 1", Data = new double[] { 40, 20, 25, 27, 46, 60, 48 } },
-        new ChartSeries() { Name = "Orphanage 2", Data = new double[] { 19, 24, 35, 13, 28, 15, 13 } },
-        new ChartSeries() { Name = "Orphanage 3", Data = new double[] { 8, 6, 11, 13, 4, 16, 10, 16} },
-        new ChartSeries() { Name = "Orphanage 4", Data = new double[] { 20, 15, 2, 6, 10, 50, 19} },
-    };
-    public string[] XAxisLabels = { "June", "July", "August", "September", "October", "November", "December" };
+    public List<ChartSeries> MonthlyDonations = new List<ChartSeries>();
+    public hartstring[] XAxisLabels = {""};
     private int Index = -1; //default value cannot be 0 -> first selectedindex is 0.
     int dataSize = 4;
     List<double> data = new();
     List<double> data2 = new();
-    string[] Types = { "Items", "Money"};
+    string[] Types = { "Items", "Money" };
     private int Index3 = -1;
     async Task Init()
     {
@@ -139,7 +133,7 @@
         if (claimsPrincipal.Identity.IsAuthenticated)
         {
             if (claimsPrincipal.IsInRole("Orphanage"))
-            {   
+            {
                 Orphanage = await orphanageService.GetByEmail(claimsPrincipal.Identity.Name);
                 data2.Add((double)Orphanage.Donations?.Sum(d => d.Quantity));
                 data2.Add((double)Orphanage.Payments?.Sum(d => d.Amount));
@@ -156,11 +150,37 @@
 
                 if (Donor.Donations.Any())
                 {
+                    var months = Donor.Payments.Select(d => d.Date.ToString("MMMM"));
+                    XAxisLabels = months.ToArray();
+                    MonthlyDonations = new List<ChartSeries>();
                     itemsTotal = Donor.Donations.Count;
                     homesTotal = Donor.Donations.Select(d => d.Orphanage).Count();
                     myDonations = Donor.Payments.Sum(d => d.Amount);
-                    data.Add((double)itemsTotal);data.Add((double)myDonations);
-            }
+                    data.Add((double)itemsTotal); data.Add((double)myDonations);
+                    if (Donor.Payments.Any())
+                    {
+                        foreach (var o in Donor.Payments.Select(p => p.Orphanage))
+                        {
+                            var series = new ChartSeries { Name = o.Name };
+                            var data2 = new List<double>();
+                            foreach (var item in Donor.Payments.Where(p => p.OrphanageId == o.Id))
+                            {
+                                foreach (var month in months)
+                                {
+                                    if (item.Date.ToString("MMMM") == month)
+                                    {
+                                        data2.Add((double)item.Amount);
+                                    }
+                                    data2.Add(0);
+                                }
+                            }
+                            series.Data = data2.ToArray();
+                            MonthlyDonations.Add(series);
+                        }
+
+                    }
+
+                }
             }
             else
             {
