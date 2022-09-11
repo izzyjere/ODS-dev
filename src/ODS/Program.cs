@@ -3,7 +3,10 @@ using Hangfire;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+using ODS.HelperModels;
+using ODS.Interfaces;
 using ODS.Middleware;
+using ODS.Services;
 using ODS.Services.Domain;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,10 +15,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDatabase(connectionString);
-builder.Services.AddServerServices(); 
+builder.Services.AddServerServices();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+builder.Services.Configure<MailConfiguration>(builder.Configuration.GetSection("MailConfiguration"))
+.AddTransient<IMailService, MailService>();
 builder.Services.AddHangfire(x => x.UseSqlServerStorage(connectionString));
 builder.Services.AddHangfireServer();
 builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
@@ -41,7 +46,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.MapPost("/api/payments",[Authorize] async (SystemDbContext context,[FromBody] Payment request) =>
+app.MapPost("/api/payments", [Authorize] async (SystemDbContext context, [FromBody] Payment request) =>
 {
     context.Set<Payment>().Add(request);
     var res = await context.SaveChangesAsync();
