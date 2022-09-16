@@ -1,0 +1,285 @@
+﻿@page "/report/{id}"
+@if (Model != null)
+{
+    <div  align=center x:publishsource="Excel">
+        <table id="report_table" border=0 cellpadding=0 cellspacing=0 width=908 style='border-collapse: collapse;table-layout:fixed;width:681pt'>
+            <col width=110 style='mso-width-source:userset;mso-width-alt:4022;width:83pt'>
+            <col width=138 style='mso-width-source:userset;mso-width-alt:5046;width:104pt'>
+            <col width=135 style='mso-width-source:userset;mso-width-alt:4937;width:101pt'>
+            <col width=95 style='mso-width-source:userset;mso-width-alt:3474;width:71pt'>
+            <col width=64 style='width:48pt'>
+            <col width=107 style='mso-width-source:userset;mso-width-alt:3913;width:80pt'>
+            <col width=64 style='width:48pt'>
+            <col width=112 style='mso-width-source:userset;mso-width-alt:4096;width:84pt'>
+            <col width=83 style='mso-width-source:userset;mso-width-alt:3035;width:62pt'>
+            <tr height=20 style='height:15.0pt'>
+                <td colspan=9 height=20 class=xl6323699 width=908 style='height:15.0pt;  width:681pt'>
+                    @Model.Name  DONATION REPORT
+                </td>
+            </tr>
+            <tr height=21 style='height:15.75pt'>
+                <td colspan=4 height=21 class=xl6423699 style='height:15.75pt'>Monetory</td>
+                <td class=xl6523699 style='border-top:none;border-left:none'>&nbsp;</td>
+                <td colspan=4 class=xl6423699 style='border-left:none'>Items</td>
+            </tr>
+            <tr height=20 style='height:15.0pt'>
+                <td height=20 class=xl6723699 style='height:15.0pt;border-top:none'>Date</td>
+                <td class=xl6723699 style='border-top:none;border-left:none'>Donor</td>
+                <td class=xl6723699 style='border-top:none;border-left:none'>Payment Method</td>
+                <td class=xl6723699 style='border-top:none;border-left:none'>Amount</td>
+                <td class=xl6523699 style='border-top:none;border-left:none'>&nbsp;</td>
+                <td class=xl6723699 style='border-top:none;border-left:none'>Date</td>
+                <td class=xl6723699 style='border-top:none;border-left:none'>Donor</td>
+                <td class=xl6723699 style='border-top:none;border-left:none'>Item</td>
+                <td class=xl6723699 style='border-top:none;border-left:none'>QTY</td>
+            </tr>
+
+            @foreach (var payment in Model.Payments)
+            {
+
+                <tr height=20 style='height:15.0pt'>
+                    <td height=20 class=xl6523699 align=right style='height:15.0pt;border-top:  none'>
+                        @payment.Date.ToString("dd MMM yyyy")
+                    </td>
+                    <td class=xl6523699 align=right style='border-top:none;border-left:none'>@payment.Donor.Name</td>
+                    <td class=xl6523699 align=right style='border-top:none;border-left:none'>@payment.PaymentMethod.ToDescriptionString()</td>
+                    <td class=xl6523699 align=right style='border-top:none;border-left:none'>@payment.Amount</td>
+                </tr>
+            }
+            @foreach (var item in Model.Donations)
+            {
+                <tr>
+                    <td class=xl6523699 align=right style='border-top:none;border-left:none'>@item.Date.ToString("dd MMM yyyy")</td>
+                    <td class=xl6523699 align=right style='border-top:none;border-left:none'>@item.Donor.Name</td>
+                    <td class=xl6523699 align=right style='border-top:none;border-left:none'>@item.Description</td>
+                    <td class=xl6523699 align=right style='border-top:none;border-left:none'>@item.Quantity</td>
+                    <td class=xl6523699 align=right style='border-top:none;border-left:none'>0</td>
+                </tr>
+            }
+            <tr height=20 style='height:15.0pt'>
+                <td colspan=3 height=20 class=xl7023699 style='border-right:.5pt solid black; height:15.0pt'>
+                    TOTAL
+                </td>
+                <td class=xl6523699 align=right style='border-top:none;border-left:none'>@Model.Payments?.Sum(a=>a.Amount)</td>
+                <td class=xl6523699 style='border-top:none;border-left:none'>&nbsp;</td>
+                <td colspan=3 class=xl7023699 style='border-right:.5pt solid black; border-left:none'>
+                    TOTAL
+                </td>
+                <td class=xl6523699 align=right style='border-top:none;border-left:none'>@Model.Donations?.Sum(d=>d.Quantity)</td>
+            </tr>
+
+            <tr height=0 style='display:none'>
+                <td width=110 style='width:83pt'></td>
+                <td width=138 style='width:104pt'></td>
+                <td width=135 style='width:101pt'></td>
+                <td width=95 style='width:71pt'></td>
+                <td width=64 style='width:48pt'></td>
+                <td width=107 style='width:80pt'></td>
+                <td width=64 style='width:48pt'></td>
+                <td width=112 style='width:84pt'></td>
+                <td width=83 style='width:62pt'></td>
+            </tr>
+
+        </table>
+
+    </div>
+}
+else
+{
+    <MudAlert Severity="Severity.Info">Something went wrong.</MudAlert>
+}
+
+@code {
+    [Parameter] public string Id { get; set; }
+    Orphanage Model { get; set; } 
+    protected override async Task OnInitializedAsync()
+    {
+        Model.Donations = new();
+        Model.Payments = new();
+        Model = await orphanageService.Get(Id);
+    }
+}
+<style>
+table
+	{mso-displayed-decimal-separator:"\.";
+	mso-displayed-thousand-separator:"\,";}
+.xl1523699
+	{padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Calibri, sans-serif;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:bottom;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl6323699
+	{padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Calibri, sans-serif;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:bottom;
+	border:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl6423699
+	{padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:black;
+	font-size:12.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Calibri, sans-serif;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:bottom;
+	border:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl6523699
+	{padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Calibri, sans-serif;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:bottom;
+	border:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl6623699
+	{padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:black;
+	font-size:12.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Calibri, sans-serif;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:bottom;
+	border:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl6723699
+	{padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Calibri, sans-serif;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:bottom;
+	border:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl6823699
+	{padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Calibri, sans-serif;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:right;
+	vertical-align:bottom;
+	border-top:.5pt solid windowtext;
+	border-right:none;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl6923699
+	{padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Calibri, sans-serif;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:right;
+	vertical-align:bottom;
+	border-top:.5pt solid windowtext;
+	border-right:.5pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl7023699
+	{padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Calibri, sans-serif;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:right;
+	vertical-align:bottom;
+	border-top:.5pt solid windowtext;
+	border-right:none;
+	border-bottom:.5pt solid windowtext;
+	border-left:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+</style>
