@@ -9,6 +9,10 @@
         {
             return await Repository.Entities().Include(d => d.Donations).ThenInclude(d => d.Donor).Include(o => o.OrphanageNeeds).Include(o=>o.Payments).ThenInclude(p=>p.Donor).FirstOrDefaultAsync(x => x.Email == email);
         }
+        public  Orphanage GetByEmail2(string email)
+        {
+            return Repository.Entities().Include(d => d.Donations).ThenInclude(d => d.Donor).Include(o => o.OrphanageNeeds).Include(o=>o.Payments).ThenInclude(p=>p.Donor).FirstOrDefault(x => x.Email == email);
+        }
         public async Task<Orphanage> Get(string id)
         {
             return await Repository.Entities().Include(d => d.Donations).ThenInclude(d => d.Donor).Include(o => o.OrphanageNeeds).Include(o => o.Payments).ThenInclude(p => p.Donor).FirstOrDefaultAsync(x => x.Id == Convert.ToInt32(id));
