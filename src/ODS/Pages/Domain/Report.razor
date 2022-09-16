@@ -14,7 +14,7 @@
             <col width=83 style='mso-width-source:userset;mso-width-alt:3035;width:62pt'>
             <tr height=20 style='height:15.0pt'>
                 <td colspan=9 height=20 class=xl6323699 width=908 style='height:15.0pt;  width:681pt'>
-                    @Model.Name  DONATION REPORT
+                    @Model.Name.ToUpper()  DONATION REPORT
                 </td>
             </tr>
             <tr height=21 style='height:15.75pt'>
@@ -102,7 +102,7 @@
             </tr>
 
         </table>
-
+        <MudButton Class="m-6" @onclick="()=>ExportExcel()" Color="Color.Success">Export</MudButton>
     </div>
 }
 else
@@ -123,6 +123,11 @@ else
             longer = Math.Max((int)Model.Payments?.Count, (int)Model.Donations?.Count);
             shorter = Math.Min((int)Model.Payments?.Count, (int)Model.Donations?.Count);
         }
+    }
+    async void ExportExcel()
+    {
+        var fileName = "Report_" + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xls";
+        await javaScript.InvokeAsync<object>("tableToExcel", "report_table", "Donations Report", fileName);
     }
 }
 <style>
