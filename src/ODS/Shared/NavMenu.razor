@@ -2,26 +2,26 @@
     Style="background-color: var(--mud-palette-drawer-background);color: var(--mud-palette-drawer-text);" />
 <MudDivider Class="mb-4" />
 <MudNavMenu Class="mud-width-full">
-    <MudNavLink IconColor="Color.Secondary" Icon="@Icons.Material.Filled.Home" Href="/">Home</MudNavLink>
+    <MudNavLink  Icon="@Icons.Material.Filled.Home" Href="/">Home</MudNavLink>
     <MudText Class="m-4" Typo="Typo.h6">Dashboard</MudText>
     <MudDivider />
     <AuthorizeView Roles="Donor">
         <Authorized>
-            <MudNavLink IconColor="Color.Primary" Icon="@Icons.Material.Filled.Dashboard" Href="dashboard">Dashboard</MudNavLink>
-            <MudNavLink IconColor="Color.Error" Icon="@Icons.Material.Filled.Money" Href="my-donations">My Donations</MudNavLink>
-            <MudNavLink IconColor="Color.Success" Icon="@Icons.Material.Filled.Payments" Href="payment-history">Payments</MudNavLink>
+            <MudNavLink  Icon="@Icons.Material.Filled.Dashboard" Href="dashboard">Dashboard</MudNavLink>
+            <MudNavLink  Icon="@Icons.Material.Filled.Money" Href="my-donations">My Donations</MudNavLink>
+            <MudNavLink  Icon="@Icons.Material.Filled.Payments" Href="payment-history">Payments</MudNavLink>
         </Authorized>
     </AuthorizeView>
     <AuthorizeView Roles="Orphanage">
         <Authorized>
-            <MudNavLink IconColor="Color.Primary" Icon="@Icons.Material.Filled.Dashboard" Href="dashboard">Dashboard</MudNavLink>
-            <MudNavLink IconColor="Color.Error" Icon="@Icons.Material.Filled.Money" Href="our-donations">Donations</MudNavLink>
-            <MudNavLink IconColor="Color.Success" Icon="@Icons.Material.Filled.Payments" Href="our-needs">Needs</MudNavLink>
-            <MudNavLink IconColor="Color.Success" Icon="@Icons.Material.Filled.AddChart" Href='@($"/report/{id}")'>Report</MudNavLink>
-            <MudNavLink IconColor="Color.Success" Icon="@Icons.Material.Filled.AccountCircle" Href="orphanage-profile">Profile</MudNavLink>
+            <MudNavLink  Icon="@Icons.Material.Filled.Dashboard" Href="dashboard">Dashboard</MudNavLink>
+            <MudNavLink  Icon="@Icons.Material.Filled.Money" Href="our-donations">Donations</MudNavLink>
+            <MudNavLink  Icon="@Icons.Material.Filled.Payments" Href="our-needs">Needs</MudNavLink>
+            <MudNavLink  Icon="@Icons.Material.Filled.AddChart" Href='@($"/report/{id}")'>Report</MudNavLink>
+            <MudNavLink  Icon="@Icons.Material.Filled.AccountCircle" Href="orphanage-profile">Profile</MudNavLink>
         </Authorized>
     </AuthorizeView>
-    <MudNavLink  IconColor="Color.Info" Icon="@Icons.Material.Filled.Logout" Href="logout">Log Out
+    <MudNavLink   Icon="@Icons.Material.Filled.Logout" Href="logout">Log Out
     </MudNavLink>
 
 </MudNavMenu>
