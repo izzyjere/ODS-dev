@@ -13,6 +13,6 @@ namespace ODS.Services.Identity
         Task<IResult<Guid>> RegisterAsync(RegisterRequest request);
 
         Task<RegisterRequest> GetUserAsync(int id);
-
+        Task<IResult> Delete(string email);
     }
 }

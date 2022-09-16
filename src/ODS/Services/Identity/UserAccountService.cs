@@ -306,6 +306,17 @@ namespace ODS.Services.Identity
                 };
             }
         }
+        public async Task<IResult> Delete(string email)
+        {
+            var user = await userManager.FindByEmailAsync(email);
+            if(user!=null)
+            {
+                await userManager.DeleteAsync(user);
+                return Result.Success("Deleted");
+            }              
+            return Result.Fail("Not found.");
+           
+        }
         public async Task<IResult<List<UserResponse>>> GetAllUsersAsync()
         {
             var users = await userManager.Users.Include(u => u.Roles).ThenInclude(ur => ur.Role).ToListAsync();

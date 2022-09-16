@@ -68,8 +68,11 @@
                             <MudItem xs="12" md="6">
                                 <MudTextField ReadOnly="true" @bind-Value="@Model2.Email" Label="Email" Variant="Variant.Outlined" HelperText="Dont worry, we shall not spam!" InputType="InputType.Email" />
                             </MudItem>
-                            <MudItem xs="12">                                
-                                <MudButton OnClick="SaveChanges" Variant="Variant.Filled" Color="Color.Secondary">Save</MudButton>
+                            <MudItem xs="6">                                
+                                <MudButton OnClick="SaveChanges" Variant="Variant.Filled" Color="Color.Success">Save</MudButton>
+                            </MudItem>
+                            <MudItem xs="6">                                
+                                <MudButton OnClick="Delete" Variant="Variant.Filled" Color="Color.Error">Delete Profile</MudButton>
                             </MudItem>
                         </MudGrid>
                     </MudCardContent>
@@ -122,6 +125,21 @@
     {
         claimsPrincipal = (await AuthenticationStateTask).User;
         await Refresh();
+
+    }
+    async Task Delete()
+    {
+        var delete = await javaScript.InvokeAsync<bool>("confirm","Are you sure you want to delete your profile?");
+        if(delete)
+        {
+            var deleted = await orphanageService.Delete(Model2);
+            if(deleted.Succeeded)
+            {
+                var done  = await userAccountService.Delete(Model2.Email);
+                snackBar.Add(done.Messages.First());
+                Navigation.NavigateTo("logout");
+            }
+        }
 
     }
     async Task SaveChanges()
