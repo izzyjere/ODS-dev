@@ -296,7 +296,7 @@
         {
             var mail = new MailRequest
                 {
-                    To = orphanages.FirstOrDefault(x => x.Id == Model.OrphanageId).Email,
+                    To = orphanages.FirstOrDefault(x => x.Id == Model2.OrphanageId).Email,
                     Subject = "Donation Notification",
                     Body = $"Hello, this serves to infom you that a donor has donated {Model2.Quantity} {Model2.Description}. Login to the system fr more details."
                 };
