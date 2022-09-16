@@ -36,16 +36,16 @@ namespace ODS.Extensions
                     .AddScoped<ICurrentUserService, CurrentUserService>()
                     .AddDbContext<SystemDbContext>(optionsBuilder =>
                     {
-                        optionsBuilder.UseSqlite(connectionString, o =>
-                        {
-                            o.MigrationsAssembly(typeof(SystemDbContext).Assembly.FullName);
-                            o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
-                        });
-                        //optionsBuilder.UseSqlServer(connectionString, options =>
+                        //optionsBuilder.UseSqlite(connectionString, o =>
                         //{
-                        //    options.MigrationsAssembly(typeof(SystemDbContext).Assembly.FullName);
-                        //    options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                        //    o.MigrationsAssembly(typeof(SystemDbContext).Assembly.FullName);
+                        //    o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
                         //});
+                        optionsBuilder.UseSqlServer(connectionString, options =>
+                        {
+                            options.MigrationsAssembly(typeof(SystemDbContext).Assembly.FullName);
+                            options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                        });
                     }, ServiceLifetime.Transient)
                     .AddScoped<IUnitOfWork<int>, UnitOfWork<int>>()
                     .AddTransient<ISeeder, DatabaseSeeder>();
