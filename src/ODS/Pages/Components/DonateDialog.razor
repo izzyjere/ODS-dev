@@ -260,7 +260,7 @@
                 PaymentMethod = Model.PaymentMethod
             };
         Model.TransactionRef = request.TransactionRef;
-        string PbKey = "FLWPUBK-da7f6e682771263e77ae9e8e6b0638c7-X";
+        string PbKey = "YOUR FLUTTER WAVE KEY HERE";
         try
         {
             await javaScript.InvokeAsync<object>("makePayment", PbKey, request.Amount, request.TransactionRef, request.DonorId, request.OrphanageId, donor.Name, request.Phone, donor.Email, request.Orphanage, $"{Navigation.BaseUri}/assets/img/icon/xfavicon.png.pagespeed.ic.YvM5dLVeS6.png", DotNetObjectReference.Create(this));
